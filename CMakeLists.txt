@@ -67,6 +67,12 @@ target_link_libraries(DjentyDonkey
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
 
+# Independent compact-amp LOW CUT / HIGH CUT stereo QA (C++17, no JUCE)
+add_executable(guitar_cuts_test tests/guitar_cuts_test.cpp)
+target_include_directories(guitar_cuts_test PRIVATE Source)
+enable_testing()
+add_test(NAME guitar_cuts_stereo COMMAND guitar_cuts_test)
+
 # Offline DSP checks against the LTspice reference (no JUCE)
 add_executable(dsp_test tests/dsp_test.cpp)
 target_include_directories(dsp_test PRIVATE Source)
