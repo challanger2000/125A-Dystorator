@@ -310,7 +310,7 @@ void VibeAmpEditor::paint (juce::Graphics& g)
     auto header = getLocalBounds().reduced (16, 8).removeFromTop (40);
     g.setColour (juce::Colours::white);
     g.setFont (font (26.0f, true));
-    g.drawText ("125A DYSTORATOR", header, juce::Justification::centredLeft);
+    g.drawText ("DYSTORATOR", header, juce::Justification::centredLeft);
 
     g.setColour (colours::text.withAlpha (0.5f));
     g.setFont (font (12.0f));
