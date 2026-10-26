@@ -1,0 +1,24 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe ["D:\\a\\125A-Dystorator\\125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3","step3"]
+HOST_STAGE enter argc=3
+HOST_STAGE install heap=1
+HOST_STAGE initialize JUCE
+HOST_STAGE discover
+HOST_STAGE discovered=1
+HOST_STAGE instantiate legacy contract
+PASS actual VST3 non-default component state survives save/restore before prepare
+PASS Linux packaged VST3 discover/instantiate/stereo R-only/no-crosstalk/state/audio audible=0.334306 bleed=0 recall_max=0 latency=5 parameters=72
+PASS VST3 host bypass parameter -> actual delayed dry/warm wet dry_max=0 warm_max=0
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=0 stereo_difference=0 energy=0.165894
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=1 stereo_difference=0 energy=0.16552
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=2 stereo_difference=0 energy=0.165301
+PASS Windows cross-DLL heap hook detects actual allocate/reallocate/free
+PASS actual VST3 rapid mode/quality/bypass with stop/play/cycle preserves continuous reference PCM and latency
+HOST_TRANSPORT max_delta=0 energy=69.4717
+PASS actual VST3 stereo IR host save/destroy/disk reload/fresh instance restores nondefault audible PCM
+HOST_IR_RECALL max_delta=0 energy=0.260256
+PASS actual VST3 missing IR recall rolls back both IR selection and changed gain
+PASS actual VST3 reprepare/IR at 16384 samples remains finite and matches fresh equivalent stream
+HOST_LARGE_IR max_delta=0 energy=0.757784
+PASS actual VST3 clear IR commits built-in selection and audibly changes from continuing IR reference
+WINDOWS_CALLBACK_HEAP allocations=0 frees=0
+PASS actual VST3 callbacks perform no process-heap allocate/reallocate/free across DLL CRT boundary

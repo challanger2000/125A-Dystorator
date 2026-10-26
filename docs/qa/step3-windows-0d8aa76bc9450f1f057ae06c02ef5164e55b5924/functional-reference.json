@@ -1,0 +1,7 @@
+{
+  "referenceCommit": "8a442d9d2a3ad10ba331b7cc849136db78ca08ac",
+  "referenceEvidence": "docs/qa/step3-windows-8a442d9d2a3ad10ba331b7cc849136db78ca08ac/results.json",
+  "sourceTree": "23fe6fa178f2248c23726a31ad080a82f9e991bc",
+  "status": "PASS",
+  "detail": "Source and root CMake identical; prior functional checks remain separately attributed"
+}

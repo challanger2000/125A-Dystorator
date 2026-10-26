@@ -1,0 +1,63 @@
+COMMAND: cmake ["--build","build/win-integration","--config","Release","--target","compact_vst3_host","--parallel","2"]
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  1>Checking Build System
+  Generating compact_vst3_host_artefacts/JuceLibraryCode/compact_vst3_host_resources.rc
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  compact_vst3_host_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_rc_lib.dir\Release\compact_vst3_host_rc_lib.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  detours.cpp
+  modules.cpp
+  disasm.cpp
+  image.cpp
+  creatwth.cpp
+  disolx86.cpp
+  disolx64.cpp
+  disolia64.cpp
+  disolarm.cpp
+  disolarm64.cpp
+  Generating Code...
+  step3_detours.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\Release\step3_detours.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  compact_vst3_host.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         with [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty=int [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         and [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty2=float [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host.vcxproj]
+  (compiling source file '../../tests/ir_presets/compact_vst3_host.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54):
+      the template instantiation context (the oldest one first) is
+          D:\a\125A-Dystorator\125A-Dystorator\tests\ir_presets\HostedCPUBenchmark.h(48,17):
+          see reference to function template instantiation 'std::pair<const char *,float>::pair<const char(&)[10],int,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=const char (&)[10],
+              _Other2=int
+          ]
+              D:\a\125A-Dystorator\125A-Dystorator\tests\ir_presets\HostedCPUBenchmark.h(47,74):
+              see the first reference to 'std::pair<const char *,float>::pair' in 'hostedCPU'
+  
+  juce_audio_utils.cpp
+  juce_audio_processors.cpp
+  juce_audio_processors_ara.cpp
+  juce_audio_processors_lv2_libs.cpp
+  juce_gui_extra.cpp
+  juce_gui_basics.cpp
+  juce_graphics.cpp
+  juce_graphics_Harfbuzz.cpp
+  juce_events.cpp
+  juce_core.cpp
+  juce_core_CompilationTime.cpp
+  juce_data_structures.cpp
+  juce_audio_basics.cpp
+  juce_audio_formats.cpp
+  juce_audio_devices.cpp
+  Generating Code...
+  juce_graphics_Sheenbidi.c
+  compact_vst3_host.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe

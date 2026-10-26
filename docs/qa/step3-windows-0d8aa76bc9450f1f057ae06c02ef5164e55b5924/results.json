@@ -1,0 +1,233 @@
+{
+  "sourceCommit": "0d8aa76bc9450f1f057ae06c02ef5164e55b5924",
+  "baselineCommit": "398204e26d84c3f40bcd1c0af55dfa8e97893ca7",
+  "scope": "cpu",
+  "functionalReference": "8a442d9d2a3ad10ba331b7cc849136db78ca08ac",
+  "checks": [
+    {
+      "name": "archive-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.0679655,
+      "log": "archive-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "extract-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.1095281,
+      "log": "extract-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 44.3644227,
+      "log": "configure-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 78.7744193,
+      "log": "build-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 24.0248636,
+      "log": "configure-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 76.3600842,
+      "log": "build-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-ir_presets_test",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 21.5659182,
+      "log": "configure-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-ir_presets_test",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 101.2470637,
+      "log": "build-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "standalone-heap-selftest",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.0350717,
+      "log": "standalone-heap-selftest.txt",
+      "detail": ""
+    },
+    {
+      "name": "packaged-vst3-host",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 39.4277714,
+      "log": "packaged-vst3-host.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-setup-before",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 12.473047,
+      "log": "cpu-setup-before.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-setup-after",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 11.975136,
+      "log": "cpu-setup-after.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-before",
+      "status": "FAIL",
+      "exitCode": 1,
+      "expectedExit": 0,
+      "seconds": 54.8723968,
+      "log": "cpu-before.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-after",
+      "status": "FAIL",
+      "exitCode": 1,
+      "expectedExit": 0,
+      "seconds": 54.4476632,
+      "log": "cpu-after.txt",
+      "detail": ""
+    },
+    {
+      "name": "native-ctest",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "tone-regression",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "fault-regression",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "ir-preset-ownership-regressions",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "quality-modes",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "quality-pcm",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "quality-stress",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "step3_pcm",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "mono_reference",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "stereo_quality_reference",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "step3_alias",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "large_ir_heap",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "tester-job-object-selftest",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "steinberg-validator-selftest",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    },
+    {
+      "name": "125a-tester-product",
+      "status": "NOT RUN",
+      "detail": "NOT RUN in CPU-only scope; prior functional evidence linked separately",
+      "exitCode": null
+    }
+  ],
+  "NOT_RUN": [
+    "Actual owner i9-11900K machine",
+    "Real ASIO device/DAW/Studio One playback and recorded dropouts",
+    "Licensed real DI and level-matched listening",
+    "Musical approval of ECO/STANDARD",
+    "Manual GUI/control acceptance"
+  ],
+  "infrastructureFailure": null,
+  "release": "DEVELOPMENT ONLY - NO FINAL"
+}
