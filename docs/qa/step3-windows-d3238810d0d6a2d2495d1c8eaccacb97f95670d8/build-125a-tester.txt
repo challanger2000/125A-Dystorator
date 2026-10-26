@@ -1,0 +1,302 @@
+COMMAND: cmake ["--build","build/win-tester","--config","Release","--target","PluginTester125ADispatcher","PluginTester125ALauncher","PluginTester125AWorker","PluginTester125AReloadProbe","PluginTester125AStateProbe","PluginTester125AEditorLifecycleProbe","PluginTester125AIOEventProbe","PluginTester125AValidatorWrapper","PluginTester125AGuardSelfTest","validator","PluginTester125AQAGoodControl","PluginTester125AQABadLifecycle","PluginTester125AQABadNaN","PluginTester125AQABadState","PluginTester125AQABadIO","PluginTester125AQAGoodEditor","PluginTester125AQABadEditor","--parallel","2"]
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  dispatcher_recursive.cpp
+  PluginTester125ADispatcher.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/CMakeLists.txt
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/CMakeLists.txt
+  conststringtable.cpp
+  coreiids.cpp
+  funknown.cpp
+  ustring.cpp
+  baseiids.cpp
+  fbuffer.cpp
+  fdebug.cpp
+  fdynlib.cpp
+  fobject.cpp
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  fstreamer.cpp
+  fstring.cpp
+  timer.cpp
+  updatehandler.cpp
+  fcondition.cpp
+  flock.cpp
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/CMakeLists.txt
+  commoniids.cpp
+  commonstringconvert.cpp
+  openurl.cpp
+  systemclipboard_linux.cpp
+  systemclipboard_win32.cpp
+  threadchecker_linux.cpp
+  threadchecker_win32.cpp
+  readfile.cpp
+  vstpresetfile.cpp
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/CMakeLists.txt
+  connectionproxy.cpp
+  eventlist.cpp
+  hostclasses.cpp
+  module.cpp
+  parameterchanges.cpp
+  pluginterfacesupport.cpp
+  processdata.cpp
+  stringconvert.cpp
+  vstinitiids.cpp
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  launcher_diagnostics.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125ALauncher.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_Single.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  main.cpp
+  memorystream.cpp
+  parameterchanges.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125AWorker.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_Worker.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  reload_probe.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125AReloadProbe.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_ReloadProbe.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  state_probe.cpp
+  memorystream.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125AStateProbe.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_StateProbe.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  editor_lifecycle_probe.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125AEditorLifecycleProbe.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_EditorLifecycleProbe.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  io_event_probe_logged.cpp
+  eventlist.cpp
+  module_win32.cpp
+  Generating Code...
+  PluginTester125AIOEventProbe.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_IOEventProbe.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/public.sdk/samples/vst-hosting/validator/CMakeLists.txt
+  memorystream.cpp
+  moduleinit.cpp
+  moduleinfoparser.cpp
+  connectionproxytest.cpp
+  eventlisttest.cpp
+  hostclassestest.cpp
+  miditovsttest.cpp
+  parameterchangestest.cpp
+  pluginterfacesupporttest.cpp
+  processdatatest.cpp
+  plugprovider.cpp
+  busactivation.cpp
+  busconsistency.cpp
+  businvalidindex.cpp
+  checkaudiobusarrangement.cpp
+  scanbusses.cpp
+  sidechainarrangement.cpp
+  editorclasses.cpp
+  midilearn.cpp
+  midimapping.cpp
+  plugcompat.cpp
+  scanparameters.cpp
+  suspendresume.cpp
+  terminit.cpp
+  keyswitch.cpp
+  noteexpression.cpp
+  automation.cpp
+  process.cpp
+  processcontextrequirements.cpp
+  processformat.cpp
+  processinputoverwriting.cpp
+  processtail.cpp
+  processthreaded.cpp
+  silenceflags.cpp
+  silenceprocessing.cpp
+  speakerarrangement.cpp
+  variableblocksize.cpp
+  bypasspersistence.cpp
+  invalidstatetransition.cpp
+  repeatidenticalstatetransition.cpp
+  validstatetransition.cpp
+  testbase.cpp
+  checkunitstructure.cpp
+  scanprograms.cpp
+  scanunits.cpp
+  vsttestsuite.cpp
+  testing.cpp
+  main.cpp
+  usediids.cpp
+  validator.cpp
+  module_win32.cpp
+  validator.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_SteinbergValidatorCore.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  validator_wrapper.cpp
+  PluginTester125AValidatorWrapper.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_SteinbergValidator.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  guard_selftest.cpp
+  PluginTester125AGuardSelfTest.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_GuardSelfTest.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  validator.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\Release\125A_Plugin_Tester_SteinbergValidatorCore.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/CMakeLists.txt
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/vst3sdk/public.sdk/samples/vst-utilities/moduleinfotool/CMakeLists.txt
+  pluginview.cpp
+  pluginfactory.cpp
+  moduleinit.cpp
+  dataexchange.cpp
+  main.cpp
+  moduleinfocreator.cpp
+  moduleinfoparser.cpp
+  module_win32.cpp
+  stringconvert.cpp
+  systemtime.cpp
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  testing.cpp
+  vst2persistence.cpp
+  vstaudioeffect.cpp
+  vstbus.cpp
+  vstcomponent.cpp
+  vstcomponentbase.cpp
+  vsteditcontroller.cpp
+  vstinitiids.cpp
+  vstnoteexpressiontypes.cpp
+  vstparameters.cpp
+  vstrepresentation.cpp
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_GoodControl.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_GoodControl.exp
+  PluginTester125AQAGoodControl.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_GoodControl.vst3\Contents\x86_64-win\125A_QA_GoodControl.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadLifecycle.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadLifecycle.exp
+  PluginTester125AQABadLifecycle.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadLifecycle.vst3\Contents\x86_64-win\125A_QA_BadLifecycle.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadNaN.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadNaN.exp
+  PluginTester125AQABadNaN.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadNaN.vst3\Contents\x86_64-win\125A_QA_BadNaN.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadState.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadState.exp
+  PluginTester125AQABadState.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadState.vst3\Contents\x86_64-win\125A_QA_BadState.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadIO.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadIO.exp
+  PluginTester125AQABadIO.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadIO.vst3\Contents\x86_64-win\125A_QA_BadIO.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_GoodEditor.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_GoodEditor.exp
+  PluginTester125AQAGoodEditor.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_GoodEditor.vst3\Contents\x86_64-win\125A_QA_GoodEditor.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  pluginterfaces.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\pluginterfaces.lib
+  base.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\base.lib
+  sdk_common.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_common.lib
+  sdk_hosting.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk_hosting.lib
+  sdk.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\lib\Release\sdk.lib
+  moduleinfotool.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\bin\Release\moduleinfotool.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/build/tools/tester/CMakeLists.txt
+  qa_fixture.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadEditor.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-tester/Release/125A_QA_BadEditor.exp
+  PluginTester125AQABadEditor.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadEditor.vst3\Contents\x86_64-win\125A_QA_BadEditor.vst3
+  [SMTG] Copy PlugIn.ico and desktop.ini and change their attributes.	

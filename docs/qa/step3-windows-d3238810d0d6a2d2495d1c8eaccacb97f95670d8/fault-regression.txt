@@ -1,0 +1,28 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-plugin/Release/dsp_test.exe "fault"
+
+== fault recovery: one bad sample at 0.4 s (RED gain 5, master 6, 352.8 kHz) ==
+clean render: peak 54.3 V at the speaker (RED)
+case                          finite  raw max (V)   <20k max (V)  <20k > 1% (ms)  result
+(floor: input held, RED)         yes         0.00           0.00            0.00        
+(floor: input held, BLUE)        yes         0.00           0.00            0.00        
+NaN  -> power amp                yes         0.01           0.01            0.00    PASS
++inf -> power amp                yes         0.01           0.01            0.00    PASS
+NaN  -> preamp (RED)             yes         0.00           0.00            0.00    PASS
++inf -> preamp (RED)             yes         0.00           0.00            0.00    PASS
+NaN  -> preamp (BLUE)            yes         0.00           0.00            0.00    PASS
+RED preamp fails, retry          yes         0.00           0.00            0.00    PASS
+BLUE preamp fails, retry         yes         0.00           0.00            0.00    PASS
+power amp fails, retry           yes         0.01           0.01            0.00    PASS
+RED preamp unconverged, 300 V off     yes         0.00           0.00            0.00    PASS
+BLUE preamp unconverged, 300 V     yes         0.00           0.00            0.00    PASS
+power amp unconverged, 300 V     yes         0.01           0.01            0.00    PASS
+RED preamp fails twice, hold     yes         0.01           0.01            0.00    PASS
+BLUE preamp fails twice, hold     yes         0.15           0.14            0.00    PASS
+power amp twice, hold        yes         0.05           0.03            0.00    PASS
+RED preamp fails 2 ms        yes        26.42          23.22           64.03    PASS   (peak 54.3 V)
+BLUE preamp fails 2 ms       yes        26.31          26.31           83.07    PASS   (peak 36.1 V)
+power amp fails 2 ms         yes        26.49          26.49           28.78    PASS   (peak 54.3 V)
+
+== extreme input: 1 kV spike, 100 V sine (stays finite and bounded) ==
+1 kV spike:   finite yes, speaker peak 54.3 V, 0 Newton failures  PASS
+100 V sine:   finite yes, speaker peak 58.7 V, 0 Newton failures  PASS

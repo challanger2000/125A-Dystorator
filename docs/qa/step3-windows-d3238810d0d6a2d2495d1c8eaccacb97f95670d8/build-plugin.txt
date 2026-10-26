@@ -1,0 +1,132 @@
+COMMAND: cmake ["--build","build/win-plugin","--config","Release","--target","DjentyDonkey_VST3","dystorator_qa_suite","tone_regress","dsp_test","--parallel","2"]
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  1>Checking Build System
+  Generating DjentyDonkey_artefacts/JuceLibraryCode/DjentyDonkey_resources.rc
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  DjentyDonkey_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_rc_lib.dir\Release\DjentyDonkey_rc_lib.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  PluginProcessor.cpp
+  PluginEditor.cpp
+  juce_audio_processors.cpp
+  juce_audio_processors_ara.cpp
+  juce_audio_processors_lv2_libs.cpp
+  juce_gui_extra.cpp
+D:\a\125A-Dystorator\125A-Dystorator\Source\dsp\DKCircuit.h(522,22): warning C4456: declaration of 'k' hides previous local declaration [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+  (compiling source file '../../Source/PluginEditor.cpp')
+      D:\a\125A-Dystorator\125A-Dystorator\Source\dsp\DKCircuit.h(493,13):
+      see declaration of 'k'
+  
+D:\a\125A-Dystorator\125A-Dystorator\Source\dsp\DKCircuit.h(522,22): warning C4456: declaration of 'k' hides previous local declaration [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+  (compiling source file '../../Source/PluginProcessor.cpp')
+      D:\a\125A-Dystorator\125A-Dystorator\Source\dsp\DKCircuit.h(493,13):
+      see declaration of 'k'
+  
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         with [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty=int [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         and [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty2=float [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+  (compiling source file '../../Source/PluginEditor.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54):
+      the template instantiation context (the oldest one first) is
+          D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(254,17):
+          see reference to function template instantiation 'std::pair<const char *,float>::pair<const char*const &,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=const char *const &,
+              _Other2=int
+          ]
+              D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(251,53):
+              see the first reference to 'std::pair<const char *,float>::pair' in 'PresetManager::factory'
+  
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         with [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty=int [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         and [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty2=float [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey.vcxproj]
+  (compiling source file '../../Source/PluginProcessor.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54):
+      the template instantiation context (the oldest one first) is
+          D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(254,17):
+          see reference to function template instantiation 'std::pair<const char *,float>::pair<const char*const &,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=const char *const &,
+              _Other2=int
+          ]
+              D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(251,53):
+              see the first reference to 'std::pair<const char *,float>::pair' in 'PresetManager::factory'
+  
+  juce_gui_basics.cpp
+  juce_graphics.cpp
+  juce_graphics_Harfbuzz.cpp
+  juce_events.cpp
+  juce_core.cpp
+  juce_core_CompilationTime.cpp
+  juce_data_structures.cpp
+  juce_audio_basics.cpp
+  juce_audio_utils.cpp
+  juce_audio_formats.cpp
+  juce_audio_devices.cpp
+  juce_dsp.cpp
+  juce_VST3ManifestHelper.cpp
+  juce_graphics_Sheenbidi.c
+  DjentyDonkey.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\Djenty Donkey_SharedCode.lib
+  juce_vst3_helper.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\juce_vst3_helper.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  juce_audio_plugin_client_AAX.cpp
+  juce_audio_plugin_client_AAX_utils.cpp
+  juce_audio_plugin_client_ARA.cpp
+  juce_audio_plugin_client_LV2.cpp
+  juce_audio_plugin_client_Standalone.cpp
+  juce_audio_plugin_client_Unity.cpp
+  juce_audio_plugin_client_VST2.cpp
+  juce_audio_plugin_client_VST3.cpp
+     Creating library D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.lib and object D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.exp
+  Generating code
+  Finished generating code
+  DjentyDonkey_VST3.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\VST3\Djenty Donkey.vst3\Contents\x86_64-win\Djenty Donkey.vst3
+  removing moduleinfo.json
+  creating D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3/Contents/Resources/moduleinfo.json
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  guitar_cuts_test.cpp
+  solver_test.cpp
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  solver_test.cpp
+  guitar_cuts_test.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\guitar_cuts_test.exe
+  solver_test.cpp
+  quality_solver_scalar.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_scalar.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  rails_test.cpp
+  quality_solver_auto.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_auto.exe
+  step3_rails_test.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\step3_rails_test.exe
+  quality_solver_sse2.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_sse2.exe
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  tone_regress.cpp
+  tone_regress.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\tone_regress.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/CMakeLists.txt
+  dsp_test.cpp
+  dsp_test.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\dsp_test.exe

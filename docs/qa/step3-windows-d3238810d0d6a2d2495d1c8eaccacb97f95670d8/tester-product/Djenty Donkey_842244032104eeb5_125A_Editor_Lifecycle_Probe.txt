@@ -1,0 +1,77 @@
+125A Plugin Tester / Editor Lifecycle Probe
+Version: 0.2.9
+Plugin: D:\a\125A-Dystorator\125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3
+
+Stage: module load
+Stage: native host window class
+Stage: class Djenty Donkey - component create
+Stage: class Djenty Donkey - component initialize
+Stage: class Djenty Donkey - controller acquire/connect
+Stage: class Djenty Donkey - cycle 1 - createView
+Stage: class Djenty Donkey - cycle 1 - getSize
+Stage: class Djenty Donkey - cycle 1 - create HWND
+Stage: class Djenty Donkey - cycle 1 - platform support
+Stage: class Djenty Donkey - cycle 1 - setFrame
+Stage: class Djenty Donkey - cycle 1 - attached
+Stage: class Djenty Donkey - cycle 1 - runtime/message pump
+Stage: class Djenty Donkey - cycle 1 - focus
+Stage: class Djenty Donkey - cycle 1 - removed
+Stage: class Djenty Donkey - cycle 1 - setFrame(nullptr)
+Stage: class Djenty Donkey - cycle 1 - destroy HWND
+Stage: class Djenty Donkey - cycle 1 - release view
+Stage: class Djenty Donkey - cycle 1 - complete
+Stage: class Djenty Donkey - cycle 2 - createView
+Stage: class Djenty Donkey - cycle 2 - getSize
+Stage: class Djenty Donkey - cycle 2 - create HWND
+Stage: class Djenty Donkey - cycle 2 - platform support
+Stage: class Djenty Donkey - cycle 2 - setFrame
+Stage: class Djenty Donkey - cycle 2 - attached
+Stage: class Djenty Donkey - cycle 2 - runtime/message pump
+Stage: class Djenty Donkey - cycle 2 - focus
+Stage: class Djenty Donkey - cycle 2 - removed
+Stage: class Djenty Donkey - cycle 2 - setFrame(nullptr)
+Stage: class Djenty Donkey - cycle 2 - destroy HWND
+Stage: class Djenty Donkey - cycle 2 - release view
+Stage: class Djenty Donkey - cycle 2 - complete
+Stage: class Djenty Donkey - cycle 3 - createView
+Stage: class Djenty Donkey - cycle 3 - getSize
+Stage: class Djenty Donkey - cycle 3 - create HWND
+Stage: class Djenty Donkey - cycle 3 - platform support
+Stage: class Djenty Donkey - cycle 3 - setFrame
+Stage: class Djenty Donkey - cycle 3 - attached
+Stage: class Djenty Donkey - cycle 3 - runtime/message pump
+Stage: class Djenty Donkey - cycle 3 - focus
+Stage: class Djenty Donkey - cycle 3 - removed
+Stage: class Djenty Donkey - cycle 3 - setFrame(nullptr)
+Stage: class Djenty Donkey - cycle 3 - destroy HWND
+Stage: class Djenty Donkey - cycle 3 - release view
+Stage: class Djenty Donkey - cycle 3 - complete
+Stage: class Djenty Donkey - cycle 4 - createView
+Stage: class Djenty Donkey - cycle 4 - getSize
+Stage: class Djenty Donkey - cycle 4 - create HWND
+Stage: class Djenty Donkey - cycle 4 - platform support
+Stage: class Djenty Donkey - cycle 4 - setFrame
+Stage: class Djenty Donkey - cycle 4 - attached
+Stage: class Djenty Donkey - cycle 4 - runtime/message pump
+Stage: class Djenty Donkey - cycle 4 - focus
+Stage: class Djenty Donkey - cycle 4 - removed
+Stage: class Djenty Donkey - cycle 4 - setFrame(nullptr)
+Stage: class Djenty Donkey - cycle 4 - destroy HWND
+Stage: class Djenty Donkey - cycle 4 - release view
+Stage: class Djenty Donkey - cycle 4 - complete
+Stage: class Djenty Donkey - cycle 5 - createView
+Stage: class Djenty Donkey - cycle 5 - getSize
+Stage: class Djenty Donkey - cycle 5 - create HWND
+Stage: class Djenty Donkey - cycle 5 - platform support
+Stage: class Djenty Donkey - cycle 5 - setFrame
+Stage: class Djenty Donkey - cycle 5 - attached
+Stage: class Djenty Donkey - cycle 5 - runtime/message pump
+Stage: class Djenty Donkey - cycle 5 - focus
+Stage: class Djenty Donkey - cycle 5 - removed
+Stage: class Djenty Donkey - cycle 5 - setFrame(nullptr)
+Stage: class Djenty Donkey - cycle 5 - destroy HWND
+Stage: class Djenty Donkey - cycle 5 - release view
+Stage: class Djenty Donkey - cycle 5 - complete
+Stage: class Djenty Donkey - controller disconnect/terminate
+Stage: class Djenty Donkey - component terminate
+Result: PASS

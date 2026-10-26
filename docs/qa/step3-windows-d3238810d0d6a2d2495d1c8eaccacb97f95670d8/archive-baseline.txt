@@ -1,0 +1,1 @@
+COMMAND: git ["archive","398204e26d84c3f40bcd1c0af55dfa8e97893ca7","--output=build/win-before.tar"]

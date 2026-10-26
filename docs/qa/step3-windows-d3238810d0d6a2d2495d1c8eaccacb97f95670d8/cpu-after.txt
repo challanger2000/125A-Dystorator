@@ -1,0 +1,1 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe ["D:\\a\\125A-Dystorator\\125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3","step3-cpu","after"]

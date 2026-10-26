@@ -1,0 +1,446 @@
+{
+  "sourceCommit": "d3238810d0d6a2d2495d1c8eaccacb97f95670d8",
+  "baselineCommit": "398204e26d84c3f40bcd1c0af55dfa8e97893ca7",
+  "checks": [
+    {
+      "name": "archive-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.0565303,
+      "log": "archive-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "extract-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.1441782,
+      "log": "extract-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 58.3570132,
+      "log": "configure-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 114.7847024,
+      "log": "build-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 35.5660304,
+      "log": "configure-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 133.8420183,
+      "log": "build-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "native-ctest",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.9577981,
+      "log": "native-ctest.txt",
+      "detail": ""
+    },
+    {
+      "name": "tone-regression",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 193.0711247,
+      "log": "tone-regression.txt",
+      "detail": ""
+    },
+    {
+      "name": "fault-regression",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 27.1610092,
+      "log": "fault-regression.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-ir_presets_test",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 33.2270128,
+      "log": "configure-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-ir_presets_test",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 311.6575221,
+      "log": "build-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "ir-preset-ownership-regressions",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 187.1877618,
+      "log": "ir-preset-ownership-regressions.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-quality_audio",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.8815298,
+      "log": "configure-quality_audio.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-quality_audio",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 16.7309577,
+      "log": "build-quality_audio.txt",
+      "detail": ""
+    },
+    {
+      "name": "quality-modes",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 30.0721145,
+      "log": "quality-modes.txt",
+      "detail": ""
+    },
+    {
+      "name": "quality-pcm",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 93.3124614,
+      "log": "quality-pcm.txt",
+      "detail": ""
+    },
+    {
+      "name": "quality-stress",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 8.3908671,
+      "log": "quality-stress.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-step3_pcm",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.6373608,
+      "log": "configure-step3_pcm.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-step3_pcm",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 10.4687338,
+      "log": "build-step3_pcm.txt",
+      "detail": ""
+    },
+    {
+      "name": "step3_pcm",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 65.8344562,
+      "log": "step3_pcm.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-mono_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.6369056,
+      "log": "configure-mono_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-mono_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 8.6437179,
+      "log": "build-mono_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "mono_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 20.0597505,
+      "log": "mono_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-stereo_quality_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.659701,
+      "log": "configure-stereo_quality_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-stereo_quality_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 8.9980534,
+      "log": "build-stereo_quality_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "stereo_quality_reference",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 62.4282691,
+      "log": "stereo_quality_reference.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-step3_alias",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.6732279,
+      "log": "configure-step3_alias.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-step3_alias",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 7.6072094,
+      "log": "build-step3_alias.txt",
+      "detail": ""
+    },
+    {
+      "name": "step3_alias",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 68.0101619,
+      "log": "step3_alias.txt",
+      "detail": ""
+    },
+    {
+      "name": "packaged-vst3-host",
+      "status": "FAIL",
+      "exitCode": -1073741819,
+      "expectedExit": 0,
+      "seconds": 0.028285,
+      "log": "packaged-vst3-host.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-before",
+      "status": "FAIL",
+      "exitCode": -1073740791,
+      "expectedExit": 0,
+      "seconds": 0.299468,
+      "log": "cpu-before.txt",
+      "detail": ""
+    },
+    {
+      "name": "cpu-after",
+      "status": "FAIL",
+      "exitCode": -1073740791,
+      "expectedExit": 0,
+      "seconds": 0.0601427,
+      "log": "cpu-after.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-125a-tester",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 4.3549458,
+      "log": "configure-125a-tester.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-125a-tester",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 90.5244139,
+      "log": "build-125a-tester.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-job-object-selftest",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.5654652,
+      "log": "tester-job-object-selftest.txt",
+      "detail": ""
+    },
+    {
+      "name": "steinberg-validator-selftest",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.0215455,
+      "log": "steinberg-validator-selftest.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-GoodControl",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.150265,
+      "log": "tester-fixture-GoodControl.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-GoodControl",
+      "status": "PASS",
+      "requiredText": "0 WARNING / 0 FAIL"
+    },
+    {
+      "name": "tester-fixture-BadLifecycle",
+      "status": "PASS",
+      "exitCode": 1,
+      "expectedExit": 1,
+      "seconds": 0.1394597,
+      "log": "tester-fixture-BadLifecycle.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-BadLifecycle",
+      "status": "PASS",
+      "requiredText": "[FAIL] Audio torture processing state (32-bit) - setProcessing(true) failed"
+    },
+    {
+      "name": "tester-fixture-BadNaN",
+      "status": "PASS",
+      "exitCode": 1,
+      "expectedExit": 1,
+      "seconds": 0.1687514,
+      "log": "tester-fixture-BadNaN.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-BadNaN",
+      "status": "PASS",
+      "requiredText": "[FAIL] Audio Silence process (32-bit)"
+    },
+    {
+      "name": "tester-fixture-BadState",
+      "status": "PASS",
+      "exitCode": 1,
+      "expectedExit": 1,
+      "seconds": 0.1478506,
+      "log": "tester-fixture-BadState.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-BadState",
+      "status": "PASS",
+      "requiredText": "[FAIL] Component state roundtrip - setState rejected the state returned by getState"
+    },
+    {
+      "name": "tester-fixture-BadIO",
+      "status": "PASS",
+      "exitCode": 1,
+      "expectedExit": 1,
+      "seconds": 0.1347537,
+      "log": "tester-fixture-BadIO.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-BadIO",
+      "status": "PASS",
+      "requiredText": "[FAIL] I/O, sidechain and event isolation"
+    },
+    {
+      "name": "tester-fixture-GoodEditor",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.3656712,
+      "log": "tester-fixture-GoodEditor.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-GoodEditor",
+      "status": "PASS",
+      "requiredText": "[PASS] Editor lifecycle / GUI runtime"
+    },
+    {
+      "name": "tester-fixture-BadEditor",
+      "status": "PASS",
+      "exitCode": 1,
+      "expectedExit": 1,
+      "seconds": 0.5760699,
+      "log": "tester-fixture-BadEditor.txt",
+      "detail": ""
+    },
+    {
+      "name": "tester-fixture-oracle-BadEditor",
+      "status": "PASS",
+      "requiredText": "last reached stage: class 125A QA Bad Editor - cycle 2 - removed"
+    },
+    {
+      "name": "125a-tester-product",
+      "status": "FAIL",
+      "exitCode": 1,
+      "expectedExit": 0,
+      "seconds": 342.9236845,
+      "log": "125a-tester-product.txt",
+      "detail": ""
+    }
+  ],
+  "NOT_RUN": [
+    "Actual owner i9-11900K machine",
+    "Real ASIO device/DAW/Studio One playback and recorded dropouts",
+    "Licensed real DI and level-matched listening",
+    "Musical approval of ECO/STANDARD",
+    "Manual GUI/control acceptance"
+  ],
+  "infrastructureFailure": null,
+  "release": "DEVELOPMENT ONLY - NO FINAL"
+}

@@ -1,0 +1,12 @@
+125A Plugin Tester / Editor Lifecycle Probe
+Version: 0.2.9
+Plugin: D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadNaN.vst3
+
+Stage: module load
+Stage: native host window class
+Stage: class 125A QA Bad NaN - component create
+Stage: class 125A QA Bad NaN - component initialize
+Stage: class 125A QA Bad NaN - controller acquire/connect
+Stage: class 125A QA Bad NaN - cycle 1 - createView
+Stage: class 125A QA Bad NaN - controller disconnect/terminate
+Stage: class 125A QA Bad NaN - component terminate

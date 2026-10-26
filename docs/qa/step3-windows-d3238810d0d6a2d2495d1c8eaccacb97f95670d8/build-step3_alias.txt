@@ -1,0 +1,13 @@
+COMMAND: cmake ["--build","build/win-integration","--config","Release","--target","ir_presets_test","compact_vst3_host","--parallel","2"]
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  ir_presets_test_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test_rc_lib.dir\Release\ir_presets_test_rc_lib.lib
+  step3_alias.cpp
+  ir_presets_test.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test_artefacts\Release\ir_presets_test.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  compact_vst3_host_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_rc_lib.dir\Release\compact_vst3_host_rc_lib.lib
+  step3_detours.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\Release\step3_detours.lib
+  compact_vst3_host.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe
