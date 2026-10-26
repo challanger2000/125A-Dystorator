@@ -1,0 +1,101 @@
+name: Dystorator portable i9 CPU test package
+on:
+  push:
+    branches: [perf/owner-i9-cpu-evidence-20261026]
+    paths:
+      - '.github/workflows/owner-cpu-pack.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  assemble-windows-package:
+    runs-on: windows-2022
+    timeout-minutes: 90
+    steps:
+      - name: Checkout exact source with baseline history
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Validate pinned product tree and get dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $baseline='398204e26d84c3f40bcd1c0af55dfa8e97893ca7'
+          $functional='8a442d9d2a3ad10ba331b7cc849136db78ca08ac'
+          & git merge-base --is-ancestor $baseline HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Baseline ancestry missing' }
+          & git diff --quiet $functional HEAD -- Source CMakeLists.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Product changed from validated source' }
+          $t1 = (& git rev-parse ($functional + ':Source')).Trim()
+          $t2 = (& git rev-parse 'HEAD:Source').Trim()
+          if ($t1 -ne $t2 -or $t2 -ne '23fe6fa178f2248c23726a31ad080a82f9e991bc') { throw 'Source tree mismatch' }
+          New-Item -ItemType Directory -Path build/tools -Force | Out-Null
+          & git clone --depth 1 --branch 8.0.4 https://github.com/juce-framework/JUCE.git build/tools/JUCE
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/JUCE rev-parse HEAD).Trim() -ne '51d11a2be6d5c97ccf12b4e5e827006e19f0555a') { throw 'JUCE pin invalid' }
+          & git clone --depth 1 --branch v4.0.1 https://github.com/microsoft/Detours.git build/tools/Detours
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/Detours rev-parse HEAD).Trim() -ne 'e4bfd6b03e50de46b47abfbd1e46b384f0c5f833') { throw 'Detours pin invalid' }
+      - name: Build two Windows VST3 variants and independent host
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = (Get-Location).Path
+          function Run-Native([string]$exe,[string[]]$argv) {
+            & $exe @argv
+            if ($LASTEXITCODE -ne 0) { throw "$exe failed with $LASTEXITCODE : $($argv -join ' ')" }
+          }
+          New-Item -ItemType Directory -Path build/before-src -Force | Out-Null
+          Run-Native git @('archive','398204e26d84c3f40bcd1c0af55dfa8e97893ca7','--output=build/before.tar')
+          Run-Native tar @('-xf','build/before.tar','-C','build/before-src')
+          Run-Native cmake @('-S','build/before-src','-B','build/before','-G','Visual Studio 17 2022','-A','x64',"-DFETCHCONTENT_SOURCE_DIR_JUCE=$root/build/tools/JUCE")
+          Run-Native cmake @('--build','build/before','--config','Release','--target','DjentyDonkey_VST3','--parallel','2')
+          Run-Native cmake @('-S','.','-B','build/after','-G','Visual Studio 17 2022','-A','x64',"-DFETCHCONTENT_SOURCE_DIR_JUCE=$root/build/tools/JUCE")
+          Run-Native cmake @('--build','build/after','--config','Release','--target','DjentyDonkey_VST3','--parallel','2')
+          Run-Native cmake @('-S','tests/ir_presets','-B','build/integration','-G','Visual Studio 17 2022','-A','x64',"-DJUCE_SOURCE_DIR=$root/build/tools/JUCE","-DIR_PRODUCT_SOURCE_DIR=$root/Source",'-DIR_TEST_MAIN=ir_presets_test.cpp','-DIR_TRACE_CONVOLUTION=OFF','-DIR_DISCARD_RIGHT_MUTATION=OFF','-DIR_BUILD_VST3_HOST=ON',"-DSTEP3_DETOURS_DIR=$root/build/tools/Detours",'-DCMAKE_BUILD_TYPE=Release')
+          Run-Native cmake @('--build','build/integration','--config','Release','--target','compact_vst3_host','--parallel','2')
+          $exe="$root/build/integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe"
+          $before="$root/build/before/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+          $after="$root/build/after/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+          foreach ($path in @($exe,$before,$after)) { if (!(Test-Path -LiteralPath $path)) { throw "Missing binary: $path" } }
+          Run-Native $exe @('step3-heap-selftest')
+          Run-Native $exe @($before,'step3-cpu-setup')
+          Run-Native $exe @($after,'step3-cpu-setup')
+      - name: Assemble portable zip, license and verified hashes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root=(Get-Location).Path
+          $stage=Join-Path $root 'dist/Owner-CPU-Test'
+          New-Item -ItemType Directory -Path "$stage/Tools","$stage/Before","$stage/After" -Force | Out-Null
+          Copy-Item -LiteralPath "$root/build/integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe" -Destination "$stage/Tools/compact_vst3_host.exe"
+          Copy-Item -LiteralPath "$root/build/before/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3" -Destination "$stage/Before/Djenty Donkey.vst3" -Recurse
+          Copy-Item -LiteralPath "$root/build/after/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3" -Destination "$stage/After/Djenty Donkey.vst3" -Recurse
+          Copy-Item -LiteralPath "$root/tests/step4/owner_cpu_vst3.ps1" -Destination "$stage/run-cpu.ps1"
+          Copy-Item -LiteralPath "$root/tests/step4/START-CPU-TEST.cmd" -Destination "$stage/START-CPU-TEST.cmd"
+          Copy-Item -LiteralPath "$root/tests/step4/OWNER-TEST-README.md" -Destination "$stage/README.md"
+          Copy-Item -LiteralPath "$root/LICENSE" -Destination "$stage/LICENSE"
+          Copy-Item -LiteralPath "$root/installer/THIRD-PARTY-NOTICES.txt" -Destination "$stage/THIRD-PARTY-NOTICES.txt"
+          $before=@(Get-ChildItem -LiteralPath "$stage/Before" -File -Recurse | Where-Object { $_.Extension -ieq '.vst3' })
+          $after=@(Get-ChildItem -LiteralPath "$stage/After" -File -Recurse | Where-Object { $_.Extension -ieq '.vst3' })
+          if ($before.Count -ne 1 -or $after.Count -ne 1) { throw 'Expected one VST3 DLL per variant' }
+          $manifest=[ordered]@{
+            utc=(Get-Date).ToUniversalTime().ToString('o')
+            packageSourceCommit=(& git rev-parse HEAD).Trim()
+            baselineSourceCommit='398204e26d84c3f40bcd1c0af55dfa8e97893ca7'
+            afterProductSourceTree='23fe6fa178f2248c23726a31ad080a82f9e991bc'
+            juceSourceCommit='51d11a2be6d5c97ccf12b4e5e827006e19f0555a'
+            detoursSourceCommit='e4bfd6b03e50de46b47abfbd1e46b384f0c5f833'
+            hostSha256=(Get-FileHash -LiteralPath "$stage/Tools/compact_vst3_host.exe" -Algorithm SHA256).Hash
+            beforeVst3Sha256=(Get-FileHash -LiteralPath $before[0].FullName -Algorithm SHA256).Hash
+            afterVst3Sha256=(Get-FileHash -LiteralPath $after[0].FullName -Algorithm SHA256).Hash
+            note='Diagnostic test only, no FULL or FINAL release'
+          }
+          if ($manifest.beforeVst3Sha256 -eq $manifest.afterVst3Sha256) { throw 'Before and after identical' }
+          $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$stage/build-manifest.json" -Encoding utf8
+          Compress-Archive -Path "$stage/*" -DestinationPath "$root/dist/125A-Dystorator-Owner-Windows-CPU-Test.zip" -CompressionLevel Optimal -Force
+      - name: Upload portable user test package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: 125A-Dystorator-Owner-Windows-CPU-Test
+          retention-days: 14
+          if-no-files-found: error
+          path: dist/125A-Dystorator-Owner-Windows-CPU-Test.zip
