@@ -447,6 +447,102 @@ static void builtinReturnAudio (const juce::File &dir, const juce::File &ir)
            "factory return routes actual processor audio through audited built-in curve");
 }
 
+
+static bool useStereoBuses (VibeAmpProcessor& proc)
+{
+    juce::AudioProcessor::BusesLayout layout;
+    layout.inputBuses.add (juce::AudioChannelSet::stereo());
+    layout.outputBuses.add (juce::AudioChannelSet::stereo());
+    return proc.setBusesLayout (layout) && proc.getTotalNumInputChannels() == 2
+                                          && proc.getTotalNumOutputChannels() == 2;
+}
+
+static void stereoInputRegressions (const juce::File& dir)
+{
+    for (int active = 0; active < 2; ++active)
+    {
+        VibeAmpProcessor tested (dir), silent (dir);
+        const bool buses = useStereoBuses (tested) && useStereoBuses (silent);
+        check (buses, "compact stereo bus contract accepts 2-in/2-out");
+        if (! buses) continue;
+        tested.prepareToPlay (48000.0, 64);
+        silent.prepareToPlay (48000.0, 64);
+        for (auto* p : { &tested, &silent })
+        {
+            param (*p, ids::channel, 0);
+            param (*p, ids::ampNoise, 0);
+            param (*p, ids::boostOn, 0);
+            param (*p, ids::cabOn, 0);
+            param (*p, ids::lowCutOn, 0);
+            param (*p, ids::highCutOn, 0);
+            param (*p, ids::inGateOn, 0);
+        }
+        double audible = 0.0, bleed = 0.0;
+        juce::MidiBuffer midi;
+        for (int k = 0; k < 160; ++k)
+        {
+            juce::AudioBuffer<float> a (2, 64), b (2, 64);
+            a.clear(); b.clear();
+            for (int i = 0; i < 64; ++i)
+                a.setSample (active, i, .15f * std::sin ((k * 64 + i) * .029f));
+            tested.processBlock (a, midi);
+            silent.processBlock (b, midi);
+            if (k < 20) continue; // don't hide differences in the initial settle
+            for (int i = 0; i < 64; ++i)
+            {
+                const auto dActive = (double) a.getSample (active, i) - b.getSample (active, i);
+                const auto dSilent = (double) a.getSample (1 - active, i) - b.getSample (1 - active, i);
+                audible += dActive * dActive;
+                bleed += dSilent * dSilent;
+            }
+        }
+        check (audible > 1e-8, active == 0 ? "L-only drives independent left amp"
+                                          : "R-only drives independent right amp (would fail original)");
+        check (bleed < 1e-12, active == 0 ? "L-only leaves right amp untouched"
+                                         : "R-only leaves left amp untouched");
+    }
+}
+
+static void stereoImpulseResponseRegression (const juce::File& dir)
+{
+    // Opposite-sign stereo impulse responses must retain channel identity.
+    const auto file = dir.getChildFile ("stereo-cab.wav");
+    juce::WavAudioFormat format;
+    auto output = file.createOutputStream();
+    auto writer = std::unique_ptr<juce::AudioFormatWriter> (
+        format.createWriterFor (output.release(), 48000.0, 2, 32, {}, 0));
+    if (! writer) { check (false, "stereo impulse writer"); return; }
+    juce::AudioBuffer<float> response (2, 128);
+    response.clear();
+    response.setSample (0, 0, .8f);
+    response.setSample (1, 0, -.8f);
+    const bool written = writer->writeFromAudioSampleBuffer (response, 0, 128);
+    writer.reset();
+    check (written, "write stereo impulse fixture");
+    if (! written) return;
+
+    CabinetIR cabinet;
+    const juce::dsp::ProcessSpec spec { 48000.0, 64, 2 };
+    cabinet.prepare (spec);
+    check (cabinet.load (file), "stereo impulse IR preflight succeeds");
+    juce::AudioBuffer<float> audio (2, 64);
+    auto passthrough = [] (float*, int, int) noexcept {};
+    // Drain the 50-ms crossfade with silent blocks, then test active convolution.
+    for (int i = 0; i < 55; ++i)
+    {
+        audio.clear();
+        auto blk = juce::dsp::AudioBlock<float> (audio);
+        cabinet.processStereo (blk, passthrough);
+    }
+    audio.clear();
+    audio.setSample (0, 0, .2f);
+    audio.setSample (1, 0, .2f);
+    auto blk = juce::dsp::AudioBlock<float> (audio);
+    cabinet.processStereo (blk, passthrough);
+    check (audio.getSample (0, 0) > 0.01f && audio.getSample (1, 0) < -.01f,
+           "stereo IR preserves opposite-sign L/R impulses");
+}
+
 int main ()
 {
     juce::ScopedJuceInitialiser_GUI init;
@@ -503,6 +599,8 @@ int main ()
         sceneAudio (dir, a);
         builtinReturnAudio (dir, a);
         realtimeHandoff (a, b);
+        stereoInputRegressions (dir);
+        stereoImpulseResponseRegression (dir);
         std::atomic<bool> done{false}, finite{true};
         std::thread audio (
             [&]
