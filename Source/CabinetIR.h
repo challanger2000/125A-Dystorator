@@ -37,7 +37,7 @@ public:
         auto ready = makeEngine (source.get(), newSpec); // build before disturbing the old state
         spec = newSpec;
         prepared = true;
-        transition.setSize (1, (int) spec.maximumBlockSize);
+        transition.setSize ((int) spec.numChannels, (int) spec.maximumBlockSize);
         delete pending.exchange (nullptr);
         delete retired.exchange (nullptr);
         delete active;
@@ -76,7 +76,7 @@ public:
             formats.registerBasicFormats();
             std::unique_ptr<juce::AudioFormatReader> reader (formats.createReaderFor (
                 std::make_unique<juce::MemoryInputStream> (bytes, false)));
-            if (! reader || reader->numChannels == 0 || reader->lengthInSamples <= 0
+            if (! reader || (reader->numChannels == 0 || reader->numChannels > 2) || reader->lengthInSamples <= 0
                 || reader->lengthInSamples > maxSamples || ! std::isfinite (reader->sampleRate)
                 || reader->sampleRate < 8000.0 || reader->sampleRate > 768000.0)
                 return fail ("Unsupported or invalid IR audio data");
@@ -86,15 +86,16 @@ public:
             if ((double) reader->lengthInSamples * budgetSampleRate / reader->sampleRate > maxSamples)
                 return fail ("IR exceeds the cross-sample-rate resource budget");
             auto candidate = std::make_unique<Source>();
-            candidate->data.setSize (1, (int) reader->lengthInSamples);
+            candidate->data.setSize ((int) reader->numChannels, (int) reader->lengthInSamples);
             candidate->rate = reader->sampleRate;
             candidate->path = file.getFullPathName();
-            // Original Convolution Stereo::no uses channel zero, never a stereo sum.
-            if (! reader->read (candidate->data.getArrayOfWritePointers(), 1, 0, candidate->data.getNumSamples()))
+            // Preserve separate L/R channels of stereo IRs; no downmix.
+            if (! reader->read (candidate->data.getArrayOfWritePointers(), candidate->data.getNumChannels(), 0, candidate->data.getNumSamples()))
                 return fail ("Incomplete IR audio data");
-            for (int i = 0; i < candidate->data.getNumSamples(); ++i)
-                if (! std::isfinite (candidate->data.getSample (0, i)))
-                    return fail ("IR contains non-finite samples");
+            for (int channel = 0; channel < candidate->data.getNumChannels(); ++channel)
+                for (int i = 0; i < candidate->data.getNumSamples(); ++i)
+                    if (! std::isfinite (candidate->data.getSample (channel, i)))
+                        return fail ("IR contains non-finite samples");
             auto ready = prepared ? makeEngine (candidate.get(), spec) : nullptr;
             // All operations that can reject the candidate precede this commit.
             source = std::move (candidate);
@@ -178,6 +179,53 @@ public:
         }
     }
 
+
+    // Two-channel atomic scene swap: both channels use the same accepted IR
+    // revision and one shared fade position. No audio-thread allocations/locks.
+    template <typename Builtin>
+    void processStereo (juce::dsp::AudioBlock<float> block, Builtin&& builtin) noexcept
+    {
+        jassert (block.getNumChannels() == 2 && spec.numChannels == 2);
+        if (previous == nullptr && retired.load() == nullptr)
+            if (auto* next = pending.exchange (nullptr))
+            {
+                previous = active;
+                active = next;
+                fadePosition = 0;
+                fadeLength = std::max (1, (int) (0.05 * spec.sampleRate));
+            }
+        if (previous && ! previous->convolution && ! active->convolution)
+        {
+            retired.store (previous);
+            previous = nullptr;
+        }
+        const int n = (int) block.getNumSamples();
+        if (previous)
+            for (int channel = 0; channel < 2; ++channel)
+                transition.copyFrom (channel, 0, block.getChannelPointer ((size_t) channel), n);
+        renderStereo (active, block, builtin);
+        if (previous)
+        {
+            auto old = juce::dsp::AudioBlock<float> (transition).getSubBlock (0, (size_t) n);
+            renderStereo (previous, old, builtin);
+            float* l = block.getChannelPointer (0);
+            float* r = block.getChannelPointer (1);
+            const float* oldL = transition.getReadPointer (0);
+            const float* oldR = transition.getReadPointer (1);
+            for (int i = 0; i < n; ++i)
+            {
+                const float mix = std::min (1.0f, (float) ++fadePosition / (float) fadeLength);
+                l[i] = oldL[i] + mix * (l[i] - oldL[i]);
+                r[i] = oldR[i] + mix * (r[i] - oldR[i]);
+            }
+            if (fadePosition >= fadeLength)
+            {
+                retired.store (previous);
+                previous = nullptr;
+            }
+        }
+    }
+
 private:
     void run() override
     {
@@ -199,7 +247,10 @@ private:
             auto& c = result->convolution;
             c = std::make_unique<juce::dsp::Convolution>();
             juce::AudioBuffer<float> copy (src->data);
-            c->loadImpulseResponse (std::move (copy), src->rate, juce::dsp::Convolution::Stereo::no,
+            c->loadImpulseResponse (std::move (copy), src->rate,
+                                    src->data.getNumChannels() == 2 && s.numChannels == 2
+                                        ? juce::dsp::Convolution::Stereo::yes
+                                        : juce::dsp::Convolution::Stereo::no,
                                     juce::dsp::Convolution::Trim::yes, juce::dsp::Convolution::Normalise::yes);
             // JUCE 8.0.4 documents prepare() as synchronous completion of the
             // latest IR load. load/prepare here never overlap this instance's process.
@@ -218,6 +269,20 @@ private:
         else
             builtin (block.getChannelPointer (0), (int) block.getNumSamples());
     }
+
+    template <typename Builtin>
+    static void renderStereo (Engine* e, juce::dsp::AudioBlock<float> block, Builtin& builtin) noexcept
+    {
+        if (e && e->convolution)
+        {
+            juce::dsp::ProcessContextReplacing<float> ctx (block);
+            e->convolution->process (ctx);
+        }
+        else
+            for (int channel = 0; channel < (int) block.getNumChannels(); ++channel)
+                builtin (block.getChannelPointer ((size_t) channel), (int) block.getNumSamples(), channel);
+    }
+
     bool fail (const juce::String& text) { error = text; return false; }
     void publish (std::unique_ptr<Engine> next)
     {

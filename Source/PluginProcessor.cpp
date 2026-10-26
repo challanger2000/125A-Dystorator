@@ -39,6 +39,8 @@ VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     pTreble = get (ids::treble); pPresence = get (ids::presence); pResonance = get (ids::resonance);
     pMaster = get (ids::master);
     pCabOn = get (ids::cabOn);
+    pLowCutOn = get (ids::lowCutOn); pLowCutHz = get (ids::lowCutHz);
+    pHighCutOn = get (ids::highCutOn); pHighCutHz = get (ids::highCutHz);
     pEqOn = get (ids::eqOn);
     for (int i = 0; i < 10; ++i)
         pEq[i] = get (ids::eqBand (i));
@@ -64,92 +66,53 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     sampleRateHz = sampleRate;
     maxBlock = juce::jmax (1, samplesPerBlock);
-
-    monoBuf.setSize (1, maxBlock);
-    keyBuf.setSize (1, maxBlock);
     stereoBuf.setSize (2, maxBlock);
 
-    const juce::dsp::ProcessSpec monoSpec { sampleRate, (juce::uint32) maxBlock, 1 };
     const juce::dsp::ProcessSpec stereoSpec { sampleRate, (juce::uint32) maxBlock, 2 };
+    inputGain.prepare (stereoSpec);
+    inputGain.setRampDurationSeconds (0.05);
+    outputGain.prepare (stereoSpec);
+    outputGain.setRampDurationSeconds (0.05);
 
-    inputGain.prepare (monoSpec);  inputGain.setRampDurationSeconds (0.05);
-    compMakeup.prepare (monoSpec); compMakeup.setRampDurationSeconds (0.05);
-    outputGain.prepare (stereoSpec); outputGain.setRampDurationSeconds (0.05);
+    for (int channel = 0; channel < 2; ++channel)
+    {
+        inputGate[channel].prepare (sampleRate);
+        amp[channel].prepare (sampleRate, maxBlock);
+        using T = vamp::Biquad::Type;
+        auto& f = fallbackCab[channel];
+        f[0].set (T::highPass, sampleRate, 80.0, 0.7);
+        f[1].set (T::peak, sampleRate, 120.0, 1.2, 3.0);
+        f[2].set (T::peak, sampleRate, 400.0, 1.0, -3.0);
+        f[3].set (T::peak, sampleRate, 2500.0, 1.5, 3.0);
+        f[4].set (T::lowPass, sampleRate, 5000.0, 0.9);
+        for (auto& biquad : f) biquad.reset();
+        lastInput[channel] = 0.0f;
+    }
 
-    gate.prepare (sampleRate);
-    inputGate.prepare (sampleRate);
-
-    shifter.prepare (sampleRate);
-    comp.prepare (monoSpec);
-    amp.prepare (sampleRate, maxBlock);
-    cabinet.prepare (monoSpec);
-
-    // Built-in fallback cabinet (used until the user loads an IR): 4x12-ish curve
-    using T = vamp::Biquad::Type;
-    fallbackCab[0].set (T::highPass, sampleRate, 80.0, 0.7);
-    fallbackCab[1].set (T::peak, sampleRate, 120.0, 1.2, 3.0);
-    fallbackCab[2].set (T::peak, sampleRate, 400.0, 1.0, -3.0);
-    fallbackCab[3].set (T::peak, sampleRate, 2500.0, 1.5, 3.0);
-    fallbackCab[4].set (T::lowPass, sampleRate, 5000.0, 0.9);
-    for (auto& f : fallbackCab) f.reset();
-    for (auto& f : eq) f.reset();
-
-    phaser.prepare (stereoSpec);
-    phaser.setCentreFrequency (1000.0f);
-    delay.prepare (sampleRate);
-    reverb.prepare (stereoSpec);
-
-    keyDelayBuf.assign (16384, 0.0f);
-    keyDelayPos = 0;
-
-    targetLatency = amp.getLatencySamples() + shifter.getReportedLatency();
-    setLatencySamples (targetLatency.load());
+    // CabinetIR's immutable prepared engines remain under the audited B01
+    // control/audio ownership contract, now prepared for two output channels.
+    cabinet.prepare (stereoSpec);
+    cuts.prepare (sampleRate);
+    inGateOn = false;
+    const int latency = amp[0].getLatencySamples();
+    targetLatency = latency;
+    setLatencySamples (latency);
 }
 
 void VibeAmpProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
-
     const int numIn = getTotalNumInputChannels();
     const int numOut = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
 
-    // ---- read parameters once per block ----
     inputGain.setGainDecibels (pInGain->load());
-
-    const bool newInGateOn = pInGateOn->load() > 0.5f;
-    if (newInGateOn && ! inGateOn) inputGate.reset();
-    inGateOn = newInGateOn;
+    const bool enabled = pInGateOn->load() > 0.5f;
+    if (enabled && ! inGateOn)
+        for (auto& gate : inputGate) gate.reset();
+    inGateOn = enabled;
     inGateThresh = pInGateThresh->load();
     inGateRelease = pInGateRelease->load();
-
-    const bool newGateOn = pGateOn->load() > 0.5f;
-    if (newGateOn && ! gateOn) gate.reset();
-    gateOn = newGateOn;
-    gateSettings.threshDb = pGateThresh->load();
-    gateSettings.releaseMs = pGateRelease->load();
-    gateSettings.depth[0] = pGateLow->load() * 0.01f;
-    gateSettings.depth[1] = pGateMid->load() * 0.01f;
-    gateSettings.depth[2] = pGateHigh->load() * 0.01f;
-
-    shifter.setParams (juce::roundToInt (pTranspose->load()), juce::roundToInt (pTransposeMode->load()));
-    keyDelay = juce::jlimit (0, (int) keyDelayBuf.size() - 1,
-                             juce::roundToInt (pTransposeMode->load()) == vamp::PitchShifter::HQ ? shifter.getAverageDelay() : 0);
-
-    // HQ transpose adds a fixed latency: report it to the host (on the message thread)
-    const int latency = amp.getLatencySamples() + shifter.getReportedLatency();
-    if (latency != targetLatency.load())
-    {
-        targetLatency = latency;
-        triggerAsyncUpdate();
-    }
-
-    compOn = pCompOn->load() > 0.5f;
-    comp.setThreshold (pCompThresh->load());
-    comp.setRatio (pCompRatio->load());
-    comp.setAttack (pCompAttack->load());
-    comp.setRelease (pCompRelease->load());
-    compMakeup.setGainDecibels (pCompMakeup->load());
 
     ampSettings.channel = juce::roundToInt (pChannel->load());
     ampSettings.bright = pAmpBright->load() > 0.5f;
@@ -172,146 +135,81 @@ void VibeAmpProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mid
     ampSettings.boostModel = juce::roundToInt (pBoostModel->load());
 
     cabOn = pCabOn->load() > 0.5f;
-
-    eqOn = pEqOn->load() > 0.5f;
-    if (eqOn)
-        for (int i = 0; i < 10; ++i)
-            eq[i].set (vamp::Biquad::Type::peak, sampleRateHz, ids::eqFreqs[i], 1.41, pEq[i]->load());
-
-    phaserOn = pPhaserOn->load() > 0.5f;
-    phaser.setRate (pPhRate->load());
-    phaser.setDepth (pPhDepth->load());
-    phaser.setFeedback (pPhFeedback->load());
-    phaser.setMix (pPhMix->load());
-
-    delayOn = pDelayOn->load() > 0.5f;
-    dlTime = pDlTime->load();
-    dlFeedback = pDlFeedback->load();
-    dlMix = pDlMix->load();
-    pingPong = pDlPingPong->load() > 0.5f;
-
-    reverbOn = pReverbOn->load() > 0.5f;
-    juce::Reverb::Parameters rp;
-    rp.roomSize = pRvSize->load();
-    rp.damping = pRvDamping->load();
-    rp.width = pRvWidth->load();
-    rp.wetLevel = pRvMix->load() * 0.5f;
-    rp.dryLevel = 0.5f; // JUCE scales dry by 2, so 0.5 == unity
-    rp.freezeMode = 0.0f;
-    reverb.setParameters (rp);
-
+    cuts.setCutoffs (pLowCutHz->load(), pHighCutHz->load());
+    cuts.setEnabled (pLowCutOn->load() > 0.5f, pHighCutOn->load() > 0.5f);
     outputGain.setGainDecibels (pOutGain->load());
 
-    // clear tails when an effect gets switched back on
-    if (delayOn && ! wasDelayOn) delay.reset();
-    if (reverbOn && ! wasReverbOn) reverb.reset();
-    if (phaserOn && ! wasPhaserOn) phaser.reset();
-    wasDelayOn = delayOn; wasReverbOn = reverbOn; wasPhaserOn = phaserOn;
-
-    // ---- process in chunks no larger than what we prepared for ----
+    // Obsolete legacy parameter IDs stay available to project recall.
+    // Compressor, Transpose, EQ, Phaser, Delay, Reverb and loop gate have
+    // NO active audio path in this compact product.
     for (int start = 0; start < numSamples; start += maxBlock)
         processChunk (buffer, start, juce::jmin (maxBlock, numSamples - start), numIn, numOut);
 }
 
 void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start, int len, int numIn, int numOut)
 {
-    // Guitar is mono: take the first input channel
-    if (numIn > 0)
-        monoBuf.copyFrom (0, 0, buffer, 0, start, len);
-    else
-        monoBuf.clear (0, 0, len);
-
-    float* mono = monoBuf.getWritePointer (0);
-    // A non-finite input sample (broken upstream plugin / host) would poison every stateful block after it
-    // (pitch shifter, compressor, oversampling filters, cab, delay, reverb) until the plugin is reloaded.
-    // It is treated as lost: the last finite sample stands in.
-    for (int i = 0; i < len; ++i)
+    // Each stereo input has its own circuit. Mono inputs process ONE amp
+    // and split into L/R only immediately before the stereo cabinet stage.
+    const int ampLanes = numIn >= 2 ? 2 : 1;
+    for (int channel = 0; channel < ampLanes; ++channel)
     {
-        if (std::isfinite (mono[i])) lastInput = mono[i];
-        else mono[i] = lastInput;
-    }
-    auto monoBlock = juce::dsp::AudioBlock<float> (monoBuf).getSubBlock (0, (size_t) len);
-    juce::dsp::ProcessContextReplacing<float> monoCtx (monoBlock);
+        if (numIn > channel)
+            stereoBuf.copyFrom (channel, 0, buffer, channel, start, len);
+        else
+            stereoBuf.clear (channel, 0, len);
 
-    // ---- pre-amp: input -> transpose -> comp ----
-    inputGain.process (monoCtx);
-    updatePeak (inputPeak, monoBuf.getMagnitude (0, 0, len)); // what the amp sees (after the Input knob)
-    {
-        // clean guitar = noise gate detector key, delayed to line up with the transposed signal
-        float* key = keyBuf.getWritePointer (0);
-        const int mask = (int) keyDelayBuf.size() - 1;
+        float* data = stereoBuf.getWritePointer (channel);
         for (int i = 0; i < len; ++i)
-        {
-            keyDelayBuf[(size_t) keyDelayPos] = mono[i];
-            key[i] = keyDelayBuf[(size_t) ((keyDelayPos - keyDelay) & mask)];
-            keyDelayPos = (keyDelayPos + 1) & mask;
-        }
+            if (std::isfinite (data[i]))
+                lastInput[channel] = data[i];
+            else
+                data[i] = lastInput[channel];
     }
-    if (inGateOn)
-        inputGate.process (mono, len, inGateThresh, inGateRelease);
-    shifter.process (mono, len);
-    if (compOn)
+    if (ampLanes == 1)
+        stereoBuf.copyFrom (1, 0, stereoBuf, 0, 0, len);
+
+    auto stereoBlock = juce::dsp::AudioBlock<float> (stereoBuf).getSubBlock (0, (size_t) len);
+    juce::dsp::ProcessContextReplacing<float> stereoCtx (stereoBlock);
+    inputGain.process (stereoCtx);
+    updatePeak (inputPeak, juce::jmax (stereoBuf.getMagnitude (0, 0, len),
+                                       stereoBuf.getMagnitude (1, 0, len)));
+
+    for (int channel = 0; channel < ampLanes; ++channel)
     {
-        comp.process (monoCtx);
-        compMakeup.process (monoCtx);
+        float* data = stereoBuf.getWritePointer (channel);
+        if (inGateOn)
+            inputGate[channel].process (data, len, inGateThresh, inGateRelease);
+        amp[channel].process (data, len, ampSettings);
     }
+    if (ampLanes == 1)
+        stereoBuf.copyFrom (1, 0, stereoBuf, 0, 0, len);
 
-    // ---- amp (boost lives inside the oversampled amp loop) ----
-    amp.process (mono, len, ampSettings);
+#if defined (VAMP_IR_TEST_CAPTURE)
+    irTestCaptureCabinetInput (stereoBuf.getReadPointer (0), len);
+#endif
 
-    // ---- 3-band noise gate: keyed by the clean input, acting on the amp output ----
-    if (gateOn)
-    {
-        gate.process (mono, keyBuf.getReadPointer (0), len, gateSettings);
-        for (int b = 0; b < 3; ++b)
-            gateBandGain[b].store (gate.getBandGain (b));
-    }
-    else
-    {
-        for (auto& g : gateBandGain) g.store (1.0f);
-    }
-
-   #if defined (VAMP_IR_TEST_CAPTURE)
-    irTestCaptureCabinetInput (mono, len);
-   #endif
-
-    // ---- cabinet ----
     if (cabOn)
-    {
-        cabinet.process (monoBlock, [this] (float* data, int count) noexcept
+        cabinet.processStereo (stereoBlock, [this] (float* data, int count, int channel) noexcept
         {
             for (int i = 0; i < count; ++i)
             {
-                float v = data[i];
-                for (auto& f : fallbackCab) v = f.process (v);
-                data[i] = v;
+                float value = data[i];
+                for (auto& f : fallbackCab[channel]) value = f.process (value);
+                data[i] = value;
             }
         });
-    }
 
-    // ---- 10-band EQ ----
-    if (eqOn)
-        for (int i = 0; i < len; ++i)
-        {
-            float v = mono[i];
-            for (auto& f : eq) v = f.process (v);
-            mono[i] = v;
-        }
+    // 2-pole Butterworth cuts with common coefficients and separate L/R
+    // states. On/off and cutoff modulation are smoothed by GuitarCuts.
+    float* left = stereoBuf.getWritePointer (0);
+    float* right = stereoBuf.getWritePointer (1);
+    for (int i = 0; i < len; ++i)
+        cuts.processStereo (left[i], right[i]);
 
-    // ---- stereo post effects ----
-    stereoBuf.copyFrom (0, 0, monoBuf, 0, 0, len);
-    stereoBuf.copyFrom (1, 0, monoBuf, 0, 0, len);
-    auto stereoBlock = juce::dsp::AudioBlock<float> (stereoBuf).getSubBlock (0, (size_t) len);
-    juce::dsp::ProcessContextReplacing<float> stereoCtx (stereoBlock);
-
-    if (phaserOn) phaser.process (stereoCtx);
-    if (delayOn) delay.process (stereoBuf.getWritePointer (0), stereoBuf.getWritePointer (1), len,
-                                dlTime, dlFeedback, dlMix, pingPong);
-    if (reverbOn) reverb.process (stereoCtx);
     outputGain.process (stereoCtx);
-    updatePeak (outputPeak, juce::jmax (stereoBuf.getMagnitude (0, 0, len), stereoBuf.getMagnitude (1, 0, len)));
+    updatePeak (outputPeak, juce::jmax (stereoBuf.getMagnitude (0, 0, len),
+                                        stereoBuf.getMagnitude (1, 0, len)));
 
-    // ---- write out ----
     if (numOut >= 2)
     {
         buffer.copyFrom (0, start, stereoBuf, 0, 0, len);
@@ -323,9 +221,10 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
         buffer.addFrom (0, start, stereoBuf, 1, 0, len);
         buffer.applyGain (0, start, len, 0.5f);
     }
+    for (int channel = juce::jlimit (0, 2, numOut); channel < buffer.getNumChannels(); ++channel)
+        buffer.clear (channel, start, len);
 
-    for (int ch = juce::jlimit (0, 2, numOut); ch < buffer.getNumChannels(); ++ch)
-        buffer.clear (ch, start, len);
+    for (auto& band : gateBandGain) band.store (1.0f); // legacy meter only
 }
 
 // ---------------------------------------------------------------------------

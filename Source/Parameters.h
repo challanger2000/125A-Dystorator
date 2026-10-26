@@ -41,6 +41,10 @@ inline constexpr const char* resonance   = "resonance";
 inline constexpr const char* master      = "master";
 inline constexpr const char* ampVolume   = "ampVolume";
 inline constexpr const char* cabOn       = "cabOn";
+inline constexpr const char* lowCutOn    = "lowCutOn";
+inline constexpr const char* lowCutHz    = "lowCutHz";
+inline constexpr const char* highCutOn   = "highCutOn";
+inline constexpr const char* highCutHz   = "highCutHz";
 inline constexpr const char* eqOn        = "eqOn";
 inline constexpr const char* phaserOn    = "phaserOn";
 inline constexpr const char* phRate      = "phRate";
@@ -140,6 +144,10 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     layout.add (makeFloat (ids::ampVolume, "Amp Volume", -40.0f, 12.0f, 0.0f, " dB"));
 
     layout.add (makeBool (ids::cabOn, "Cab On", true));
+    layout.add (makeBool  (ids::lowCutOn, "Low Cut On", false));
+    layout.add (makeFloat (ids::lowCutHz, "Low Cut", 20.0f, 300.0f, 85.0f, " Hz", 0, 100.0f));
+    layout.add (makeBool  (ids::highCutOn, "High Cut On", false));
+    layout.add (makeFloat (ids::highCutHz, "High Cut", 3000.0f, 20000.0f, 10000.0f, " Hz", 0, 7000.0f));
 
     layout.add (makeBool (ids::eqOn, "EQ On", false));
     for (int i = 0; i < 10; ++i)

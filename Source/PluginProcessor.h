@@ -2,6 +2,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 #include "dsp/AmpSim.h"
+#include "dsp/GuitarCuts.h"
 #include "dsp/Filters.h"
 #include "dsp/MultibandGate.h"
 #include "dsp/PitchShifter.h"
@@ -31,7 +32,7 @@ public:
     bool acceptsMidi() const override { return false; }
     bool producesMidi() const override { return false; }
     bool isMidiEffect() const override { return false; }
-    double getTailLengthSeconds() const override { return 3.0; }
+    double getTailLengthSeconds() const override { return 8.0; }
 
     int getNumPrograms() override { return 1; }
     int getCurrentProgram() override { return 0; }
@@ -79,7 +80,8 @@ private:
     std::atomic<float>* pChannel {}; std::atomic<float>* pAmpBright {}; std::atomic<float>* pAmpCrunch {}; std::atomic<float>* pAmpNoise {}; std::atomic<float>* pTubeSet {}; std::atomic<float>* pAmpGain {}; std::atomic<float>* pBass {};
     std::atomic<float>* pMid {}; std::atomic<float>* pTreble {}; std::atomic<float>* pPresence {};
     std::atomic<float>* pResonance {}; std::atomic<float>* pMaster {};
-    std::atomic<float>* pCabOn {}; std::atomic<float>* pEqOn {}; std::atomic<float>* pEq[10] {};
+    std::atomic<float>* pCabOn {}; std::atomic<float>* pLowCutOn {}; std::atomic<float>* pLowCutHz {};
+    std::atomic<float>* pHighCutOn {}; std::atomic<float>* pHighCutHz {}; std::atomic<float>* pEqOn {}; std::atomic<float>* pEq[10] {};
     std::atomic<float>* pPhaserOn {}; std::atomic<float>* pPhRate {}; std::atomic<float>* pPhDepth {};
     std::atomic<float>* pPhFeedback {}; std::atomic<float>* pPhMix {};
     std::atomic<float>* pDelayOn {}; std::atomic<float>* pDlTime {}; std::atomic<float>* pDlFeedback {};
@@ -90,41 +92,26 @@ private:
 
     double sampleRateHz = 44100.0;
     int maxBlock = 512;
-    juce::AudioBuffer<float> monoBuf, stereoBuf, keyBuf;
-    float lastInput = 0.0f; // last finite input sample (stands in for a non-finite one)
+    juce::AudioBuffer<float> stereoBuf;
 
-    // signal chain
-    juce::dsp::Gain<float> inputGain, compMakeup, outputGain;
-    vamp::InputGate inputGate;
+    // Compact stereo amplifier. Each lane has its own nonlinear circuit state.
+    juce::dsp::Gain<float> inputGain, outputGain;
+    vamp::InputGate inputGate[2];
     bool inGateOn = false;
     float inGateThresh = -50.0f, inGateRelease = 20.0f;
-    vamp::MultibandGate gate;
-    vamp::MultibandGate::Settings gateSettings;
-    vamp::PitchShifter shifter;
-    juce::dsp::Compressor<float> comp;
-    vamp::AmpSim amp;
+    vamp::AmpSim amp[2];
     vamp::AmpSim::Settings ampSettings;
     CabinetIR cabinet;
-    vamp::Biquad fallbackCab[5];
-    vamp::Biquad eq[10];
-    juce::dsp::Phaser<float> phaser;
-    vamp::StereoDelay delay;
-    juce::dsp::Reverb reverb;
-
-    bool gateOn = true, compOn = false, cabOn = true, eqOn = false;
-    bool phaserOn = false, delayOn = false, reverbOn = false, pingPong = false;
-    bool wasDelayOn = false, wasReverbOn = false, wasPhaserOn = false;
-    float dlTime = 380.0f, dlFeedback = 0.35f, dlMix = 0.3f;
+    vamp::Biquad fallbackCab[2][5];
+    vamp::GuitarCuts cuts;
+    bool cabOn = true;
+    float lastInput[2] { 0.0f, 0.0f };
 
     static void updatePeak (std::atomic<float>& target, float value)
     {
         float prev = target.load();
         while (value > prev && ! target.compare_exchange_weak (prev, value)) {}
     }
-
-    // noise-gate key delay (aligns the key with the transposed signal in HQ mode)
-    std::vector<float> keyDelayBuf;
-    int keyDelayPos = 0, keyDelay = 0;
 
     std::atomic<int> targetLatency { 0 };
     std::atomic<float> inputPeak { 0.0f }, outputPeak { 0.0f };
