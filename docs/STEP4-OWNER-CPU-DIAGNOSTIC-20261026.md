@@ -2,6 +2,16 @@
 
 Stand: 2026-10-26. **Kein RELEASE, keine DSP-Änderung.** Ausgangspunkt: Entwicklungsbranch dev/compact-stereo-on-ir-fix-20261026, Quellstand 44a184599abeaaa928f6751ce10a71b574ea499c. Dieser Arbeitsbranch ist ein isoliertes Diagnoseexperiment, kein Merge in den Produktbranch.
 
+## Verbindliche Produktpriorität – ECO in Echtzeit, HIGH beim Bounce
+
+**Nutzerentscheidung vom 26.10.2026:** Nicht HIGH-Echtzeit um jeden Preis optimieren. **ECO (LOW) muss in Studio One mit tatsächlich unabhängigem Stereo-Gitarrensignal ohne Knackser/Dropouts funktionieren.** STANDARD ist optional; HIGH ist für den finalen Offline-Bounce/Export vorgesehen. Ein HIGH-Deadline-FAIL im Echtzeittest ist ab jetzt keine alleinige Ablehnung des Produkts, solange der qualitativ einwandfreie HIGH-Offline-Render funktioniert. Die Entscheidung ändert **nicht** die allgemeinen Anforderungen an Fehlerfreiheit, Latenz, Zustand, Stereo-Unabhängigkeit und CPU-Sicherheit.
+
+**Bisheriger Windows-CI-Befund (Run 40406692088, AMD EPYC9V45, nicht Owner-i9):** ECO MONO besteht 7/8 der 44,1/48-kHz-×128/256-×offline/getaktet-Fälle. **ECO STEREO besteht nur 1/8**; 7/8 verfehlen das strikte Test-Gate. Deshalb ist gerade die wichtigste neue Anforderung derzeit **FAIL auf CI / NOT RUN auf Owner-i9 und ASIO**. Für die Freigabe sind insbesondere reale 44,1/48-kHz-Stereo-Instanzen und eine praxisgerechte Mehrinstanz-Session auf dem tatsächlichen Rechner wichtiger als weitere HIGH-Mikrooptimierungen.
+
+**Klangbedingung:** Die vorhandene synthetische Alias-Messung weist für ECO ein ernstes Risiko aus. Bei 48 kHz/5 kHz/−18,42 dBFS ist der gefaltete-Bin-Indikator laut Step3-Bericht etwa **−7,34 dB** in ECO gegenüber **−45,84 dB** in HIGH; diese Metrik ist kein reiner hörpsychologischer Alias-Nachweis. Deshalb ECO nicht aufgrund der CPU-Zeit allein als musikalisch akzeptabel behandeln. Realistische Gitarren-DI, Level-Matching, Akkorde, Palm-Mutes, Höhen, lange Ausklingphasen und Umschalten ECO→HIGH müssen geprüft werden. Kein automatisches Abschwächen von Oversampling/Filterung ohne Klangnachweis.
+
+**Keine automatische Host-Umschaltung behaupten:** `quality` ist derzeit ein normaler gespeicherter Plugin-Parameter; laut Source/Parameters.h lautet der bestehende Default HIGH, um Projektklang zu erhalten. Zum Bouncen muss HIGH derzeit bewusst gewählt werden. Automatischer HIGH-Wechsel bei Offline-Render ist kein implementiertes Feature und wäre ein gesonderter, vollständig zu testender Auftrag (auch mit State- und Latenzverhalten). Nicht stillschweigend Defaults ändern oder alte Projekte verändern.
+
 ## Messbasis und Engpass
 
 Windows CI (AMD EPYC, nicht i9-11900K) ergab unter Run 40406692088 gegenüber dem genehmigten CPU-Ausgangsstand 398204e26d84c3f40bcd1c0af55dfa8e97893ca7 nach dem Zusatzschritt 33/48 statt vorher 30/48 Deadline-Verletzungsfälle. Nur 0,19 % HIGH-Einsparung in diesem Lauf, nicht signifikant gegenüber Lastdrift. Im 48-kHz-HIGH-STEREO-Fall mit 128 Samples lag die aktuelle Callback-Wallzeit bei durchschnittlich 4944,81 us gegenüber 2666,67 us Blockdeadline. Es ist keine ASIO-Messung. Auch die 2026-10-26 Linux-Profilierung ordnet die größten inklusiven Kosten Preamp und Poweramp/Newton zu, nicht primär Cabinet/Oversampling.
