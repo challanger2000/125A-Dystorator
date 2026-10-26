@@ -1,6 +1,7 @@
 #include "HeapProbe.h"
 #include "Parameters.h"
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 #include "matched_ir_oracle.h"
 #include <atomic>
 #include <chrono>
@@ -79,6 +80,43 @@ static void block (VibeAmpProcessor &p)
                 throw std::runtime_error ("nonfinite audio");
 }
 
+// Real JUCE editor controls -> existing APVTS parameters, not just a source-text
+// assertion. Does not approve final GUI look, host DPI, or Studio One lifecycle.
+static juce::Button* findEditorButton (juce::Component& parent, const juce::String& label)
+{
+    if (auto* b = dynamic_cast<juce::Button*> (&parent))
+        if (b->getButtonText() == label && b->isVisible()) return b;
+    for (int i = 0; i < parent.getNumChildComponents(); ++i)
+        if (auto* found = findEditorButton (*parent.getChildComponent (i), label)) return found;
+    return nullptr;
+}
+static void compactEditorBindings (const juce::File& dir)
+{
+    VibeAmpProcessor processor (dir);
+    std::unique_ptr<juce::AudioProcessorEditor> editor (processor.createEditor());
+    check (editor != nullptr, "compact editor can be constructed");
+    if (! editor) return;
+    int sections = 0;
+    for (int i = 0; i < editor->getNumChildComponents(); ++i)
+        if (dynamic_cast<ui::Section*> (editor->getChildComponent (i))) ++sections;
+    check (sections == 8, "exactly eight live compact sections, no dead effect sections");
+    const auto clickAndCheck = [&] (const char* caption, const char* id, int expected)
+    {
+        auto* button = findEditorButton (*editor, caption);
+        if (! button) { check (false, "required interactive button absent"); return; }
+        button->triggerClick();
+        juce::MessageManager::getInstance()->runDispatchLoopUntil (30);
+        const auto* actual = processor.apvts.getRawParameterValue (id);
+        check (actual && juce::roundToInt (actual->load()) == expected,
+               "editor input reaches its actual APVTS parameter");
+    };
+    clickAndCheck ("ECO", ids::quality, 0);
+    clickAndCheck ("HIGH", ids::quality, 2);
+    clickAndCheck ("MONO", ids::ampMode, 0);
+    clickAndCheck ("STEREO", ids::ampMode, 1);
+    clickAndCheck ("LOW ON", ids::lowCutOn, 1);
+    clickAndCheck ("HIGH ON", ids::highCutOn, 1);
+}
 static juce::MemoryBlock hostState (VibeAmpProcessor &p)
 {
     juce::MemoryBlock state;
@@ -614,7 +652,8 @@ int main (int argc, char** argv)
     if (argc > 1)
     {
         const std::string mode = argv[1];
-        if (mode == "cuts") compactCutProcessorOracle (dir);
+        if (mode == "gui") compactEditorBindings (dir);
+        else if (mode == "cuts") compactCutProcessorOracle (dir);
         else if (mode == "bypass") compactBypass (dir);
         else if (mode == "stereo") compactRegressions (dir);
         else if (mode == "cpu") compactCPU (dir);
@@ -684,6 +723,7 @@ int main (int argc, char** argv)
         p.setStateInformation (state.getData (), (int)state.getSize ());
         check (p.getIRPath () == a.getFullPathName (), "host state restores IR A");
         malformedScenes (p, dir, a);
+        compactEditorBindings (dir);
         check (cabMatchGainInvariants(), "IR gain scales with input amplitude and preserves anti-phase stereo");
         cabinetAudio (dir, a, b);
         sceneAudio (dir, a);
