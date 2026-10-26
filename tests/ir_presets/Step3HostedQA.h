@@ -307,6 +307,7 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
         for (int lanes : {1, 2})
         {
             juce::String error;
+            std::cout << "HOST_STAGE cpu instantiate fs=" << fs << " lanes=" << lanes << std::endl;
             auto p = format.createInstanceFromDescription (description, fs, 512, error);
             if (!p)
                 throw std::runtime_error (error.toStdString ());
@@ -330,7 +331,9 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
                                                              {"AMP MODE", lanes == 1 ? 0.f : 1.f},
                                                              {"QUALITY", 1}})
                 parameter (*p, setting.first, setting.second);
+            std::cout << "HOST_STAGE cpu prepare fs=" << fs << " lanes=" << lanes << std::endl;
             p->prepareToPlay (fs, 512);
+            std::cout << "HOST_STAGE cpu prepared" << std::endl;
             const int latency = p->getLatencySamples ();
             for (int quality : {2, 1, 0})
             {

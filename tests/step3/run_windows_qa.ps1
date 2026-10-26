@@ -82,6 +82,7 @@ try {
         } else { $null = Check-Native ($qaMain.Replace('.cpp','')) $integrationExe @() }
     }
     # Packaged DLL, host controller, real ProcessContext and cross-CRT heap hooks.
+    $null = Check-Native 'standalone-heap-selftest' $hostExe @('step3-heap-selftest')
     $null = Check-Native 'packaged-vst3-host' $hostExe @($plugin,'step3')
     # Same host executable, complete before/after Release VST3, same flags and runner.
     # A single deadline miss is FAIL; preserve exit 1 rather than accepting it as PASS.
@@ -126,7 +127,7 @@ try {
     $infraFailure | Set-Content (Join-Path $EvidenceDir 'infrastructure-failure.txt') -Encoding utf8
     Write-Error $infraFailure -ErrorAction Continue
  } finally {
-    $required = @('build-before-plugin','build-plugin','native-ctest','tone-regression','fault-regression','ir-preset-ownership-regressions','quality-modes','quality-pcm','quality-stress','step3_pcm','mono_reference','stereo_quality_reference','step3_alias','large_ir_heap','packaged-vst3-host','cpu-before','cpu-after','tester-job-object-selftest','steinberg-validator-selftest','125a-tester-product')
+    $required = @('build-before-plugin','build-plugin','native-ctest','tone-regression','fault-regression','ir-preset-ownership-regressions','quality-modes','quality-pcm','quality-stress','step3_pcm','mono_reference','stereo_quality_reference','step3_alias','large_ir_heap','standalone-heap-selftest','packaged-vst3-host','cpu-before','cpu-after','tester-job-object-selftest','steinberg-validator-selftest','125a-tester-product')
     foreach ($name in $required) {
         if (-not @($checks | Where-Object { $_.name -eq $name }).Count) {
             $checks.Add([ordered]@{name=$name;status='NOT RUN';detail='Not reached after infrastructure/build failure';exitCode=$null})

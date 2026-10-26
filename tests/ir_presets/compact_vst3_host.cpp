@@ -1,3 +1,4 @@
+#include "../step3/WindowsCrashDiagnostics.h"
 #include "HostedCPUBenchmark.h"
 #include "Step3HostedQA.h"
 #include <cmath>
@@ -6,8 +7,27 @@
 
 int main (int argc, char **argv)
 {
+    step3Crash::install ();
+    std::cout << "HOST_STAGE enter argc=" << argc << std::endl;
+    const bool heapOnly = argc == 2 && juce::String (argv[1]) == "step3-heap-selftest";
     const bool step3 = argc == 3 && juce::String (argv[2]) == "step3";
-    step3Heap::Installation allocationHooks (step3);
+    std::cout << "HOST_STAGE install heap=" << (step3 || heapOnly) << std::endl;
+    step3Heap::Installation allocationHooks (step3 || heapOnly);
+#if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
+    if (heapOnly)
+    {
+        const bool ok = step3Heap::Installation::selfTest ();
+        std::cout << (ok ? "PASS" : "FAIL") << " standalone process-heap positive self-test" << std::endl;
+        return ok ? 0 : 1;
+    }
+#else
+    if (heapOnly)
+    {
+        std::cout << "NOT RUN Windows process-heap self-test" << std::endl;
+        return 2;
+    }
+#endif
+    std::cout << "HOST_STAGE initialize JUCE" << std::endl;
     juce::ScopedJuceInitialiser_GUI init;
     if (argc != 2 && argc != 3 && argc != 4)
     {
@@ -15,8 +35,10 @@ int main (int argc, char **argv)
         return 2;
     }
     juce::VST3PluginFormat format;
+    std::cout << "HOST_STAGE discover" << std::endl;
     juce::OwnedArray<juce::PluginDescription> descriptions;
     format.findAllTypesForFile (descriptions, juce::String (argv[1]));
+    std::cout << "HOST_STAGE discovered=" << descriptions.size () << std::endl;
     if (descriptions.size () != 1)
     {
         std::cerr << "FAIL expected one discovered VST3 effect\n";
@@ -24,7 +46,8 @@ int main (int argc, char **argv)
     }
     if (argc == 4)
     {
-        if (juce::String (argv[2]) != "step3-cpu") return 2;
+        if (juce::String (argv[2]) != "step3-cpu")
+            return 2;
         return step3Hosted::cpu (format, *descriptions[0], argv[3]);
     }
     if (argc == 3 && !step3)
@@ -35,6 +58,7 @@ int main (int argc, char **argv)
     }
     juce::String error;
     auto make = [&] { return format.createInstanceFromDescription (*descriptions[0], 48000, 64, error); };
+    std::cout << "HOST_STAGE instantiate legacy contract" << std::endl;
     auto active = make (), silent = make (), restored = make ();
     if (!active || !silent || !restored)
     {
@@ -233,6 +257,7 @@ int main (int argc, char **argv)
     }
     for (auto *p : {active.get (), silent.get (), restored.get ()})
         p->releaseResources ();
-    if (step3) pass = step3Hosted::run (format, *descriptions[0]) && pass;
+    if (step3)
+        pass = step3Hosted::run (format, *descriptions[0]) && pass;
     return pass ? 0 : 1;
 }

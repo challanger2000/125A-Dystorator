@@ -621,6 +621,16 @@ int main (int argc, char** argv)
         else if (mode == "cpu") compactCPU (dir);
         else if (mode == "right") stereoInputRegressions (dir);
         else if (mode == "ir-invalid") compactMalformedStereo (dir);
+        else if (mode == "program")
+        {
+            VibeAmpProcessor p (dir);
+            check (p.getNumPrograms () == 1 && p.getCurrentProgram () == 0 &&
+                       p.getProgramName (0).isNotEmpty (),
+                   "VST3 exported program zero has a non-empty name (Steinberg Scan Programs)");
+            const auto saved = hostState (p);
+            p.setCurrentProgram (0);
+            check (hostState (p) == saved, "fixed host program metadata preserves complete scene state");
+        }
         else { std::cerr << "Unknown test mode\n"; return 2; }
         dir.deleteRecursively();
         std::cout << checks << " checks, " << failures << " failures\n";
@@ -632,6 +642,9 @@ int main (int argc, char** argv)
                    missing = dir.getChildFile ("missing.wav");
         bad.replaceWithText ("not an audio file");
         VibeAmpProcessor p (dir);
+        check (p.getNumPrograms () == 1 && p.getCurrentProgram () == 0 &&
+                   p.getProgramName (0).isNotEmpty (),
+               "VST3 exported program zero has a non-empty name (Steinberg Scan Programs)");
         p.prepareToPlay (48000, 64);
         param (p, ids::channel, 0);
         param (p, ids::gateOn, 0);

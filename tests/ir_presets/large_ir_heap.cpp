@@ -1,4 +1,5 @@
 #include "../step3/WindowsHeapProbe.h"
+#include "../step3/WindowsCrashDiagnostics.h"
 #include "CabinetIR.h"
 #include <iostream>
 #include <juce_audio_utils/juce_audio_utils.h>
@@ -41,6 +42,8 @@ void irTestCaptureCabinetInput (const float *, int) {}
 void irTestConvolutionCall (const void *, int) {}
 int main ()
 {
+    step3Crash::install ();
+    std::cout << "LARGE_IR_STAGE install heap" << std::endl;
 #if defined(_WIN32)
     step3Heap::Installation hooks (true);
     if (!step3Heap::Installation::selfTest ())
