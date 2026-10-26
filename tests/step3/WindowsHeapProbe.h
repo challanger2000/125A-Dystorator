@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <exception>
 #include <stdexcept>
 #if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
 #ifndef NOMINMAX

@@ -66,14 +66,19 @@ try {
     Require-Build 'configure-plugin' @('-S','.','-B','build/win-plugin','-G','Visual Studio 17 2022','-A','x64',"-DFETCHCONTENT_SOURCE_DIR_JUCE=$JuceDir")
     Require-Build 'build-plugin' @('--build','build/win-plugin','--config','Release','--target','DjentyDonkey_VST3','dystorator_qa_suite','tone_regress','dsp_test','--parallel','2')
     $null = Check-Native 'native-ctest' 'ctest' @('--test-dir','build/win-plugin','-C','Release','-V')
-    $null = Check-Native 'tone-regression' "$root/build/win-plugin/Release/tone_regress.exe" @()
-    $null = Check-Native 'fault-regression' "$root/build/win-plugin/Release/dsp_test.exe" @('fault')
-
     Configure-Integration 'ir_presets_test.cpp' $true
     $integrationExe = "$root/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe"
     $hostExe = "$root/build/win-integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe"
     $plugin = "$root/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
     $beforePlugin = "$root/build/win-plugin-before/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+    # Fail early on broken instrumentation/host loading. These are required
+    # functional gates, unlike measured CPU deadline failures retained below.
+    $heapValid = Check-Native 'standalone-heap-selftest' $hostExe @('step3-heap-selftest')
+    if (-not $heapValid) { throw 'Required Windows heap observer self-test failed; inspect fatal diagnostics' }
+    $hostValid = Check-Native 'packaged-vst3-host' $hostExe @($plugin,'step3')
+    if (-not $hostValid) { throw 'Required packaged VST3 host gate failed; inspect fatal/PCM/heap diagnostics' }
+    $null = Check-Native 'tone-regression' "$root/build/win-plugin/Release/tone_regress.exe" @()
+    $null = Check-Native 'fault-regression' "$root/build/win-plugin/Release/dsp_test.exe" @('fault')
     $null = Check-Native 'ir-preset-ownership-regressions' $integrationExe @()
     foreach ($qaMain in @('quality_audio.cpp','step3_pcm.cpp','mono_reference.cpp','stereo_quality_reference.cpp','step3_alias.cpp','large_ir_heap.cpp')) {
         Configure-Integration $qaMain
@@ -81,9 +86,6 @@ try {
             foreach ($case in @('modes','pcm','stress')) { $null = Check-Native ('quality-' + $case) $integrationExe @($case) }
         } else { $null = Check-Native ($qaMain.Replace('.cpp','')) $integrationExe @() }
     }
-    # Packaged DLL, host controller, real ProcessContext and cross-CRT heap hooks.
-    $null = Check-Native 'standalone-heap-selftest' $hostExe @('step3-heap-selftest')
-    $null = Check-Native 'packaged-vst3-host' $hostExe @($plugin,'step3')
     # Same host executable, complete before/after Release VST3, same flags and runner.
     # A single deadline miss is FAIL; preserve exit 1 rather than accepting it as PASS.
     $null = Check-Native 'cpu-before' $hostExe @($beforePlugin,'step3-cpu','before')

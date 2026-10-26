@@ -35,6 +35,7 @@ Alternative actual-processor integration entry points: `step3_pcm.cpp` (27 compa
 Build root VST3 and `compact_vst3_host` (`IR_BUILD_VST3_HOST=ON`). Invoke:
 
 ```text
+compact_vst3_host step3-heap-selftest  # Windows observer positive control
 compact_vst3_host /absolute/plugin.vst3 step3
 compact_vst3_host /absolute/plugin.vst3 step3-cpu before-or-after
 ```
@@ -56,3 +57,5 @@ Windows CI hardware is not the owner's i9-11900K. Actual ASIO/DAW dropout captur
 `IR_TEST_MAIN=large_ir_heap.cpp` tests mono/stereo IRs at128/256/8192/8193/16384. Linux links `--wrap=malloc/calloc/realloc/free` for actual C allocations in the linked JUCE code; Windows uses the self-validated process-heap detours. Native real-FFT fallback originally made24 malloc/free pairs over6 calls at16384, despite zero C++new/delete in the older tests. Product only caps its convolver quantum at8192 and subdivides views; the amp host block/ramp and scene fade are unchanged. The oracle remains the unmodified JUCE large-block convolution, sample tolerance1e−6. Windows packaged host additionally exercises16384 with the cross-DLL hooks enabled. No DSP precision/iteration reduction.
 
 The workflow checks out the exact triggering SHA, then attaches that local checkout to the development branch. This also works when a preceding queued job publishes a documentation-only evidence commit before checkout; it never silently tests a different source HEAD.
+
+Windows heap hooks gate C++ TLS reads with a reserved fixed TEB TLS slot and preserve LastError. The actual test host includes unbuffered stage and fatal CRT/C++/SEH diagnostics with module/stack locations. Required heap/host functional smoke gates run before the long audio suites; a failure retains its logs and marks unreached checks NOT RUN. CPU deadline failures still retain the entire measurement matrix and remain FAIL.
