@@ -1,0 +1,1 @@
+COMMAND: tar ["-xf","build/win-before.tar","-C","build/win-before"]

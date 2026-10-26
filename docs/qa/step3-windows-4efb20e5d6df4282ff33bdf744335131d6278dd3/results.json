@@ -1,0 +1,198 @@
+{
+  "sourceCommit": "4efb20e5d6df4282ff33bdf744335131d6278dd3",
+  "baselineCommit": "398204e26d84c3f40bcd1c0af55dfa8e97893ca7",
+  "checks": [
+    {
+      "name": "archive-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.0462393,
+      "log": "archive-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "extract-baseline",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 0.143118,
+      "log": "extract-baseline.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 61.8538124,
+      "log": "configure-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-before-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 86.9603168,
+      "log": "build-before-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 27.8865663,
+      "log": "configure-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-plugin",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 98.8739459,
+      "log": "build-plugin.txt",
+      "detail": ""
+    },
+    {
+      "name": "native-ctest",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 1.5419405,
+      "log": "native-ctest.txt",
+      "detail": ""
+    },
+    {
+      "name": "tone-regression",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 158.183832,
+      "log": "tone-regression.txt",
+      "detail": ""
+    },
+    {
+      "name": "fault-regression",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 22.4096519,
+      "log": "fault-regression.txt",
+      "detail": ""
+    },
+    {
+      "name": "configure-ir_presets_test",
+      "status": "PASS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "seconds": 26.9239911,
+      "log": "configure-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "build-ir_presets_test",
+      "status": "FAIL",
+      "exitCode": 1,
+      "expectedExit": 0,
+      "seconds": 227.2638494,
+      "log": "build-ir_presets_test.txt",
+      "detail": ""
+    },
+    {
+      "name": "ir-preset-ownership-regressions",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "quality-modes",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "quality-pcm",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "quality-stress",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "step3_pcm",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "mono_reference",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "stereo_quality_reference",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "step3_alias",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "packaged-vst3-host",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "cpu-before",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "cpu-after",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "tester-job-object-selftest",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "steinberg-validator-selftest",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    },
+    {
+      "name": "125a-tester-product",
+      "status": "NOT RUN",
+      "detail": "Not reached after infrastructure/build failure",
+      "exitCode": null
+    }
+  ],
+  "NOT_RUN": [
+    "Actual owner i9-11900K machine",
+    "Real ASIO device/DAW/Studio One playback and recorded dropouts",
+    "Licensed real DI and level-matched listening",
+    "Musical approval of ECO/STANDARD",
+    "Manual GUI/control acceptance"
+  ],
+  "infrastructureFailure": "System.Management.Automation.RuntimeException: Required build/configure failed: build-ir_presets_test",
+  "release": "DEVELOPMENT ONLY - NO FINAL"
+}
