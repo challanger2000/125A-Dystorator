@@ -1,0 +1,40 @@
+# 125A Systems High-Gain Amp – Compact Stereo Migration
+Date 2026-10-26. Source baseline: main @ 81cc90dfd076f1510c02bf6ccc8318575dc4aa45 (unmodified Djenty Donkey 0.5.6-beta). Independent audit: audit/codex-independent-20261026 @ 75a638bd. Status: **IN DEVELOPMENT, NOT WINDOWS/VST3/DAW VERIFIED**.
+
+## Product scope
+Keep: input level and meters, one effective gate, Precision Drive/TS9 and their controls, Clean/Blue/Red, full original modeled preamp/poweramp/oversampling, Gain/Bass/Mid/Treble/Presence/Resonance/Master/Amp Volume, Bright/Crunch/Noise/Tube Sets, Cabinet On/Off, mono/stereo user IR and built-in Cabinet, LOW CUT, HIGH CUT, output level and meter, preset load/save. Windows x64 VST3 is the eventual only shipping platform.
+
+Remove from **new GUI and active processing chain**: Compressor, Phaser, Delay, Reverb, Transpose/Pitch Shifter, 10-band Graphic EQ. Any legacy parameter, test or source deletion requires dependency and state migration review first. Old projects with active removed effects cannot remain sonically identical; document that fact, never falsely promise full audio backward compatibility.
+
+Planned GUI: approximately 1100x500 @ 100% with five functional zones Input+Gate | Drive | prominent Amp | Cab+Cuts | Output. Before implementing 125A hardware-style visuals use current 125A-Branding and 125A-Knob-Designer authoritative assets. Confirm real Windows/Studio One 100/130/150% behavior; not just scaled images.
+
+## Source inventory and architectural decision
+- Source/PluginProcessor.cpp:45–51 negotiates both mono/stereo inputs, but :207–212 uses ONLY input channel 0 and :287–292 mirrors the result to L/R. P1 stereo failure confirmed by independent audit.
+- Source/dsp/AmpSim.h owns pedal, coupled preamp, power amp, speaker load and oversampling. **Two independent AmpSim state machines** are required for truly independent stereo signals. Share Settings parameters only, not mutable circuit state, buffers, noise generators, oversampling delay. Keep AmpSim formulas and 8x behavior unchanged. The stereo CPU cost may substantially increase: measure p95/p99/max/deadlines before considering DSP optimization. Mono inputs should render one AmpSim, not two.
+- One early InputGate (ids::inGateOn, inGateThresh, inGateRelease) is preferred for compact single gate. Original 3-band loop gate has a different tonal effect and must be explicitly retired/migrated. Separate InputGate state for each lane. Keep original amp controls/IDs intact.
+- Existing JUCE Convolution is prepared mono. Create correctly mapped stereo-capable cabinet handling, with mono IR applied to both and stereo IR L/R independently. Built-in 5-Biquad cabinet needs separate channel states. IR safety block from audit B01/A04/B03/B04 is **prerequisite**: lawful JUCE thread handoff, Pending/Ready/Failed, no audio-thread blocking locks/file I/O, malformed/missing IR rollback, valid preset/IR atomicity and state recall.
+- 65 original parameter IDs exist. Preserve original identifiers in the transitional ParameterLayout, including retired legacy IDs, to avoid misinterpreted project state. Expose only active controls in compact GUI; retired effects must be documented as no longer sonically reproducible. Add new parameters lowCutOn/lowCutHz/highCutOn/highCutHz default OFF so old sessions aren't silently filtered.
+- Low and High Cuts belong immediately AFTER cabinet, before output gain. Proposed usable ranges Low Cut 20–300 Hz and High Cut 3–20 kHz, per-samplerate Nyquist clamp. Musical response, not arbitrary fixed gain curves; default disabled. Existing project states should not enable them automatically.
+- Original getTailLengthSeconds() is fixed at 3 s because of former FX and is inaccurate for feedback delay; reassess and test active remaining cab/amp tail after deleting Delay/Reverb. Do not just keep 3 s.
+- CMake still specifies upstream Djenty Donkey manufacturer/plugin IDs and builds standalone+ASIO. Separate 125A identity must be deliberate to avoid host project/scan clashes. Eventual Windows VST3-only package should remove standalone/ASIO dependencies. Preserve AGPLv3 and third-party notices: commercial distribution does not permit relicensing upstream AGPL as closed source.
+
+## Phases and required tests
+**C01 (started, only committed code)**: Independent native two-pole stereo Cut DSP module Source/dsp/GuitarCuts.h, 15 ms coefficient and enable smoothing, TPT Butterworth filtering, no allocations/locks/file I/O in processStereo and independent L/R state. tests/guitar_cuts_test.cpp was compiled under Linux GCC C++17 -O2 -Wall -Wextra -Werror and PASS/0 failures: 44.1/48/96 kHz; low/high attenuation/passband; L-only, R-only, anti-phase; fully bypassed bit-identical samples; fast cutoff automation and finite values. An initially red low-cut test exposed an equation error that was corrected *before* commit. **New code not yet wired into plugin**, so no host/audio integration PASS.
+
+**C02 (next)**: Capture frozen original 8x AmpSim golden references, input/output hashes and objective alias/harmonic diagnostics. Create first failing JUCE direct-processor integration tests: L-only, R-only, distinct frequencies, anti-phase, mono/stereo bus layouts, block 1–1024 and 44.1/48/96 kHz; existing/mono/stereo IRs incl. distinct channel impulses, corrupted/missing files, rapid reload/clear; factory/user XML invalid and recall rollback; no hidden R drop. Confirm these tests fail with deliberately broken right-channel path. JUCE and Windows/Studio One tests are NOT RUN in this Linux-only phase.
+
+**C03**: Once C02 red baselines exist, repair IR loading and preset transitions as one transaction-safe thread-coherent unit. Then implement separate AmpSim L/R, separate input gain/gate/built-in Cab states with shared Settings, one stereo-capable IR Convolution, correct fast mono path. No L+R summing and no cloned mono for stereo signals. Prove positive/negative/rollback cases before proceeding.
+
+**C04**: Remove active obsolete processing (pitch, compressor, 3-band gate, 10-band EQ, phaser/delay/reverb) without changing AmpSim nonlinear DSP. Connect the new GuitarCuts after Cabinet; add on/off and cutoff parameters with safe legacy defaults. Remove unused source/standalone dependencies only after references and tests permit. Document semantic incompatibility of old multieffect presets.
+
+**C05**: Compact 125A GUI, official master logo and approved knob filmstrips, full control/automation/recall binding evidence. Single window, real scaling/host, editor open/close, async chooser and modal-lifetime tests. No fabricated screenshots.
+
+**C06**: One appropriately timed Windows x64 VST3 build, Steinberg Validator, correct packaged host operation, real Studio One verification; 1/2 channel CPU mean/p95/p99/max+overruns, all sample rates/block sizes; input gate/drive/amp/IR/filter positive and negative PCM; frozen amp reference null/THD/IMD/alias tests; user listening A/B on licensed guitar DI. NO FINAL until critical gates are checked. GitHub Actions budget-conscious, no spontaneous expensive rebuild loops, never modify main without explicit release approval.
+
+## Acceptance gates
+- Stereo-In/Stereo-Out R-only is audible on R without disappearing; L-only and distinct L/R tones remain distinct (unless intentional stereo convolution handling is documented), anti-phase correct, no channel bleed in deterministic processing. Same signal on both channels => same output when noise OFF.
+- Low Cut 100 Hz attenuates 30 Hz >19 dB; High Cut 5 kHz attenuates 12 kHz >15 dB; each passes 1 kHz within ±0.1 dB at 44.1/48/96 kHz. Disabled cuts sample-identical; no NaN/Inf, abrupt-automation clicks or channel drift.
+- Original nonlinear AmpSim, tube stages and oversampling remain source-identical until new audio baseline captures exist.
+- Invalid IR/preset never corrupts last valid scene; no audio-thread locks/filesystem blocking; true host state recall and GUI lifetime tests. Windows/JUCE/Studio One NOT RUN so far.
+
+**Current completed work:** C01 source and test only. No Windows build, no actual two-AmpSim integration, no reduction of GUI yet, no release authorization.
