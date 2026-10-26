@@ -1,0 +1,29 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Parse Config file:/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/ir-presets
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: stereo_quality_pcm_oracle
+
+1: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test
+1: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+1: Test timeout computed to be: 1500
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=2 max_delta=0 reference_L_energy=7.82179 reference_R_energy=4.01804
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=0 max_delta=0 reference_L_energy=7.82822 reference_R_energy=4.00892
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=1 max_delta=0 reference_L_energy=7.82302 reference_R_energy=4.01825
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=2 max_delta=0 reference_L_energy=7.96462 reference_R_energy=3.99461
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=0 max_delta=0 reference_L_energy=7.97086 reference_R_energy=3.98448
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=1 max_delta=0 reference_L_energy=7.96584 reference_R_energy=3.99459
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=2 max_delta=0 reference_L_energy=7.55461 reference_R_energy=3.61825
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=0 max_delta=0 reference_L_energy=7.56091 reference_R_energy=3.59983
+1: PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=1 max_delta=0 reference_L_energy=7.55726 reference_R_energy=3.61515
+1/1 Test #1: stereo_quality_pcm_oracle ........   Passed   56.30 sec
+
+100% tests passed out of 1
+
+Total Test time (real) =  56.30 sec

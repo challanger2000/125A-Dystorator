@@ -1,0 +1,3 @@
+[0/2] Re-checking globbed directories...
+[1/3] Building CXX object CMakeFiles/ir_presets_test.dir/quality_audio.cpp.o
+[2/3] Linking CXX executable ir_presets_test_artefacts/Release/ir_presets_test

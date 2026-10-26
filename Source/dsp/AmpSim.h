@@ -35,7 +35,7 @@ public:
         int boostModel = 0;  // 0 Precision Drive, 1 TS9
     };
 
-    void prepare (double sampleRate, int maxBlock)
+    void prepare (double sampleRate, int maxBlock, int requestedFactor = 0)
     {
         // Oversampling around the whole non-linear amp (preamp + power amp), to at least kMinOsRate:
         // 8x at 44.1 / 48 kHz, 4x at 88.2 / 96 kHz, 2x at 176.4 / 192 kHz. Aliasing (inharmonic energy for
@@ -43,6 +43,12 @@ public:
         int stages = 1;
         while (sampleRate * (1 << stages) < kMinOsRate && stages < 3)
             ++stages;
+        if (requestedFactor != 0)
+        {
+            jassert (requestedFactor == 1 || requestedFactor == 2 || requestedFactor == 4 || requestedFactor == 8);
+            stages = requestedFactor == 8 ? 3 : requestedFactor == 4 ? 2 : requestedFactor == 2 ? 1 : 0;
+        }
+        oversamplingFactor = 1 << stages;
         oversampler = std::make_unique<juce::dsp::Oversampling<float>> (
             1, (size_t) stages, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true, false);
         oversampler->initProcessing ((size_t) maxBlock);
@@ -90,6 +96,8 @@ public:
     {
         return oversampler ? juce::roundToInt (oversampler->getLatencyInSamples()) : 0;
     }
+
+    int getOversamplingFactor() const noexcept { return oversamplingFactor; }
 
     void process (float* data, int numSamples, const Settings& s)
     {
@@ -219,6 +227,7 @@ private:
     static constexpr double kMinOsRate = 352800.0; // 8 x 44.1 kHz
     std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
     double osRate = 176400.0;
+    int oversamplingFactor = 1;
 
     PrecisionDrive drive;
     TubeScreamer9 ts9;

@@ -1,0 +1,717 @@
+commit 51597a8767dfc7f4b7ac020baedb762a7658ae3a
+Author:     SteveAsAConstant <346773822+SteveAsAConstant@users.noreply.github.com>
+AuthorDate: Mon Oct 26 19:10:48 2026 +1100
+Commit:     SteveAsAConstant <346773822+SteveAsAConstant@users.noreply.github.com>
+CommitDate: Mon Oct 26 19:10:48 2026 +1100
+
+    CPU: single-core speed-up without changing the sound (8-sample blocks fit on one core)
+
+    Measured with the new dsp_test block8 (cost per 8-sample block at 48 kHz, the
+    hardware target; one P-core, fastest of 5 runs per block), against the last commit:
+      amp (preamp + power amp at 8x): avg 103 -> 55 us, worst 165 -> 96 us
+      channel-switch crossfade worst 262 -> 160 us; every knob turning 220 -> 139 us
+      1176 avg 37 -> 30 us, worst 175 -> 141 us; LIVE transpose splice 53 -> 13 us
+      whole chain on one core: avg 154 -> 100 us, worst 259 -> 160 us,
+      blocks past the 167 us deadline 22 % -> 0
+
+    What changed:
+    - PortSolve.h: the tube Newton step (I - K D) dp = r is solved as (I - D K) q = D r,
+      dp = r + K q, with only the conducting ports as unknowns (a grid that draws no
+      current has a zero row in D): ~7 instead of 12 in the preamp. Same solution.
+    - DKCircuit: the per-sample products (P, M, O) stored column by column and
+      accumulated 16 / 32 rows at a time in SSE2 / NEON / AVX registers (AVX chosen
+      at run time, Simd.h). Each row is summed in the same order: bit-identical.
+    - SemiNetwork (1176): Newton and the linear solve as fixed-size instances per
+      port count (the same operations, unrolled): bit-identical.
+    - 6L6 screen terms: pow (x, ex) as exp (ex log x).
+    - WSOLA splice search: the reference energy once, four candidates at a time,
+      each summed as before: bit-identical.
+
+    Sound: tests/golden.cpp renders 19 scenes (every channel with knobs moving,
+    channel switches, both drives, circuit noise, another tube set, a hot input, the
+    1176, the drives alone, the transposer) and compares them with the last commit:
+    the 1176, the drives and the transposer are bit-identical; the amp differs at
+    rounding level only (residual -208..-223 dB, worst single sample -177 dB, far
+    below the solver's own ~-100 dB tolerance). tone_regress 0 failed, dsp_test,
+    comp1176_test (0.01 dB vs LTspice) and host_test pass.
+
+    Also: dsp_test switch8 (one channel switch in detail), twocore (a two-core split
+    of the switch, kept as a test hook: Preamp5150::runAhead, off), DKCircuit::ensureBuilt.
+
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/Source/dsp/DKCircuit.h b/Source/dsp/DKCircuit.h
+index cd10e56..ea588a5 100644
+--- a/Source/dsp/DKCircuit.h
++++ b/Source/dsp/DKCircuit.h
+@@ -3,6 +3,7 @@
+ #include <cassert>
+ #include <cmath>
+ #include <vector>
++#include "Simd.h"
+
+ namespace vamp
+ {
+@@ -147,6 +148,11 @@ public:
+         P.assign ((size_t) m * nz, 0.0); // over all of z, zero in the port-current columns
+         M.assign ((size_t) numS * nz, 0.0);
+         O.assign (outputs.size() * (size_t) nz, 0.0);
++        // the same column by column (per-sample products, matVecT), rows padded to a multiple of 4 (the AVX loads)
++        ldP = (m + 3) & ~3; ldM = (numS + 3) & ~3; ldO = ((int) outputs.size() + 3) & ~3;
++        Pt.assign ((size_t) nz * ldP, 0.0);
++        Mt.assign ((size_t) nz * ldM, 0.0);
++        Ot.assign ((size_t) nz * ldO, 0.0);
+         dirty = true;
+         reset();
+     }
+@@ -188,10 +194,10 @@ public:
+             for (int k = 0; k < numSrc; ++k) if (noiseAmp[(size_t) k] > 0.0) zu[k] += noiseAmp[(size_t) k] * noiseUniform();
+             double* zn = z.data() + nzMain;
+             for (int k = 0; k < numNoise; ++k) zn[k] = noiseAmp[(size_t) (numSrc + k)] * noiseUniform();
+-            matVec (P.data(), m, nz, nz, z.data(), p0.data()); // (the port-current columns of P are 0)
++            matVecT (Pt.data(), ldP, m, nz, z.data(), p0.data()); // (the port-current columns of P are 0)
+         }
+         else
+-            matVec (P.data(), m, numS + numSrc, nz, z.data(), p0.data());
++            matVecT (Pt.data(), ldP, m, numS + numSrc, z.data(), p0.data());
+         return p0;
+     }
+
+@@ -205,7 +211,7 @@ public:
+         evalOutputs (iPorts);
+         const int cols = noiseOn ? nz : nzMain;
+         double buf[kMaxStates];
+-        matVec (M.data(), numS, cols, nz, z.data(), buf);
++        matVecT (Mt.data(), ldM, numS, cols, z.data(), buf);
+         std::copy (buf, buf + numS, z.begin());
+     }
+
+@@ -216,7 +222,8 @@ public:
+         const int cols = noiseOn ? nz : nzMain;
+         double buf[kMaxStates];
+         const int numO = (int) outputs.size();
+-        matVec (O.data(), numO, cols, nz, z.data(), buf);
++        if (numO <= 2) matVec (O.data(), numO, cols, nz, z.data(), buf); // one or two dot products: by row
++        else matVecT (Ot.data(), ldO, numO, cols, z.data(), buf);
+         for (int o = 0; o < numO; ++o) x[(size_t) outputs[(size_t) o]] = buf[o];
+     }
+
+@@ -226,6 +233,10 @@ public:
+
+     void markDirty() { dirty = true; }
+
++    // the matrix rebuild computeP0() would do next, ahead of time (allocation-free; the same matrices either way)
++    bool isDirty() const { return dirty; }
++    void ensureBuilt() { if (dirty) rebuild(); }
++
+ private:
+     struct Res { int a, b; double g; bool noisy; };
+     struct Cap { int a, b; double c, gc; };
+@@ -269,7 +280,124 @@ public:
+         }
+     }
+
++    // out = A v with A stored column by column: At[j * ld + r] = A[r][j] (ld a multiple of 4, the pad rows 0). Up to
++    // 16 rows at a time in eight 2-wide registers (32 in eight 4-wide AVX registers where the CPU has AVX) across all
++    // columns: eight independent sums, so the adds overlap instead of waiting on each other (a tail computes and
++    // drops the pad rows). Each row is still summed in column order with a separate multiply and add, so the result
++    // is bit-identical to matVec (and the plain loop) on every path.
++    static void matVecT (const double* At, int ld, int rows, int cols, const double* v, double* out)
++    {
++#if VAMP_SIMD_SSE2
++        if (vampHasAvx()) { matVecTAvx (At, ld, rows, cols, v, out); return; }
++#endif
++#if VAMP_SIMD_SSE2 || VAMP_SIMD_NEON
++        for (int r = 0; r < rows; r += 16)
++        {
++            const int pairs = std::min (8, (rows - r + 1) / 2);
++            double* o = out + r;
++            double tmp[16];
++            const bool tail = r + 2 * pairs > rows; // an odd count: the last pair's pad row goes to tmp
++            switch (pairs)
++            {
++                case 8: tileT<8> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 7: tileT<7> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 6: tileT<6> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 5: tileT<5> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 4: tileT<4> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 3: tileT<3> (At + r, ld, cols, v, tail ? tmp : o); break;
++                case 2: tileT<2> (At + r, ld, cols, v, tail ? tmp : o); break;
++                default: tileT<1> (At + r, ld, cols, v, tail ? tmp : o); break;
++            }
++            if (tail) std::copy (tmp, tmp + (rows - r), o);
++        }
++#else
++        for (int r = 0; r < rows; ++r)
++        {
++            double s = 0.0;
++            for (int j = 0; j < cols; ++j) s += At[(size_t) j * ld + r] * v[j];
++            out[r] = s;
++        }
++#endif
++    }
++
++#if VAMP_SIMD_SSE2 || VAMP_SIMD_NEON
++#if VAMP_SIMD_SSE2
++    // matVecT with 4-wide AVX registers, up to 32 rows at a time
++    VAMP_AVX_FN static void matVecTAvx (const double* At, int ld, int rows, int cols, const double* v, double* out)
++    {
++        for (int r = 0; r < rows; r += 32)
++        {
++            const int quads = std::min (8, (rows - r + 3) / 4);
++            double* o = out + r;
++            double tmp[32];
++            const bool tail = r + 4 * quads > rows; // the pad rows of the last quad go to tmp
++            double* dst = tail ? tmp : o;
++            switch (quads)
++            {
++                case 8: tileAvx<8> (At + r, ld, cols, v, dst); break;
++                case 7: tileAvx<7> (At + r, ld, cols, v, dst); break;
++                case 6: tileAvx<6> (At + r, ld, cols, v, dst); break;
++                case 5: tileAvx<5> (At + r, ld, cols, v, dst); break;
++                case 4: tileAvx<4> (At + r, ld, cols, v, dst); break;
++                case 3: tileAvx<3> (At + r, ld, cols, v, dst); break;
++                case 2: tileAvx<2> (At + r, ld, cols, v, dst); break;
++                default: tileAvx<1> (At + r, ld, cols, v, dst); break;
++            }
++            if (tail) for (int k = 0; k < rows - r; ++k) o[k] = tmp[k];
++        }
++        _mm256_zeroupper(); // back to SSE code without the transition penalty
++    }
++
++    // 4 Q rows of matVecTAvx, all columns
++    template <int Q>
++    VAMP_AVX_FN static inline void tileAvx (const double* At, int ld, int cols, const double* v, double* out)
++    {
++        __m256d s[Q];
++        for (int k = 0; k < Q; ++k) s[k] = _mm256_setzero_pd();
++        for (int j = 0; j < cols; ++j, At += ld)
++        {
++            const __m256d vj = _mm256_set1_pd (v[j]);
++            for (int k = 0; k < Q; ++k) s[k] = _mm256_add_pd (s[k], _mm256_mul_pd (_mm256_loadu_pd (At + 4 * k), vj));
++        }
++        for (int k = 0; k < Q; ++k) _mm256_storeu_pd (out + 4 * k, s[k]);
++    }
++#endif
++
++    // 2 P rows of matVecT, all columns
++    template <int P>
++    static inline void tileT (const double* At, int ld, int cols, const double* v, double* out)
++    {
++  #if VAMP_SIMD_SSE2
++        __m128d s[P];
++        for (int k = 0; k < P; ++k) s[k] = _mm_setzero_pd();
++        for (int j = 0; j < cols; ++j, At += ld)
++        {
++            const __m128d vj = _mm_set1_pd (v[j]);
++            for (int k = 0; k < P; ++k) s[k] = _mm_add_pd (s[k], _mm_mul_pd (_mm_loadu_pd (At + 2 * k), vj));
++        }
++        for (int k = 0; k < P; ++k) _mm_storeu_pd (out + 2 * k, s[k]);
++  #else
++        float64x2_t s[P];
++        for (int k = 0; k < P; ++k) s[k] = vdupq_n_f64 (0.0);
++        for (int j = 0; j < cols; ++j, At += ld)
++        {
++            const float64x2_t vj = vdupq_n_f64 (v[j]);
++            for (int k = 0; k < P; ++k) s[k] = vaddq_f64 (s[k], vmulq_f64 (vld1q_f64 (At + 2 * k), vj));
++        }
++        for (int k = 0; k < P; ++k) vst1q_f64 (out + 2 * k, s[k]);
++  #endif
++    }
++#endif
++
+ private:
++    // row-major A (rows x cols) -> At column by column with leading dimension ld (the pad rows stay 0)
++    static void transpose (const std::vector<double>& A, int rows, int cols, std::vector<double>& At, int ld)
++    {
++        for (int r = 0; r < rows; ++r)
++            for (int j = 0; j < cols; ++j)
++                At[(size_t) j * ld + r] = A[(size_t) r * cols + j];
++    }
++
+     static void stamp (std::vector<double>& A, int n, int a, int b, double g)
+     {
+         if (a >= 0) A[(size_t) a * n + a] += g;
+@@ -396,6 +524,10 @@ private:
+             for (int j = 0; j < nz; ++j)
+                 O[o * (size_t) nz + j] = nodeRow (outputs[o], j);
+
++        transpose (P, m, nz, Pt, ldP);
++        transpose (M, numS, nz, Mt, ldM);
++        transpose (O, (int) outputs.size(), nz, Ot, ldO);
++
+         // thermal noise per sample, white up to Nyquist (one-sided density 4kT R, i.e. variance 2kT R fs), as uniform
+         // samples of the same variance: a series voltage for a noisy source, a parallel current for a resistor
+         {
+@@ -465,6 +597,8 @@ private:
+     std::vector<int> outputs;
+
+     std::vector<double> K, P, M, O;
++    std::vector<double> Pt, Mt, Ot; // P, M, O column by column (rows padded to ldP / ldM / ldO): the per-sample products
++    int ldP = 0, ldM = 0, ldO = 0;
+     std::vector<double> z;     // [s; u; i]: reactive states, then the inputs and port currents of this sample
+     std::vector<double> x, p0; // x: output node voltages (others stay 0)
+     std::vector<double> zSaved, xSaved;
+diff --git a/Source/dsp/PortSolve.h b/Source/dsp/PortSolve.h
+new file mode 100644
+index 0000000..3a20871
+--- /dev/null
++++ b/Source/dsp/PortSolve.h
+@@ -0,0 +1,106 @@
++#pragma once
++#include <cmath>
++
++namespace vamp
++{
++// Newton step of the DK port equations  p = p0 + K i(p)  for devices in pairs of ports, as the tubes here: port 2t
++// carries a current depending on ports 2t and 2t+1 (plate: Vpk, Vgk), port 2t+1 one depending on itself only (grid).
++// With D = dI/dp, block-diagonal 2 x 2 per device ([[d[2t][0], d[2t][1]], [0, d[2t+1][1]]]), the step solves
++//        (I - K D) dp = r.
++// Written in the current changes q = D dp instead:  (I - D K) q = D r,  dp = r + K q.  A port whose row of D is all
++// zero (a grid that does not conduct, a plate below 0 V) has q = 0, so only the ports that conduct are unknowns:
++// 6 instead of 12 for six triodes whose grids draw no current, the usual case. The same solution as eliminating
++// the full system (identical up to rounding); Gaussian elimination with partial pivoting.
++// K: M x M row-major. False if the reduced matrix is singular.
++// The active count is dispatched to a fixed-size instance (the same operations in the same order: only unrolled).
++template <int M, int N>
++inline bool solvePortStepN (const double* K, const double (&d)[M][2], const double (&r)[M], const int* act, double (&dp)[M]);
++
++template <int M>
++inline bool solvePortStep (const double* K, const double (&d)[M][2], const double (&r)[M], double (&dp)[M])
++{
++    int act[M];
++    int n = 0;
++    for (int k = 0; k < M; k += 2)
++    {
++        if (d[k][0] != 0.0 || d[k][1] != 0.0) act[n++] = k;
++        if (d[k + 1][1] != 0.0) act[n++] = k + 1;
++    }
++    switch (n)
++    {
++        case 0:  for (int k = 0; k < M; ++k) dp[k] = r[k]; return true; // nothing conducts: dp = r
++        case 1:  return solvePortStepN<M, 1> (K, d, r, act, dp);
++        case 2:  return solvePortStepN<M, (M < 2 ? M : 2)> (K, d, r, act, dp);
++        case 3:  return solvePortStepN<M, (M < 3 ? M : 3)> (K, d, r, act, dp);
++        case 4:  return solvePortStepN<M, (M < 4 ? M : 4)> (K, d, r, act, dp);
++        case 5:  return solvePortStepN<M, (M < 5 ? M : 5)> (K, d, r, act, dp);
++        case 6:  return solvePortStepN<M, (M < 6 ? M : 6)> (K, d, r, act, dp);
++        case 7:  return solvePortStepN<M, (M < 7 ? M : 7)> (K, d, r, act, dp);
++        case 8:  return solvePortStepN<M, (M < 8 ? M : 8)> (K, d, r, act, dp);
++        case 9:  return solvePortStepN<M, (M < 9 ? M : 9)> (K, d, r, act, dp);
++        case 10: return solvePortStepN<M, (M < 10 ? M : 10)> (K, d, r, act, dp);
++        case 11: return solvePortStepN<M, (M < 11 ? M : 11)> (K, d, r, act, dp);
++        default: return solvePortStepN<M, M> (K, d, r, act, dp);
++    }
++}
++
++template <int M, int n>
++inline bool solvePortStepN (const double* K, const double (&d)[M][2], const double (&r)[M], const int* act, double (&dp)[M])
++{
++    // rows of (I - D K) and D r over the active ports
++    double a[n][n + 1];
++    for (int x = 0; x < n; ++x)
++    {
++        const int k = act[x];
++        const double* Kk = K + k * M;
++        if (k % 2 == 0)
++        {
++            const double d0 = d[k][0], d1 = d[k][1];
++            const double* Kg = Kk + M;
++            for (int y = 0; y < n; ++y) a[x][y] = -(d0 * Kk[act[y]] + d1 * Kg[act[y]]);
++            a[x][n] = d0 * r[k] + d1 * r[k + 1];
++        }
++        else
++        {
++            const double d1 = d[k][1];
++            for (int y = 0; y < n; ++y) a[x][y] = -d1 * Kk[act[y]];
++            a[x][n] = d1 * r[k];
++        }
++        a[x][x] += 1.0;
++    }
++
++    double q[n];
++    double invPivot[n];
++    for (int col = 0; col < n; ++col)
++    {
++        int piv = col;
++        for (int x = col + 1; x < n; ++x)
++            if (std::abs (a[x][col]) > std::abs (a[piv][col])) piv = x;
++        if (std::abs (a[piv][col]) < 1e-300) return false;
++        if (piv != col)
++            for (int j = col; j <= n; ++j) { const double t = a[col][j]; a[col][j] = a[piv][j]; a[piv][j] = t; }
++        invPivot[col] = 1.0 / a[col][col];
++        for (int x = col + 1; x < n; ++x)
++        {
++            const double f = a[x][col] * invPivot[col];
++            if (f == 0.0) continue;
++            for (int j = col + 1; j <= n; ++j) a[x][j] -= f * a[col][j];
++        }
++    }
++    for (int x = n - 1; x >= 0; --x)
++    {
++        double s = a[x][n];
++        for (int j = x + 1; j < n; ++j) s -= a[x][j] * q[j];
++        q[x] = s * invPivot[x];
++    }
++
++    for (int k = 0; k < M; ++k)
++    {
++        const double* Kk = K + k * M;
++        double s = r[k];
++        for (int y = 0; y < n; ++y) s += Kk[act[y]] * q[y];
++        dp[k] = s;
++    }
++    return true;
++}
++} // namespace vamp
+diff --git a/Source/dsp/PowerAmp5150.h b/Source/dsp/PowerAmp5150.h
+index f39af09..01a9711 100644
+--- a/Source/dsp/PowerAmp5150.h
++++ b/Source/dsp/PowerAmp5150.h
+@@ -2,6 +2,7 @@
+ #include <algorithm>
+ #include <cmath>
+ #include "DKCircuit.h"
++#include "PortSolve.h"
+ #include "PotTapers.h"
+ #include "Supply5150.h"
+ #include "TriodeStage.h"
+@@ -35,7 +36,7 @@ struct KorenPentode
+     static Screen screenTerms (double vg2k)
+     {
+         // scale = 2/kg1 (vg2k/kp)^ex; vg2k <= 0 -> no plate current (as Koren's E1 <= 0)
+-        return { vg2k, 1.0 / vg2k, vg2k > 0.0 ? 2.0 / kg1 * std::pow (vg2k / kp, ex) : 0.0 };
++        return { vg2k, 1.0 / vg2k, vg2k > 0.0 ? 2.0 / kg1 * std::exp (ex * std::log (vg2k / kp)) : 0.0 };
+     }
+
+     // plate current of ONE tube and its derivatives w.r.t. Vpk and Vg1k
+@@ -110,8 +111,8 @@ struct KorenPentode
+         const double b = vg2k / mu + vg1k;
+         const double x = kp * (1.0 / mu + vg1k / vg2k);
+         const double sp = x > 30.0 ? x : (x < -30.0 ? std::exp (x) : std::log1p (std::exp (x)));
+-        const double base = 2.0 / kg1 * std::pow (vg2k / kp * sp, ex);
+-        return currentScale * ((b > 0.0 ? std::pow (b, ex) / kg2 : 0.0) + base * (1.5707963267948966 - std::atan (vpk / kvb)));
++        const double base = 2.0 / kg1 * std::exp (ex * std::log (vg2k / kp * sp)); // pow (., ex), faster (log (0) -> 0)
++        return currentScale * ((b > 0.0 ? std::exp (ex * std::log (b)) / kg2 : 0.0) + base * (1.5707963267948966 - std::atan (vpk / kvb)));
+     }
+ };
+
+@@ -412,34 +413,24 @@ public:
+             ++iterations;
+             evalDevices (i, d);
+
+-            double J[kPorts][kPorts + 1], maxF = 0.0;
++            double rhs[kPorts], maxF = 0.0; // -F
+             for (int r = 0; r < kPorts; ++r)
+             {
+                 double Ki = 0.0;
+                 for (int k = 0; k < kPorts; ++k) Ki += K[(size_t) r * kPorts + k] * i[k];
+                 const double F = p[r] - p0[(size_t) r] - Ki;
+                 maxF = std::max (maxF, std::abs (F) * (r % 2 == 0 ? 1.0 : 10.0)); // grids 10x stricter
+-                J[r][kPorts] = -F;
++                rhs[r] = -F;
+             }
+             // converged: plates < 0.1 mV, grids < 0.01 mV. The final Newton step is still applied (a linear
+             // solve, no tube evaluation): the error drops from ~residual to ~residual^2. v0.3.0 returned
+             // before it, which biased the small-signal response by up to 0.3 dB at low frequencies.
+             const bool converged = maxF < resTol;
+
+-            for (int r = 0; r < kPorts; ++r)
+-            {
+-                const double* Kr = &K[(size_t) r * kPorts];
+-                for (int dv = 0; dv < kDevices; ++dv)
+-                {
+-                    const int c0 = 2 * dv, c1 = c0 + 1;
+-                    // port c0 = plate (current depends on c0, c1), port c1 = grid (depends on c1 only)
+-                    J[r][c0] = (r == c0 ? 1.0 : 0.0) - Kr[c0] * d[c0][0];
+-                    J[r][c1] = (r == c1 ? 1.0 : 0.0) - Kr[c0] * d[c0][1] - Kr[c1] * d[c1][1];
+-                }
+-            }
+-
++            // (I - K D) dp = -F over the conducting ports only: port 2t = plate (current depends on 2t, 2t+1),
++            // port 2t+1 = grid (depends on itself only); PortSolve.h
+             double dp[kPorts];
+-            if (! solve (J, dp)) return converged;
++            if (! solvePortStep<kPorts> (K.data(), d, rhs, dp)) return converged;
+
+             // Step limit, the same for plates and grids. Grid current and the flyback diodes are softplus
+             // knees (linear beyond the knee), so an overshoot corrects itself on the next step. A tighter
+@@ -632,36 +623,6 @@ private:
+         }
+     }
+
+-    // Gaussian elimination with partial pivoting; one division per pivot
+-    static bool solve (double (&m)[kPorts][kPorts + 1], double (&x)[kPorts])
+-    {
+-        constexpr int n = kPorts;
+-        double invPivot[n];
+-        for (int col = 0; col < n; ++col)
+-        {
+-            int piv = col;
+-            for (int r = col + 1; r < n; ++r)
+-                if (std::abs (m[r][col]) > std::abs (m[piv][col])) piv = r;
+-            if (std::abs (m[piv][col]) < 1e-300) return false;
+-            if (piv != col)
+-                for (int j = 0; j <= n; ++j) std::swap (m[col][j], m[piv][j]);
+-            invPivot[col] = 1.0 / m[col][col];
+-            for (int r = col + 1; r < n; ++r)
+-            {
+-                const double f = m[r][col] * invPivot[col];
+-                if (f == 0.0) continue;
+-                for (int j = col; j <= n; ++j) m[r][j] -= f * m[col][j];
+-            }
+-        }
+-        for (int r = n - 1; r >= 0; --r)
+-        {
+-            double s = m[r][n];
+-            for (int j = r + 1; j < n; ++j) s -= m[r][j] * x[j];
+-            x[r] = s * invPivot[r];
+-        }
+-        return true;
+-    }
+-
+     // V3B (cathode follower to the effects loop, plate on V2+; signal not modelled, it is linear at normal Master
+     // settings): its DC current, cathode -> R80 1k -> R16 100k -> ground, grid leak R79 to the R80 / R16 junction.
+     // One Newton step per sample from the last value (V2+ moves slowly).
+diff --git a/Source/dsp/Preamp5150.h b/Source/dsp/Preamp5150.h
+index 37be0c1..6cc5487 100644
+--- a/Source/dsp/Preamp5150.h
++++ b/Source/dsp/Preamp5150.h
+@@ -1,5 +1,6 @@
+ ﻿#pragma once
+ #include <algorithm>
++#include <vector>
+ #include <cmath>
+ #include "LinearNetwork.h"
+ #include "FullPreamp5150.h"
+@@ -282,11 +283,16 @@ public:
+             const double s = 0.5 - 0.5 * std::cos (kPi * (double) fadePos / (double) fadeLen); // 0 -> 1
+             x = 0.0;
+             double rs = 0.0;
++            aheadCur = aheadPos < aheadN ? aheadPos++ : -1;
+             for (int c = 0; c < kPaths; ++c)
+             {
+                 const bool running = w[c] > 0.0 || c == path;
+                 w[c] = fadePos >= fadeLen ? (c == path ? 1.0 : 0.0) : w0[c] * (1.0 - s) + (c == path ? s : 0.0);
+-                if (running) x += w[c] * runPath (c, vin) * trim[c]; // a fading-out channel runs to the end
++                if (running) // a fading-out channel runs to the end
++                {
++                    const double y = aheadCur >= 0 && aheadRun[c] ? aheadOut[(size_t) (c * kAheadHist + aheadCur)] : runPath (c, vin);
++                    x += w[c] * y * trim[c];
++                }
+                 rs += w[c] * sourceR (c);
+             }
+             if (fadePos % 32 == 1 || fadePos == fadeLen) // the tone stack's source impedance slides with the fade
+@@ -312,9 +318,52 @@ public:
+         blueOff.setReferencePrecision (on);
+     }
+
++    // ---- Two-core split of a channel-switch fade (test hook: dsp_test switch8; off unless enabled) ----
++    // During a fade a second core could solve the circuits fading out a whole block ahead of the first core, if they
++    // run on the supply rails of the block before (the power amp on the first core has not computed this block's
++    // yet). enableRunAhead() keeps a rail history; runAhead (vin, n) then solves those circuits for the next n samples
++    // (n <= the samples since enabling) and process() / railCurrents() take their outputs and draws from it.
++    // Without runAhead() calls, everything stays the exact per-sample coupling.
++    void enableRunAhead (bool on)
++    {
++        aheadOn = on;
++        hist1.assign (kAheadHist, 0.0); hist2.assign (kAheadHist, 0.0);
++        aheadOut.assign (kPaths * kAheadHist, 0.0); aheadI1.assign (kPaths * kAheadHist, 0.0); aheadI2.assign (kPaths * kAheadHist, 0.0);
++        histPos = histFilled = aheadN = aheadPos = 0;
++        aheadCur = -1;
++    }
++    bool fading() const { return fadePos < fadeLen; }
++
++    void runAhead (const double* vin, int n)
++    {
++        aheadN = aheadPos = 0;
++        if (! aheadOn || fadePos >= fadeLen) return;
++        n = std::min ({ n, fadeLen - fadePos, histFilled });
++        for (int c = 0; c < kPaths; ++c)
++        {
++            aheadRun[c] = c != path && w[c] > 0.0; // fading out: runs to the end of the fade
++            if (! aheadRun[c]) continue;
++            for (int k = 0; k < n; ++k)
++            {
++                const int h = (histPos - n + k + kAheadHist) % kAheadHist; // the same sample of the block before
++                setPathRails (c, hist1[(size_t) h], hist2[(size_t) h]);
++                const size_t j = (size_t) (c * kAheadHist + k);
++                aheadOut[j] = runPath (c, vin[k]);
++                pathCurrents (c, aheadI1[j], aheadI2[j]);
++            }
++        }
++        aheadN = n;
++    }
++
+     // Supply rails V1+ / V2+ for the next sample (from PowerAmp5150's supply chain)
+     void setRails (double v1, double v2)
+     {
++        if (aheadOn)
++        {
++            hist1[(size_t) histPos] = v1; hist2[(size_t) histPos] = v2;
++            histPos = (histPos + 1) % kAheadHist;
++            histFilled = std::min (histFilled + 1, kAheadHist);
++        }
+         lead.setRails (v1, v2);
+         blue.setRails (v1, v2);
+         clean.setRails (v1);
+@@ -333,7 +382,13 @@ public:
+                 if (w[c] > 0.0)
+                 {
+                     double o1, o2;
+-                    pathCurrents (c, o1, o2);
++                    if (aheadCur >= 0 && aheadRun[c])
++                    {
++                        o1 = aheadI1[(size_t) (c * kAheadHist + aheadCur)];
++                        o2 = aheadI2[(size_t) (c * kAheadHist + aheadCur)];
++                    }
++                    else
++                        pathCurrents (c, o1, o2);
+                     i1 += w[c] * o1;
+                     i2 += w[c] * o2;
+                 }
+@@ -433,6 +488,16 @@ private:
+     double idleI1V2A = 0.0, idleI2Late = 0.0; // CLEAN: rail draw of the bypassed stages
+     bool noise = false;
+
++    // run-ahead split (enableRunAhead): rails of the last kAheadHist samples, and per circuit the outputs / rail
++    // currents of the block solved ahead (aheadCur: index of the sample in process(), -1 outside a run-ahead block)
++    static constexpr int kAheadHist = 512;
++    bool aheadOn = false;
++    std::vector<double> hist1, hist2, aheadOut, aheadI1, aheadI2; // aheadOut etc.: [path * kAheadHist + k]
++    int histPos = 0, histFilled = 0, aheadN = 0, aheadPos = 0, aheadCur = -1;
++    bool aheadRun[kPaths] {};
++
++    void setPathRails (int p, double v1, double v2) { if (p == PClean) clean.setRails (v1); else full (p).setRails (v1, v2); }
++
+     LinearNetwork<8> toneStack;
+     int tsSrc = 0, tsTrebUp = 0, tsTrebLo = 0, tsBass = 0, tsMidUp = 0, tsMidLo = 0;
+ };
+diff --git a/Source/dsp/Simd.h b/Source/dsp/Simd.h
+new file mode 100644
+index 0000000..7c3a119
+--- /dev/null
++++ b/Source/dsp/Simd.h
+@@ -0,0 +1,37 @@
++#pragma once
++// 2-wide double SIMD where the platform always has it: SSE2 on x86-64, NEON on arm64 (scalar code elsewhere), and
++// on x86-64 4-wide AVX where the CPU has it (checked at run time: vampHasAvx()). Used only as separate multiplies
++// and adds, so each lane computes exactly what the scalar code would, whichever path runs.
++#if defined(__SSE2__) || defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__)
++ #include <emmintrin.h>
++ #include <immintrin.h>
++ #define VAMP_SIMD_SSE2 1
++ #if defined(_MSC_VER) && ! defined(__clang__)
++  #include <intrin.h>
++  #define VAMP_AVX_FN // MSVC compiles AVX intrinsics in any function
++ #else
++  #define VAMP_AVX_FN __attribute__ ((target ("avx")))
++ #endif
++namespace vamp
++{
++// AVX available (CPU and operating system)
++inline bool vampHasAvx()
++{
++    static const bool has = []
++    {
++  #if defined(_MSC_VER) && ! defined(__clang__)
++        int r[4];
++        __cpuid (r, 1);
++        const bool cpu = (r[2] & (1 << 28)) != 0 && (r[2] & (1 << 27)) != 0; // AVX, OSXSAVE
++        return cpu && (_xgetbv (0) & 6) == 6;                                // XMM and YMM state enabled by the OS
++  #else
++        return __builtin_cpu_supports ("avx");
++  #endif
++    }();
++    return has;
++}
++} // namespace vamp
++#elif defined(__aarch64__) || defined(_M_ARM64)
++ #include <arm_neon.h>
++ #define VAMP_SIMD_NEON 1
++#endif
+diff --git a/Source/dsp/TriodeNetwork.h b/Source/dsp/TriodeNetwork.h
+index ac57f07..b4d06e2 100644
+--- a/Source/dsp/TriodeNetwork.h
++++ b/Source/dsp/TriodeNetwork.h
+@@ -2,6 +2,7 @@
+ #include <algorithm>
+ #include <cmath>
+ #include "DKCircuit.h"
++#include "PortSolve.h"
+ #include "TriodeStage.h"
+ #include "TubeNoise.h"
+
+@@ -110,14 +111,14 @@ public:
+             ++iterations;
+             evalDevices (i, d);
+
+-            double J[M][M + 1], maxF = 0.0;
++            double rhs[M], maxF = 0.0; // -F
+             for (int r = 0; r < M; ++r)
+             {
+                 double Ki = 0.0;
+                 for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+                 const double F = p[r] - p0[(size_t) r] - Ki;
+                 maxF = std::max (maxF, std::abs (F) * (r % 2 == 0 ? 1.0 : 10.0)); // grids 10x stricter
+-                J[r][M] = -F;
++                rhs[r] = -F;
+             }
+             if (damped)
+             {
+@@ -133,16 +134,10 @@ public:
+             }
+             const bool converged = maxF < resTol; // the final step is still applied (error ~ residual^2)
+
+-            for (int r = 0; r < M; ++r)
+-                for (int t = 0; t < NT; ++t)
+-                {
+-                    const int c0 = 2 * t, c1 = c0 + 1; // plate current depends on both ports, grid current on c1
+-                    J[r][c0] = (r == c0 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][0];
+-                    J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+-                }
+-
++            // (I - K D) dp = -F over the conducting ports only (plate current depends on both ports, grid current
++            // on the grid's: PortSolve.h)
+             double dp[M];
+-            if (! solveLinear (J, dp)) return converged;
++            if (! solvePortStep<M> (K.data(), d, rhs, dp)) return converged;
+
+             double maxStep = 0.0;
+             for (int k = 0; k < M; ++k)
+@@ -314,35 +309,6 @@ private:
+         }
+     }
+
+-    // Gaussian elimination with partial pivoting
+-    static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+-    {
+-        double invPivot[M];
+-        for (int col = 0; col < M; ++col)
+-        {
+-            int piv = col;
+-            for (int r = col + 1; r < M; ++r)
+-                if (std::abs (m[r][col]) > std::abs (m[piv][col])) piv = r;
+-            if (std::abs (m[piv][col]) < 1e-300) return false;
+-            if (piv != col)
+-                for (int j = 0; j <= M; ++j) std::swap (m[col][j], m[piv][j]);
+-            invPivot[col] = 1.0 / m[col][col];
+-            for (int r = col + 1; r < M; ++r)
+-            {
+-                const double f = m[r][col] * invPivot[col];
+-                if (f == 0.0) continue;
+-                for (int j = col; j <= M; ++j) m[r][j] -= f * m[col][j];
+-            }
+-        }
+-        for (int r = M - 1; r >= 0; --r)
+-        {
+-            double s = m[r][M];
+-            for (int j = r + 1; j < M; ++j) s -= m[r][j] * x[j];
+-            x[r] = s * invPivot[r];
+-        }
+-        return true;
+-    }
+-
+     void restoreIdle()
+     {
+         dk.restoreState();

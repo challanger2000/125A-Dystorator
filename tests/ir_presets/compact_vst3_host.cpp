@@ -166,6 +166,63 @@ int main (int argc, char **argv)
               << " VST3 host bypass parameter -> actual delayed dry/warm wet"
               << " dry_max=" << dryError << " warm_max=" << warmError << '\n';
     pass = pass && bypassPass;
+    // Isolate amp duplication: the preceding stereo run leaves different L/R
+    // cabinet/cut histories (float IIR rounding can persist). MONO duplicates
+    // BEFORE cabinet/cuts; it does not promise equal post-stereo-cab output.
+    // Keep the preceding enabled-cab/cut wrapper/state/bypass checks intact.
+    for (auto *parameter : active->getParameters ())
+        if (parameter->getName (128) == "Cab On" || parameter->getName (128) == "Low Cut On" ||
+            parameter->getName (128) == "High Cut On")
+            parameter->setValueNotifyingHost (0.f);
+    // Exercise new controls through the real VST3 controller, after prepare.
+    const int fixedLatency = active->getLatencySamples ();
+    for (int quality = 0; quality < 3; ++quality)
+    {
+        int found = 0;
+        for (auto *parameter : active->getParameters ())
+        {
+            if (parameter->getName (128) == "AMP MODE")
+            {
+                parameter->setValueNotifyingHost (0.f);
+                ++found;
+            }
+            if (parameter->getName (128) == "QUALITY")
+            {
+                parameter->setValueNotifyingHost (quality * .5f);
+                ++found;
+            }
+        }
+        double difference = 0, energy = 0;
+        for (int k = 0; k < 210; ++k)
+        {
+            a.clear ();
+            for (int i = 0; i < 64; ++i)
+                a.setSample (1, i, .1f * std::sin ((k * 64 + i) * .031f));
+            active->processBlock (a, midi);
+            if (k > 180)
+                for (int i = 0; i < 64; ++i)
+                {
+                    difference =
+                        std::max (difference, (double)std::abs (a.getSample (0, i) - a.getSample (1, i)));
+                    energy += (double)a.getSample (0, i) * a.getSample (0, i);
+                }
+        }
+        bool modeState = false, qualityState = false;
+        if (auto scene = hostedComponentState (*active))
+            for (auto *child : scene->getChildWithTagNameIterator ("PARAM"))
+            {
+                if (child->getStringAttribute ("id") == "ampMode")
+                    modeState = child->getDoubleAttribute ("value") == 0.;
+                if (child->getStringAttribute ("id") == "quality")
+                    qualityState = child->getDoubleAttribute ("value") == quality;
+            }
+        const bool modePass = found == 2 && modeState && qualityState && difference < 1e-6 && energy > 1e-8 &&
+                              active->getLatencySamples () == fixedLatency;
+        std::cout << (modePass ? "PASS" : "FAIL")
+                  << " VST3 live MONO/R-only/quality/state/fixed latency quality=" << quality
+                  << " stereo_difference=" << difference << " energy=" << energy << '\n';
+        pass = pass && modePass;
+    }
     for (auto *p : {active.get (), silent.get (), restored.get ()})
         p->releaseResources ();
     return pass ? 0 : 1;

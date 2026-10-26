@@ -1,0 +1,4 @@
+PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+PASS singular reduced solve rejects
+PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero

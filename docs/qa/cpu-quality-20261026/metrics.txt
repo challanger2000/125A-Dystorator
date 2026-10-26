@@ -1,0 +1,91 @@
+METRIC fs=44100 quality=BEFORE_HIGH signal=0 rms=0.0258707 dc=-4.60399e-06 peak=0.0545584 dynamic_db=-0.0375469 thd_db=-4.25917 inharmonic_db=-53.3757
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=BEFORE_HIGH signal=1 rms=0.0197994 dc=-1.35715e-06 peak=0.0524419 dynamic_db=-0.0271968 imd3_db=-9.0788
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=BEFORE_HIGH signal=2 rms=0.0355334 dc=0.000444429 peak=0.072374 dynamic_db=0.0216989
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=HIGH signal=0 rms=0.0258707 dc=-4.60399e-06 peak=0.0545584 dynamic_db=-0.0375469 thd_db=-4.25917 inharmonic_db=-53.3757
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=HIGH signal=1 rms=0.0197994 dc=-1.35715e-06 peak=0.0524419 dynamic_db=-0.0271968 imd3_db=-9.0788
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=HIGH signal=2 rms=0.0355334 dc=0.000444429 peak=0.072374 dynamic_db=0.0216989
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=STANDARD signal=0 rms=0.0258116 dc=-4.56947e-06 peak=0.0543498 dynamic_db=-0.0389081 thd_db=-4.31701 inharmonic_db=-47.7749
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=STANDARD signal=1 rms=0.0197844 dc=-1.35152e-06 peak=0.0526498 dynamic_db=-0.0276087 imd3_db=-9.07878
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=STANDARD signal=2 rms=0.0355375 dc=0.000441661 peak=0.0709743 dynamic_db=0.0223151
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=ECO signal=0 rms=0.0255878 dc=-4.51199e-06 peak=0.051045 dynamic_db=-0.0382375 thd_db=-4.58388 inharmonic_db=-24.5984
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=ECO signal=1 rms=0.0196899 dc=-1.36661e-06 peak=0.0510811 dynamic_db=-0.0269902 imd3_db=-9.07677
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=ECO signal=2 rms=0.0355438 dc=0.000434727 peak=0.0707306 dynamic_db=0.023189
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=REF16 signal=0 rms=0.0258765 dc=-4.6322e-06 peak=0.0546354 dynamic_db=-0.0365866 thd_db=-4.25033 inharmonic_db=-64.897
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=REF16 signal=1 rms=0.019802 dc=-1.36411e-06 peak=0.0528199 dynamic_db=-0.0271558 imd3_db=-9.07834
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=44100 quality=REF16 signal=2 rms=0.0355316 dc=0.00044582 peak=0.0712296 dynamic_db=0.0214033
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=BEFORE_HIGH signal=0 rms=0.0260473 dc=-5.20966e-06 peak=0.0529944 dynamic_db=-0.0326839 thd_db=-4.25329 inharmonic_db=-57.4977
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=BEFORE_HIGH signal=1 rms=0.0199215 dc=-1.22812e-06 peak=0.0536704 dynamic_db=-0.0432229 imd3_db=-9.10228
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=BEFORE_HIGH signal=2 rms=0.0358364 dc=4.45654e-05 peak=0.0814718 dynamic_db=0.209485
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=HIGH signal=0 rms=0.0260473 dc=-5.20966e-06 peak=0.0529944 dynamic_db=-0.0326839 thd_db=-4.25329 inharmonic_db=-57.4977
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=HIGH signal=1 rms=0.0199215 dc=-1.22812e-06 peak=0.0536704 dynamic_db=-0.0432229 imd3_db=-9.10228
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=HIGH signal=2 rms=0.0358364 dc=4.45654e-05 peak=0.0814718 dynamic_db=0.209485
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=STANDARD signal=0 rms=0.025985 dc=-5.22533e-06 peak=0.0532961 dynamic_db=-0.0332361 thd_db=-4.2995 inharmonic_db=-50.2947
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=STANDARD signal=1 rms=0.0199033 dc=-1.25976e-06 peak=0.0538324 dynamic_db=-0.0430699 imd3_db=-9.10256
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=STANDARD signal=2 rms=0.0358417 dc=3.89758e-05 peak=0.0795637 dynamic_db=0.211088
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=ECO signal=0 rms=0.0256608 dc=-5.17486e-06 peak=0.0529403 dynamic_db=-0.0278258 thd_db=-4.538 inharmonic_db=-29.0361
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=ECO signal=1 rms=0.0198039 dc=-1.34108e-06 peak=0.0519999 dynamic_db=-0.0287446 imd3_db=-9.10617
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=ECO signal=2 rms=0.0358537 dc=2.50471e-05 peak=0.0824046 dynamic_db=0.215042
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=REF16 signal=0 rms=0.0260558 dc=-5.19438e-06 peak=0.0528601 dynamic_db=-0.0327062 thd_db=-4.24585 inharmonic_db=-65.0562
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=REF16 signal=1 rms=0.0199232 dc=-1.22452e-06 peak=0.0537475 dynamic_db=-0.0388729 imd3_db=-9.10211
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=48000 quality=REF16 signal=2 rms=0.0358339 dc=4.73612e-05 peak=0.082387 dynamic_db=0.208665
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=BEFORE_HIGH signal=0 rms=0.0264869 dc=-9.83252e-06 peak=0.0607239 dynamic_db=-0.0152874 thd_db=-4.25042 inharmonic_db=-57.7482
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=BEFORE_HIGH signal=1 rms=0.0200912 dc=-2.19452e-06 peak=0.0620431 dynamic_db=-0.0222907 imd3_db=-9.07093
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=BEFORE_HIGH signal=2 rms=0.0360019 dc=0.000957167 peak=0.0923535 dynamic_db=0.258431
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=HIGH signal=0 rms=0.0264869 dc=-9.83252e-06 peak=0.0607239 dynamic_db=-0.0152874 thd_db=-4.25042 inharmonic_db=-57.7482
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=HIGH signal=1 rms=0.0200912 dc=-2.19452e-06 peak=0.0620431 dynamic_db=-0.0222907 imd3_db=-9.07093
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=HIGH signal=2 rms=0.0360019 dc=0.000957167 peak=0.0923535 dynamic_db=0.258431
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=STANDARD signal=0 rms=0.0263442 dc=-9.74687e-06 peak=0.0592301 dynamic_db=-0.0150838 thd_db=-4.29664 inharmonic_db=-50.042
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=STANDARD signal=1 rms=0.0200425 dc=-2.23721e-06 peak=0.0604472 dynamic_db=-0.0211807 imd3_db=-9.07137
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=STANDARD signal=2 rms=0.036011 dc=0.000965175 peak=0.0908541 dynamic_db=0.254853
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=ECO signal=0 rms=0.0258224 dc=-9.97525e-06 peak=0.0535247 dynamic_db=-0.00885611 thd_db=-4.53939 inharmonic_db=-28.2346
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=ECO signal=1 rms=0.0198782 dc=-2.59293e-06 peak=0.0547092 dynamic_db=-0.0213428 imd3_db=-9.06863
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=ECO signal=2 rms=0.0360351 dc=0.000983261 peak=0.0862882 dynamic_db=0.247262
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=REF16 signal=0 rms=0.0265227 dc=-9.72002e-06 peak=0.061033 dynamic_db=-0.0159373 thd_db=-4.24056 inharmonic_db=-65.3356
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=REF16 signal=1 rms=0.0201026 dc=-2.19382e-06 peak=0.0623865 dynamic_db=-0.0231305 imd3_db=-9.0709
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+METRIC fs=96000 quality=REF16 signal=2 rms=0.0359958 dc=0.000952215 peak=0.0921455 dynamic_db=0.260626
+PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+45 checks, 0 failures

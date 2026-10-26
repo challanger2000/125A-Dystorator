@@ -1,0 +1,6 @@
+PASS actual VST3 non-default component state survives save/restore before prepare
+PASS Linux packaged VST3 discover/instantiate/stereo R-only/no-crosstalk/state/audio audible=0.334309 bleed=0 recall_max=0 latency=5 parameters=72
+PASS VST3 host bypass parameter -> actual delayed dry/warm wet dry_max=0 warm_max=0
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=0 stereo_difference=0 energy=0.165894
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=1 stereo_difference=0 energy=0.16552
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=2 stereo_difference=0 energy=0.165301

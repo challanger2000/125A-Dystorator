@@ -1,0 +1,32 @@
+{
+  "functional_status": "PASS within documented coverage",
+  "cpu_deadline_status": "FAIL",
+  "cpu_before_cases": 48,
+  "cpu_before_deadline_failures": 48,
+  "cpu_after_cases": 144,
+  "cpu_after_deadline_failures": 127,
+  "high_mean_relative_callback_saving_percent": 38.55303374630723,
+  "legacy_checks": 131,
+  "ownership_trace_checks": 132,
+  "modes_checks": 66,
+  "high_pcm_checks": 27,
+  "mono_reference_checks": 3,
+  "stereo_quality_reference_checks": 9,
+  "vst3_wrapper_checks": 6,
+  "stress_checks": 3,
+  "tsan_modes_checks": 66,
+  "tsan_stress_checks": 3,
+  "asan_ubsan_modes_checks": 66,
+  "asan_ubsan_stress_checks": 3,
+  "NOT_RUN": [
+    "Windows/MSVC/ASIO/StudioOne real host",
+    "real DI and matched listening",
+    "musical approval ECO/STANDARD",
+    "physical non-AVX hardware",
+    "ARM/NEON",
+    "pluginval/47-validator",
+    "whole legacy suite under new sanitizers",
+    "hotspot/startup/RAM profiling"
+  ],
+  "release_status": "DEVELOPMENT ONLY, NO FINAL"
+}

@@ -51,6 +51,7 @@ VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     pReverbOn = get (ids::reverbOn); pRvSize = get (ids::rvSize); pRvDamping = get (ids::rvDamping);
     pRvWidth = get (ids::rvWidth); pRvMix = get (ids::rvMix);
     pOutGain = get (ids::outGain);
+    pAmpMode = get (ids::ampMode); pQuality = get (ids::quality);
 }
 
 bool VibeAmpProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
@@ -78,8 +79,6 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     for (int channel = 0; channel < 2; ++channel)
     {
-        inputGate[channel].prepare (sampleRate);
-        amp[channel].prepare (sampleRate, maxBlock);
         using T = vamp::Biquad::Type;
         auto& f = fallbackCab[channel];
         f[0].set (T::highPass, sampleRate, 80.0, 0.7);
@@ -96,7 +95,10 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     cabinet.prepare (stereoSpec);
     cuts.prepare (sampleRate);
     inGateOn = false;
-    const int latency = amp[0].getLatencySamples();
+    ampBank.prepare (sampleRate, maxBlock, getTotalNumInputChannels(),
+                     juce::roundToInt (pAmpMode->load()), juce::roundToInt (pQuality->load()));
+    effectiveFactor = ampBank.getActiveFactor(); effectiveLanes = ampBank.getActiveLanes(); ampTransition = false;
+    const int latency = ampBank.getLatencySamples();
     dryLatency = latency;
     dryDelay.setSize (2, latency + 1);
     dryDelay.clear();
@@ -128,8 +130,6 @@ void VibeAmpProcessor::processAudio (juce::AudioBuffer<float>& buffer, bool bypa
 
     inputGain.setGainDecibels (pInGain->load());
     const bool enabled = pInGateOn->load() > 0.5f;
-    if (enabled && ! inGateOn)
-        for (auto& gate : inputGate) gate.reset();
     inGateOn = enabled;
     inGateThresh = pInGateThresh->load();
     inGateRelease = pInGateRelease->load();
@@ -210,15 +210,10 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
     updatePeak (inputPeak, juce::jmax (stereoBuf.getMagnitude (0, 0, len),
                                        stereoBuf.getMagnitude (1, 0, len)));
 
-    for (int channel = 0; channel < ampLanes; ++channel)
-    {
-        float* data = stereoBuf.getWritePointer (channel);
-        if (inGateOn)
-            inputGate[channel].process (data, len, inGateThresh, inGateRelease);
-        amp[channel].process (data, len, ampSettings);
-    }
-    if (ampLanes == 1)
-        stereoBuf.copyFrom (1, 0, stereoBuf, 0, 0, len);
+    ampBank.process (stereoBlock, ampSettings, numIn, juce::roundToInt (pAmpMode->load()),
+                     juce::roundToInt (pQuality->load()), inGateOn, inGateThresh, inGateRelease);
+    effectiveFactor = ampBank.getActiveFactor(); effectiveLanes = ampBank.getActiveLanes();
+    ampTransition = ampBank.transitioning();
 
 #if defined (VAMP_IR_TEST_CAPTURE)
     irTestCaptureCabinetInput (stereoBuf.getReadPointer (0), len);

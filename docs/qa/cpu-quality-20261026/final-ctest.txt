@@ -1,0 +1,258 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Parse Config file:/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/ir-presets
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: quality_modes
+
+1: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test "modes"
+1: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+1: Test timeout computed to be: 1500
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: 66 checks, 0 failures
+1/4 Test #1: quality_modes ....................   Passed   26.76 sec
+test 2
+    Start 2: quality_frozen_pcm
+
+2: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test "pcm"
+2: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+2: Test timeout computed to be: 1500
+2: PCM fs=44100 channel=0 drive=-1 max=2.98023e-08 residual_db=-152.96 energy=19.6376
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=0 drive=0 max=2.98023e-08 residual_db=-153.103 energy=35.111
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=0 drive=1 max=2.98023e-08 residual_db=-155.03 energy=58.401
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=1 drive=-1 max=1.49012e-08 residual_db=-154.927 energy=15.8385
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=1 drive=0 max=1.49012e-08 residual_db=-154.386 energy=13.2002
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=1 drive=1 max=1.49012e-08 residual_db=-154.85 energy=14.6205
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=2 drive=-1 max=1.49012e-08 residual_db=-153.804 energy=12.9604
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=2 drive=0 max=7.45058e-09 residual_db=-154.142 energy=10.789
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=44100 channel=2 drive=1 max=1.11759e-08 residual_db=-155.195 energy=11.4694
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=0 drive=-1 max=1.11759e-08 residual_db=-158.358 energy=20.1927
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=0 drive=0 max=1.49012e-08 residual_db=-161.845 energy=35.6689
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=0 drive=1 max=2.98023e-08 residual_db=-161.78 energy=58.9194
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=1 drive=-1 max=7.45058e-09 residual_db=-161.144 energy=17.2106
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=1 drive=0 max=7.45058e-09 residual_db=-160.684 energy=13.6425
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=1 drive=1 max=7.45058e-09 residual_db=-160.598 energy=14.6697
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=2 drive=-1 max=1.49012e-08 residual_db=-156.236 energy=13.4084
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=2 drive=0 max=7.45058e-09 residual_db=-158.683 energy=11.2079
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=48000 channel=2 drive=1 max=7.45058e-09 residual_db=-158.264 energy=11.755
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=0 drive=-1 max=1.49012e-08 residual_db=-160.368 energy=30.9003
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=0 drive=0 max=2.98023e-08 residual_db=-158.369 energy=45.8559
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=0 drive=1 max=2.98023e-08 residual_db=-159.123 energy=75.6359
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=1 drive=-1 max=7.45058e-09 residual_db=-160.712 energy=23.5951
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=1 drive=0 max=7.45058e-09 residual_db=-160.883 energy=20.1742
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=1 drive=1 max=7.45058e-09 residual_db=-159.17 energy=20.8508
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=2 drive=-1 max=7.45058e-09 residual_db=-160.579 energy=19.1925
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=2 drive=0 max=1.49012e-08 residual_db=-155.87 energy=18.0593
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: PCM fs=96000 channel=2 drive=1 max=7.45058e-09 residual_db=-159.729 energy=18.1667
+2: PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+2: 27 checks, 0 failures
+2/4 Test #2: quality_frozen_pcm ...............   Passed   80.11 sec
+test 3
+    Start 3: quality_concurrent_state_ir
+
+3: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test "stress"
+3: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+3: Test timeout computed to be: 1500
+3: PASS concurrent stereo IR/preset/host-state/mode/quality and host bypass complete with finite audio
+3: PASS concurrent mode/IR callback has no C++ new/delete
+3: PASS concurrent last mono/ECO selection becomes active
+3: 3 checks, 0 failures
+3/4 Test #3: quality_concurrent_state_ir ......   Passed    7.55 sec
+test 4
+    Start 4: quality_spectral_measurements
+
+4: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test "metrics"
+4: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+4: Test timeout computed to be: 1500
+4: METRIC fs=44100 quality=BEFORE_HIGH signal=0 rms=0.0258707 dc=-4.60399e-06 peak=0.0545584 dynamic_db=-0.0375469 thd_db=-4.25917 inharmonic_db=-53.3757
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=BEFORE_HIGH signal=1 rms=0.0197994 dc=-1.35715e-06 peak=0.0524419 dynamic_db=-0.0271968 imd3_db=-9.0788
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=BEFORE_HIGH signal=2 rms=0.0355334 dc=0.000444429 peak=0.072374 dynamic_db=0.0216989
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=HIGH signal=0 rms=0.0258707 dc=-4.60399e-06 peak=0.0545584 dynamic_db=-0.0375469 thd_db=-4.25917 inharmonic_db=-53.3757
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=HIGH signal=1 rms=0.0197994 dc=-1.35715e-06 peak=0.0524419 dynamic_db=-0.0271968 imd3_db=-9.0788
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=HIGH signal=2 rms=0.0355334 dc=0.000444429 peak=0.072374 dynamic_db=0.0216989
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=STANDARD signal=0 rms=0.0258116 dc=-4.56947e-06 peak=0.0543498 dynamic_db=-0.0389081 thd_db=-4.31701 inharmonic_db=-47.7749
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=STANDARD signal=1 rms=0.0197844 dc=-1.35152e-06 peak=0.0526498 dynamic_db=-0.0276087 imd3_db=-9.07878
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=STANDARD signal=2 rms=0.0355375 dc=0.000441661 peak=0.0709743 dynamic_db=0.0223151
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=ECO signal=0 rms=0.0255878 dc=-4.51199e-06 peak=0.051045 dynamic_db=-0.0382375 thd_db=-4.58388 inharmonic_db=-24.5984
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=ECO signal=1 rms=0.0196899 dc=-1.36661e-06 peak=0.0510811 dynamic_db=-0.0269902 imd3_db=-9.07677
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=ECO signal=2 rms=0.0355438 dc=0.000434727 peak=0.0707306 dynamic_db=0.023189
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=REF16 signal=0 rms=0.0258765 dc=-4.6322e-06 peak=0.0546354 dynamic_db=-0.0365866 thd_db=-4.25033 inharmonic_db=-64.897
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=REF16 signal=1 rms=0.019802 dc=-1.36411e-06 peak=0.0528199 dynamic_db=-0.0271558 imd3_db=-9.07834
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=44100 quality=REF16 signal=2 rms=0.0355316 dc=0.00044582 peak=0.0712296 dynamic_db=0.0214033
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=BEFORE_HIGH signal=0 rms=0.0260473 dc=-5.20966e-06 peak=0.0529944 dynamic_db=-0.0326839 thd_db=-4.25329 inharmonic_db=-57.4977
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=BEFORE_HIGH signal=1 rms=0.0199215 dc=-1.22812e-06 peak=0.0536704 dynamic_db=-0.0432229 imd3_db=-9.10228
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=BEFORE_HIGH signal=2 rms=0.0358364 dc=4.45654e-05 peak=0.0814718 dynamic_db=0.209485
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=HIGH signal=0 rms=0.0260473 dc=-5.20966e-06 peak=0.0529944 dynamic_db=-0.0326839 thd_db=-4.25329 inharmonic_db=-57.4977
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=HIGH signal=1 rms=0.0199215 dc=-1.22812e-06 peak=0.0536704 dynamic_db=-0.0432229 imd3_db=-9.10228
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=HIGH signal=2 rms=0.0358364 dc=4.45654e-05 peak=0.0814718 dynamic_db=0.209485
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=STANDARD signal=0 rms=0.025985 dc=-5.22533e-06 peak=0.0532961 dynamic_db=-0.0332361 thd_db=-4.2995 inharmonic_db=-50.2947
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=STANDARD signal=1 rms=0.0199033 dc=-1.25976e-06 peak=0.0538324 dynamic_db=-0.0430699 imd3_db=-9.10256
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=STANDARD signal=2 rms=0.0358417 dc=3.89758e-05 peak=0.0795637 dynamic_db=0.211088
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=ECO signal=0 rms=0.0256608 dc=-5.17486e-06 peak=0.0529403 dynamic_db=-0.0278258 thd_db=-4.538 inharmonic_db=-29.0361
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=ECO signal=1 rms=0.0198039 dc=-1.34108e-06 peak=0.0519999 dynamic_db=-0.0287446 imd3_db=-9.10617
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=ECO signal=2 rms=0.0358537 dc=2.50471e-05 peak=0.0824046 dynamic_db=0.215042
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=REF16 signal=0 rms=0.0260558 dc=-5.19438e-06 peak=0.0528601 dynamic_db=-0.0327062 thd_db=-4.24585 inharmonic_db=-65.0562
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=REF16 signal=1 rms=0.0199232 dc=-1.22452e-06 peak=0.0537475 dynamic_db=-0.0388729 imd3_db=-9.10211
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=48000 quality=REF16 signal=2 rms=0.0358339 dc=4.73612e-05 peak=0.082387 dynamic_db=0.208665
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=BEFORE_HIGH signal=0 rms=0.0264869 dc=-9.83252e-06 peak=0.0607239 dynamic_db=-0.0152874 thd_db=-4.25042 inharmonic_db=-57.7482
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=BEFORE_HIGH signal=1 rms=0.0200912 dc=-2.19452e-06 peak=0.0620431 dynamic_db=-0.0222907 imd3_db=-9.07093
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=BEFORE_HIGH signal=2 rms=0.0360019 dc=0.000957167 peak=0.0923535 dynamic_db=0.258431
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=HIGH signal=0 rms=0.0264869 dc=-9.83252e-06 peak=0.0607239 dynamic_db=-0.0152874 thd_db=-4.25042 inharmonic_db=-57.7482
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=HIGH signal=1 rms=0.0200912 dc=-2.19452e-06 peak=0.0620431 dynamic_db=-0.0222907 imd3_db=-9.07093
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=HIGH signal=2 rms=0.0360019 dc=0.000957167 peak=0.0923535 dynamic_db=0.258431
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=STANDARD signal=0 rms=0.0263442 dc=-9.74687e-06 peak=0.0592301 dynamic_db=-0.0150838 thd_db=-4.29664 inharmonic_db=-50.042
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=STANDARD signal=1 rms=0.0200425 dc=-2.23721e-06 peak=0.0604472 dynamic_db=-0.0211807 imd3_db=-9.07137
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=STANDARD signal=2 rms=0.036011 dc=0.000965175 peak=0.0908541 dynamic_db=0.254853
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=ECO signal=0 rms=0.0258224 dc=-9.97525e-06 peak=0.0535247 dynamic_db=-0.00885611 thd_db=-4.53939 inharmonic_db=-28.2346
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=ECO signal=1 rms=0.0198782 dc=-2.59293e-06 peak=0.0547092 dynamic_db=-0.0213428 imd3_db=-9.06863
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=ECO signal=2 rms=0.0360351 dc=0.000983261 peak=0.0862882 dynamic_db=0.247262
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=REF16 signal=0 rms=0.0265227 dc=-9.72002e-06 peak=0.061033 dynamic_db=-0.0159373 thd_db=-4.24056 inharmonic_db=-65.3356
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=REF16 signal=1 rms=0.0201026 dc=-2.19382e-06 peak=0.0623865 dynamic_db=-0.0231305 imd3_db=-9.0709
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: METRIC fs=96000 quality=REF16 signal=2 rms=0.0359958 dc=0.000952215 peak=0.0921455 dynamic_db=0.260626
+4: PASS metric render is finite and non-silent (measurement, not subjective quality approval)
+4: 45 checks, 0 failures
+4/4 Test #4: quality_spectral_measurements ....   Passed   52.62 sec
+
+100% tests passed out of 4
+
+Total Test time (real) = 167.03 sec

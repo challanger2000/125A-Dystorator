@@ -1,0 +1,6 @@
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+CMAKE_CXX_FLAGS:STRING=-I/workspace/sysroot/usr/include -I/workspace/sysroot/usr/include/freetype2
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+FETCHCONTENT_SOURCE_DIR_JUCE:PATH=/workspace/juce-8.0.4
+JUCE_SOURCE_DIR:STATIC=/workspace/juce-8.0.4

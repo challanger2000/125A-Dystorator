@@ -1,5 +1,7 @@
 # Kompakter Stereo-Amp: technische Fortsetzung und QA
 
+Historischer Stand `8ca580d`: Die anschließende beauftragte CPU-/Qualitätsänderung und ihre neuen Messungen sind in [CPU-QUALITY-MODES-20261026.md](CPU-QUALITY-MODES-20261026.md) dokumentiert. Die folgenden ursprünglichen Befunde bleiben als Baseline erhalten.
+
 Datum: 2026-10-26 (Europe/Berlin). Entwicklungsbericht, **keine FINAL-Freigabe**.
 
 ## Verbindliche Basis und Änderungsgrenze

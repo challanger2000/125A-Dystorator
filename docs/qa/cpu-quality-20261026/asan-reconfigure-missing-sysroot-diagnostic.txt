@@ -1,0 +1,158 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Checking for modules 'webkit2gtk-4.0;gtk+-x11-3.0'
+--   Package 'webkit2gtk-4.0', required by 'virtual:world', not found
+--   Package 'gtk+-x11-3.0', required by 'virtual:world', not found
+-- Configuring juceaide
+-- Building juceaide
+CMake Error at /workspace/juce-8.0.4/extras/Build/juceaide/CMakeLists.txt:142 (message):
+  Failed to build juceaide
+
+  [0/2] Re-checking globbed directories...
+
+  [1/12] Building CXX object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.cpp.o
+
+  FAILED: [code=1]
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.cpp.o
+
+  /usr/bin/c++ -DDEBUG=1 -DJUCE_DISABLE_JUCE_VERSION_PRINTING=1
+  -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
+  -DJUCE_MODULE_AVAILABLE_juce_build_tools=1
+  -DJUCE_MODULE_AVAILABLE_juce_core=1
+  -DJUCE_MODULE_AVAILABLE_juce_data_structures=1
+  -DJUCE_MODULE_AVAILABLE_juce_events=1
+  -DJUCE_MODULE_AVAILABLE_juce_graphics=1
+  -DJUCE_MODULE_AVAILABLE_juce_gui_basics=1
+  -DJUCE_SILENCE_XCODE_15_LINKER_WARNING=1 -DJUCE_STANDALONE_APPLICATION=1
+  -DJUCE_USE_CURL=0 -DLINUX=1 -D_DEBUG=1
+  -I/workspace/125A-Dystorator/build/compact-asan/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/JuceLibraryCode
+  -I/workspace/juce-8.0.4/extras/Build -I/workspace/juce-8.0.4/modules
+  -I/workspace/sysroot/usr/include/libpng16 -std=c++17 -g -O0 -Wall -Wextra
+  -Wpedantic -Wstrict-aliasing -Wuninitialized -Wunused-parameter
+  -Wsign-compare -Wsign-conversion -Wunreachable-code -Wcast-align
+  -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-ignored-qualifiers
+  -Wno-multichar -Wswitch-enum -Wredundant-decls -Wno-strict-overflow
+  -Wshadow -Wfloat-equal -Wmissing-field-initializers -Woverloaded-virtual
+  -Wreorder -Wzero-as-null-pointer-constant -MD -MT
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.cpp.o
+  -MF
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.cpp.o.d
+  -o
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.cpp.o
+  -c /workspace/juce-8.0.4/modules/juce_graphics/juce_graphics.cpp
+
+  /workspace/juce-8.0.4/modules/juce_graphics/juce_graphics.cpp:115:11: fatal
+  error: ft2build.h: No such file or directory
+
+    115 |  #include <ft2build.h>
+        |           ^~~~~~~~~~~~
+
+  compilation terminated.
+
+  [2/12] Building CXX object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+
+  FAILED: [code=1]
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+
+  /usr/bin/c++ -DDEBUG=1 -DJUCE_DISABLE_JUCE_VERSION_PRINTING=1
+  -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
+  -DJUCE_MODULE_AVAILABLE_juce_build_tools=1
+  -DJUCE_MODULE_AVAILABLE_juce_core=1
+  -DJUCE_MODULE_AVAILABLE_juce_data_structures=1
+  -DJUCE_MODULE_AVAILABLE_juce_events=1
+  -DJUCE_MODULE_AVAILABLE_juce_graphics=1
+  -DJUCE_MODULE_AVAILABLE_juce_gui_basics=1
+  -DJUCE_SILENCE_XCODE_15_LINKER_WARNING=1 -DJUCE_STANDALONE_APPLICATION=1
+  -DJUCE_USE_CURL=0 -DLINUX=1 -D_DEBUG=1
+  -I/workspace/125A-Dystorator/build/compact-asan/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/JuceLibraryCode
+  -I/workspace/juce-8.0.4/extras/Build -I/workspace/juce-8.0.4/modules
+  -I/workspace/sysroot/usr/include/libpng16 -std=c++17 -g -O0 -Wall -Wextra
+  -Wpedantic -Wstrict-aliasing -Wuninitialized -Wunused-parameter
+  -Wsign-compare -Wsign-conversion -Wunreachable-code -Wcast-align
+  -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-ignored-qualifiers
+  -Wno-multichar -Wswitch-enum -Wredundant-decls -Wno-strict-overflow
+  -Wshadow -Wfloat-equal -Wmissing-field-initializers -Woverloaded-virtual
+  -Wreorder -Wzero-as-null-pointer-constant -MD -MT
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+  -MF
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o.d
+  -o
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+  -c /workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Harfbuzz.cpp
+
+  In file included from
+  /workspace/juce-8.0.4/modules/juce_graphics/fonts/harfbuzz/hb-ft.cc:34,
+
+                   from /workspace/juce-8.0.4/modules/juce_graphics/fonts/harfbuzz/harfbuzz.cc:16,
+                   from /workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Harfbuzz.cpp:92:
+
+  /workspace/juce-8.0.4/modules/juce_graphics/fonts/harfbuzz/hb-ft.h:34:10:
+  fatal error: ft2build.h: No such file or directory
+
+     34 | #include <ft2build.h>
+        |          ^~~~~~~~~~~~
+
+  compilation terminated.
+
+  [3/12] Building C object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics_Sheenbidi.c.o
+
+  [4/12] Building CXX object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.cpp.o
+
+  FAILED: [code=1]
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.cpp.o
+
+  /usr/bin/c++ -DDEBUG=1 -DJUCE_DISABLE_JUCE_VERSION_PRINTING=1
+  -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
+  -DJUCE_MODULE_AVAILABLE_juce_build_tools=1
+  -DJUCE_MODULE_AVAILABLE_juce_core=1
+  -DJUCE_MODULE_AVAILABLE_juce_data_structures=1
+  -DJUCE_MODULE_AVAILABLE_juce_events=1
+  -DJUCE_MODULE_AVAILABLE_juce_graphics=1
+  -DJUCE_MODULE_AVAILABLE_juce_gui_basics=1
+  -DJUCE_SILENCE_XCODE_15_LINKER_WARNING=1 -DJUCE_STANDALONE_APPLICATION=1
+  -DJUCE_USE_CURL=0 -DLINUX=1 -D_DEBUG=1
+  -I/workspace/125A-Dystorator/build/compact-asan/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/JuceLibraryCode
+  -I/workspace/juce-8.0.4/extras/Build -I/workspace/juce-8.0.4/modules
+  -I/workspace/sysroot/usr/include/libpng16 -std=c++17 -g -O0 -Wall -Wextra
+  -Wpedantic -Wstrict-aliasing -Wuninitialized -Wunused-parameter
+  -Wsign-compare -Wsign-conversion -Wunreachable-code -Wcast-align
+  -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-ignored-qualifiers
+  -Wno-multichar -Wswitch-enum -Wredundant-decls -Wno-strict-overflow
+  -Wshadow -Wfloat-equal -Wmissing-field-initializers -Woverloaded-virtual
+  -Wreorder -Wzero-as-null-pointer-constant -MD -MT
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.cpp.o
+  -MF
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.cpp.o.d
+  -o
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.cpp.o
+  -c /workspace/juce-8.0.4/modules/juce_gui_basics/juce_gui_basics.cpp
+
+  In file included from
+  /workspace/juce-8.0.4/modules/juce_gui_basics/juce_gui_basics.cpp:55:
+
+  /workspace/juce-8.0.4/modules/juce_gui_basics/juce_gui_basics.h:348:12:
+  fatal error: X11/Xlib.h: No such file or directory
+
+    348 |   #include <X11/Xlib.h>
+        |            ^~~~~~~~~~~~
+
+  compilation terminated.
+
+  [5/12] Building CXX object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/Main.cpp.o
+
+  [6/12] Building CXX object
+  extras/Build/juceaide/CMakeFiles/juceaide.dir/__/juce_build_tools/juce_build_tools.cpp.o
+
+  ninja: build stopped: subcommand failed.
+
+
+
+-- Configuring incomplete, errors occurred!
+FAILED: [code=1] build.ninja /workspace/125A-Dystorator/build/compact-asan/cmake_install.cmake /workspace/125A-Dystorator/build/compact-asan/JUCE/cmake_install.cmake /workspace/125A-Dystorator/build/compact-asan/JUCE/modules/cmake_install.cmake /workspace/125A-Dystorator/build/compact-asan/JUCE/extras/Build/cmake_install.cmake /workspace/125A-Dystorator/build/compact-asan/JUCE/extras/Build/juceaide/cmake_install.cmake /workspace/125A-Dystorator/build/compact-asan/CTestTestfile.cmake
+/workspace/cloud-tools/cmake/data/bin/cmake --regenerate-during-build -S/workspace/125A-Dystorator/tests/ir_presets -B/workspace/125A-Dystorator/build/compact-asan
+ninja: error: rebuilding 'build.ninja': subcommand failed

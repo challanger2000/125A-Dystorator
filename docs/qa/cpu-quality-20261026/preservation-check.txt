@@ -1,0 +1,3 @@
+PASS: all 15 frozen amp headers are exactly pinned-source, namespace-only transformed.
+PASS: CabinetIR.h, PresetManager.h, PluginEditor.h/.cpp, Preamp5150.h, Supply5150.h byte-identical to 8ca580d.
+PASS: Parameters.h diff appends only ampMode/quality IDs and layout entries; existing 69 IDs/definitions unchanged.

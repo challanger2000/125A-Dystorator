@@ -73,6 +73,18 @@ target_include_directories(guitar_cuts_test PRIVATE Source)
 enable_testing()
 add_test(NAME guitar_cuts_stereo COMMAND guitar_cuts_test)
 
+# Independent algebra/SIMD checks, always-active in Release.
+foreach(backend auto sse2 scalar)
+    add_executable(quality_solver_${backend} tests/cpu_quality/solver_test.cpp)
+    target_include_directories(quality_solver_${backend} PRIVATE Source)
+    if(backend STREQUAL "sse2")
+        target_compile_definitions(quality_solver_${backend} PRIVATE VAMP_FORCE_SSE2=1)
+    elseif(backend STREQUAL "scalar")
+        target_compile_definitions(quality_solver_${backend} PRIVATE VAMP_FORCE_SCALAR=1)
+    endif()
+    add_test(NAME quality_solver_${backend} COMMAND quality_solver_${backend})
+endforeach()
+
 # Offline DSP checks against the LTspice reference (no JUCE)
 add_executable(dsp_test tests/dsp_test.cpp)
 target_include_directories(dsp_test PRIVATE Source)

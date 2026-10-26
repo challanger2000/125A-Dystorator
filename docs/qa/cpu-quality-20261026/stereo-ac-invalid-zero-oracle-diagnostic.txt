@@ -1,0 +1,102 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Parse Config file:/workspace/125A-Dystorator/build/ir-presets/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/ir-presets
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: quality_modes
+
+1: Test command: /workspace/125A-Dystorator/build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test "modes"
+1: Working Directory: /workspace/125A-Dystorator/build/ir-presets
+1: Test timeout computed to be: 1500
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: FAIL every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+1: PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+1: PASS quality/mode switches preserve the truthful padded HIGH latency
+1: PASS every STEREO quality has real right-channel AC audio without left-channel bleed
+1: PASS dense switches finish latest request without resetting active warm/fade
+1: PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+1: PASS save mode/quality preset
+1: PASS host state restores actual audible mono/ECO bank
+1: PASS preset restores mode/quality selection
+1: PASS preset reload drives actual mono/ECO signal path
+1: PASS legacy host scene migrates to original STEREO/HIGH defaults
+1: 75 checks, 6 failures
+1/1 Test #1: quality_modes ....................***Failed   28.21 sec
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =  28.21 sec
+
+The following tests FAILED:
+	  1 - quality_modes (Failed)
+Errors while running CTest
+Output from these tests are in: /workspace/125A-Dystorator/build/ir-presets/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

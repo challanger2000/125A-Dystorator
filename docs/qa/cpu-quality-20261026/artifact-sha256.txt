@@ -1,0 +1,4 @@
+207c20ae10d92c5d1b916e8f6791eab64951293590a2297c9be6700a07475df0  build/cpu-quality-before
+8ff28db64bde1e3cd4ed07aa206efe8445d699a39b9163a075f41d8c6a1e1684  build/cpu-quality-after
+c18758dd2c9434ac40e890f0794b252b93994a6655cd7f47eee051972b56d303  build/compact-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3/Contents/x86_64-linux/Djenty Donkey.so
+80c4dcad5abaa785636087a4831e1ed838f60620a6ef790eb7ba1cad580610c7  build/compact-plugin/DjentyDonkey_artefacts/Release/Standalone/Djenty Donkey

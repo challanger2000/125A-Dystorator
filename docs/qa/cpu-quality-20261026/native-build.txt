@@ -1,0 +1,7 @@
+[0/2] Re-checking globbed directories...
+[1/7] Building CXX object CMakeFiles/quality_solver_sse2.dir/tests/cpu_quality/solver_test.cpp.o
+[2/7] Building CXX object CMakeFiles/quality_solver_auto.dir/tests/cpu_quality/solver_test.cpp.o
+[3/7] Linking CXX executable quality_solver_auto
+[4/7] Linking CXX executable quality_solver_sse2
+[5/7] Building CXX object CMakeFiles/quality_solver_scalar.dir/tests/cpu_quality/solver_test.cpp.o
+[6/7] Linking CXX executable quality_solver_scalar

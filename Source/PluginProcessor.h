@@ -2,6 +2,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 #include "dsp/AmpSim.h"
+#include "dsp/AmpModes.h"
 #include "dsp/GuitarCuts.h"
 #include "dsp/Filters.h"
 #include "dsp/MultibandGate.h"
@@ -53,6 +54,9 @@ public:
     bool clearIR();
     void stepIR (int direction); // next / previous IR in the same folder
     juce::String getIRPath() const;
+    int getEffectiveOversamplingFactor() const noexcept { return effectiveFactor.load(); }
+    int getEffectiveAmpLanes() const noexcept { return effectiveLanes.load(); }
+    bool isAmpTransitioning() const noexcept { return ampTransition.load(); }
 
     // Peak levels since the last call (linear), for the UI meters
     float popInputPeak()  { return inputPeak.exchange (0.0f); }
@@ -92,6 +96,7 @@ private:
     std::atomic<float>* pReverbOn {}; std::atomic<float>* pRvSize {}; std::atomic<float>* pRvDamping {};
     std::atomic<float>* pRvWidth {}; std::atomic<float>* pRvMix {};
     std::atomic<float>* pOutGain {};
+    std::atomic<float>* pAmpMode {}; std::atomic<float>* pQuality {};
 
     double sampleRateHz = 44100.0;
     int maxBlock = 512;
@@ -102,10 +107,11 @@ private:
 
     // Compact stereo amplifier. Each lane has its own nonlinear circuit state.
     juce::dsp::Gain<float> inputGain, outputGain;
-    vamp::InputGate inputGate[2];
     bool inGateOn = false;
     float inGateThresh = -50.0f, inGateRelease = 20.0f;
-    vamp::AmpSim amp[2];
+    vamp::AmpModes ampBank;
+    std::atomic<int> effectiveFactor {8}, effectiveLanes {1};
+    std::atomic<bool> ampTransition {false};
     vamp::AmpSim::Settings ampSettings;
     CabinetIR cabinet;
     vamp::Biquad fallbackCab[2][5];

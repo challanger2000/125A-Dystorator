@@ -1,0 +1,17 @@
+-- Checking for modules 'webkit2gtk-4.0;gtk+-x11-3.0'
+--   Package 'webkit2gtk-4.0', required by 'virtual:world', not found
+--   Package 'gtk+-x11-3.0', required by 'virtual:world', not found
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- Testing juceaide
+-- Finished setting up juceaide
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/125A-Dystorator/build/ir-presets
+[0/2] Re-checking globbed directories...
+[1/6] Building CXX object CMakeFiles/compact_vst3_host.dir/compact_vst3_host.cpp.o
+[2/6] Linking CXX executable compact_vst3_host_artefacts/Release/compact_vst3_host
+[3/6] Building CXX object CMakeFiles/ir_presets_test.dir/trace/traced_dsp.cpp.o
+[4/6] Building CXX object CMakeFiles/ir_presets_test.dir/ir_presets_test.cpp.o
+[5/6] Linking CXX executable ir_presets_test_artefacts/Release/ir_presets_test

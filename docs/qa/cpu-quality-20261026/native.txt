@@ -1,0 +1,56 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/compact-plugin/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/compact-plugin
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: guitar_cuts_stereo
+
+1: Test command: /workspace/125A-Dystorator/build/compact-plugin/guitar_cuts_test
+1: Working Directory: /workspace/125A-Dystorator/build/compact-plugin
+1: Test timeout computed to be: 10000000
+1: guitar_cuts_test: PASS (0 failures)
+1/4 Test #1: guitar_cuts_stereo ...............   Passed    0.04 sec
+test 2
+    Start 2: quality_solver_auto
+
+2: Test command: /workspace/125A-Dystorator/build/compact-plugin/quality_solver_auto
+2: Working Directory: /workspace/125A-Dystorator/build/compact-plugin
+2: Test timeout computed to be: 10000000
+2: BACKEND AVX
+2: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+2: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+2: PASS singular reduced solve rejects
+2: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+2/4 Test #2: quality_solver_auto ..............   Passed    0.01 sec
+test 3
+    Start 3: quality_solver_sse2
+
+3: Test command: /workspace/125A-Dystorator/build/compact-plugin/quality_solver_sse2
+3: Working Directory: /workspace/125A-Dystorator/build/compact-plugin
+3: Test timeout computed to be: 10000000
+3: BACKEND SSE2
+3: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+3: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+3: PASS singular reduced solve rejects
+3: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+3/4 Test #3: quality_solver_sse2 ..............   Passed    0.01 sec
+test 4
+    Start 4: quality_solver_scalar
+
+4: Test command: /workspace/125A-Dystorator/build/compact-plugin/quality_solver_scalar
+4: Working Directory: /workspace/125A-Dystorator/build/compact-plugin
+4: Test timeout computed to be: 10000000
+4: BACKEND SCALAR
+4: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+4: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+4: PASS singular reduced solve rejects
+4: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+4/4 Test #4: quality_solver_scalar ............   Passed    0.01 sec
+
+100% tests passed out of 4
+
+Total Test time (real) =   0.08 sec

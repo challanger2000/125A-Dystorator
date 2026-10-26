@@ -1,0 +1,25 @@
+3bc4969a60a64927ba6459574145682ca47f0601 2026-10-26T21:41:15+11:00 macOS CI: choose the runner image when run by hand (Apple-silicon runners out of capacity)
+eb3bfa24575bbcbb0f54bbffb53a86e84f1d3da7 2026-10-26T21:04:16+11:00 1176 with the DI in front; loaded IRs loudness-matched to the built-in cab; plugin_cpu
+51597a8767dfc7f4b7ac020baedb762a7658ae3a 2026-10-26T19:10:48+11:00 CPU: single-core speed-up without changing the sound (8-sample blocks fit on one core)
+dc8589c6c696e5961624f70ca49db2543f49fd00 2026-10-26T18:57:56+11:00 make_package_mac.sh: add the relocatable flag when the bundle entry lacks it (.vst3)
+fc56c5cdca093de44b6346cb6f0dbd6ca17100fa 2026-10-26T18:45:41+11:00 host_test: bound +80 dBFS (all gains at maximum legitimately reach ~+45 dBFS)
+c2585cf48cac1ed565ff646fe01c0e5c75de412f 2026-10-26T18:39:50+11:00 Delay: out-of-buffer read after a sample-rate change (auval crash); host_test
+8f1531436ecc480540d893b6c1cc7d77234cc383 2026-10-26T18:00:12+11:00 make_package_mac.sh: skip the relocatable flag when pkgbuild lists no bundle (.vst3)
+33d2e64da2d78dcdf9cfdc9a90a78adca8ad5699 2026-10-26T17:54:04+11:00 v1.0.0: macOS support (AU + VST3 + standalone, universal binary)
+8ba661dbc9b2644ff0924af328e64255b1bfcf71 2026-10-26T17:22:30+11:00 CLAUDE.md: build, test, LTspice and release workflow, project rules
+4fc033eaf7e1dfc1c48556a468c97d3369361f33 2026-10-26T16:56:50+11:00 1176: comparison against NAM captures of real 1176s (comp1176_nam)
+a50dcecf1eeb1255e618373ab0bc342274c1e6bd 2026-10-26T12:32:27+11:00 v0.6.0-beta
+73379af60c21442d03a3b2d3588a460d5003e484 2026-10-26T12:32:14+11:00 Compressor: UREI 1176LN Rev D at component level (replaces juce::dsp::Compressor)
+20d90e837ca3a5bc64fc0d0d0aa14bcb12053a20 2026-10-26T12:27:52+11:00 power_compare --fitbox: box-only speaker fit (Qmc x fc, voice coil fixed)
+e363027d7a125018bb1cb56acc14958bc9baf9ff 2026-10-26T09:59:51+11:00 v0.5.6-beta (local)
+982f90e9c10918d4a044e7e1a6532121b5cd7f59 2026-10-26T09:54:06+11:00 Voice-coil eddy-current loss fitted empirically: 15 -> 6 ohm
+9342b1456fa2d9427dd2e6c67ec4c95ff6e2cb06 2026-10-26T09:19:10+11:00 v0.5.5-beta
+e598242743708fc330a11150a81e5475e0c38227 2026-10-26T09:15:07+11:00 CRUNCH switch for BLUE (relay K4): the rhythm channel without crunch, all five stages
+be4777734813dbea45f9210a2ec038025304a927 2026-10-26T09:05:12+11:00 docs/noise.md: noise columns skipped when off
+48732d7b59eb310c7f3446698b4df38b67682a7c 2026-10-26T09:04:58+11:00 Tube sets: particular 12AX7s and 6L6s from production spreads
+8f566bcb95bf1004085fd9dcf493784ea4f7bb4e 2026-10-26T08:54:36+11:00 Circuit noise from physics: resistor thermal noise in the DK solve, tube shot / flicker noise
+ebf3bfdee44195cd9904eecc4b304265984b9b84 2026-10-26T08:37:40+11:00 Dynamics: 6L6 screen current by current conservation, safer solver acceptance, three-way channel fade
+c03e0f493cecf33f0a559bae9a7365ca635e9aa8 2026-10-26T05:24:43+11:00 v0.5.4-beta: Resonance pot law from the schematic; C201/C202; speaker refit
+b14c4b5e1d3dfdacdf473aaf513bd71110079b51 2026-10-26T04:02:46+11:00 v0.5.3-beta: datasheet 6L6, physical 4x12 speaker, BRIGHT switch as on the amp
+658375cadf8a86f6e68b00ef45760dd908e3050e 2026-10-25T17:15:38+11:00 v0.5.2-beta: Presence network and rectifier as on the schematic; real power-amp check
+b097a44c556cd6e5afed7d958f4c4448d9769b2c 2026-10-25T16:00:43+11:00 v0.5.1-beta: Precision Drive Attack and TS9 Level as on the real pedals

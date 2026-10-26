@@ -1,0 +1,79 @@
+case                                         new-base base err  new err new peak   bands   speed
+                                                   dB       dB       dB       dB  max dB
+preamp CLEAN gain 0.3  chugs                     -8.3     -4.8   -117.6   -136.1   0.000   1.20x  FIXED
+preamp CLEAN gain 0.3  chord decay               -7.9     -3.7   -117.8   -137.1   0.000   0.95x  FIXED
+preamp CLEAN gain 0.3  dynamics                  -8.0     -3.8   -122.6   -118.6   0.000   1.01x  FIXED
+preamp CLEAN gain 0.3  sweep 50mV                -6.9     -2.5   -112.0    -97.4   0.000   0.91x  FIXED
+preamp CLEAN gain 0.7  chugs                    -11.1    -11.6   -132.1   -128.1   0.000   0.88x  FIXED
+preamp CLEAN gain 0.7  chord decay              -15.1    -14.7   -134.4   -128.6   0.000   0.89x  FIXED
+preamp CLEAN gain 0.7  dynamics                 -15.2    -15.5   -119.5   -113.9   0.000   0.97x  FIXED
+preamp CLEAN gain 0.7  sweep 50mV                -9.0     -6.1   -124.4   -100.7   0.000   0.95x  FIXED
+preamp CLEAN gain 1.0  chugs                     -6.0     -0.3   -118.7   -117.1   0.000   0.91x  FIXED
+preamp CLEAN gain 1.0  chord decay               -5.1      1.7   -134.7   -122.8   0.000   0.90x  FIXED
+preamp CLEAN gain 1.0  dynamics                  -5.8      0.3   -129.7   -115.2   0.000   0.90x  FIXED
+preamp CLEAN gain 1.0  sweep 50mV                -6.2     -1.3   -132.8   -108.8   0.000   0.89x  FIXED
+preamp BLUE  gain 0.3  chugs                    -12.7    -11.2   -128.7   -127.4   0.000   1.09x  FIXED
+preamp BLUE  gain 0.3  chord decay              -11.1     -9.8   -129.3   -113.8   0.000   1.36x  FIXED
+preamp BLUE  gain 0.3  dynamics                 -13.7    -12.2   -132.5   -120.3   0.000   1.23x  FIXED
+preamp BLUE  gain 0.3  sweep 50mV               -14.4    -13.2   -146.7   -121.9   0.000   1.00x  FIXED
+preamp BLUE  gain 0.7  chugs                    -13.9    -13.5   -128.4   -114.0   0.000   1.08x  FIXED
+preamp BLUE  gain 0.7  chord decay              -10.5     -9.8   -112.3    -89.7   0.000   0.86x  FIXED
+preamp BLUE  gain 0.7  dynamics                 -14.2    -13.6   -112.2    -90.4   0.000   1.01x  FIXED
+preamp BLUE  gain 0.7  sweep 50mV               -12.6    -11.8   -124.9    -99.5   0.000   0.78x  FIXED
+preamp BLUE  gain 1.0  chugs                     -9.5     -8.3   -119.7   -100.4   0.000   0.94x  FIXED
+preamp BLUE  gain 1.0  chord decay               -5.2     -4.2   -108.3    -90.0   0.000   0.89x  FIXED
+preamp BLUE  gain 1.0  dynamics                  -9.7     -8.7   -108.9    -90.4   0.000   0.90x  FIXED
+preamp BLUE  gain 1.0  sweep 50mV                -8.5     -7.6   -116.4    -93.1   0.000   0.79x  FIXED
+preamp RED   gain 0.3  chugs                     -6.2     -5.6   -105.0    -95.4   0.000   1.70x  FIXED
+preamp RED   gain 0.3  chord decay               -6.5     -6.6   -108.3    -90.4   0.000   1.54x  FIXED
+preamp RED   gain 0.3  dynamics                  -3.0     -1.8   -107.3    -91.5   0.000   1.52x  FIXED
+preamp RED   gain 0.3  sweep 50mV                -9.9     -9.9   -127.7    -97.5   0.000   1.49x  FIXED
+preamp RED   gain 0.7  chugs                     -6.2     -6.0   -109.4    -91.8   0.000   1.66x  FIXED
+preamp RED   gain 0.7  chord decay               -4.8     -4.7   -109.6    -90.1   0.000   1.59x  FIXED
+preamp RED   gain 0.7  dynamics                  -4.4     -3.4   -107.8    -91.8   0.000   1.50x  FIXED
+preamp RED   gain 0.7  sweep 50mV                -7.9     -7.9   -111.8    -91.0   0.000   1.52x  FIXED
+preamp RED   gain 1.0  chugs                     -5.0     -4.8   -108.2    -91.3   0.000   1.63x  FIXED
+preamp RED   gain 1.0  chord decay               -4.2     -3.9   -108.2    -90.3   0.000   1.46x  FIXED
+preamp RED   gain 1.0  dynamics                  -5.5     -4.8   -106.5    -90.7   0.000   1.47x  FIXED
+preamp RED   gain 1.0  sweep 50mV                -7.9     -7.9   -108.7    -90.9   0.000   1.49x  FIXED
+power  master 0.3 P5 R5   chugs                 -18.9    -18.2   -164.9   -157.2   0.000   1.30x  FIXED
+power  master 0.3 P5 R5   dynamics              -17.2    -16.5   -163.3   -156.8   0.000   1.32x  FIXED
+power  master 0.3 P10 R0  chugs                  -7.5     -7.6   -163.3   -159.7   0.000   1.36x  FIXED
+power  master 0.3 P10 R0  dynamics               -5.8     -5.3   -162.1   -148.1   0.000   1.42x  FIXED
+power  master 0.3 P0 R10  chugs                  -8.6    -10.8   -165.2   -159.7   0.000   1.33x  FIXED
+power  master 0.3 P0 R10  dynamics              -10.0    -10.6   -163.4   -163.1   0.000   1.26x  FIXED
+power  master 0.6 P5 R5   chugs                 -16.9    -15.8   -179.6   -146.0   0.000   1.34x  FIXED
+power  master 0.6 P5 R5   dynamics              -16.6    -15.7   -173.8   -133.0   0.000   1.35x  FIXED
+power  master 0.6 P10 R0  chugs                 -10.5    -11.0   -139.2   -110.8   0.000   1.41x  FIXED
+power  master 0.6 P10 R0  dynamics               -9.9    -10.5   -137.0   -106.5   0.000   1.43x  FIXED
+power  master 0.6 P0 R10  chugs                 -14.1    -14.2   -148.7   -118.0   0.000   1.23x  FIXED
+power  master 0.6 P0 R10  dynamics              -12.6    -12.4   -177.1   -139.3   0.000   1.48x  FIXED
+power  master 0.9 P5 R5   chugs                 -15.0    -14.1   -113.5    -89.0   0.000   1.33x  FIXED
+power  master 0.9 P5 R5   dynamics              -16.0    -15.2   -115.1    -86.7   0.000   1.38x  FIXED
+power  master 0.9 P10 R0  chugs                  -9.7     -8.9   -112.3    -82.0   0.000   1.40x  FIXED
+power  master 0.9 P10 R0  dynamics              -17.7    -17.2   -123.0    -94.2   0.000   1.51x  FIXED
+power  master 0.9 P0 R10  chugs                 -13.5    -12.7   -122.3    -93.9   0.000   1.20x  FIXED
+power  master 0.9 P0 R10  dynamics              -15.1    -14.4   -108.9    -86.7   0.000   1.49x  FIXED
+drive  0.3 attack 0  chugs                        7.6     -2.0   -240.0   -240.0   0.000   0.91x  FIXED
+drive  0.3 attack 0  dynamics                     0.7     -4.2   -240.0   -240.0   0.000   0.79x  FIXED
+drive  0.3 attack 7  chugs                       -2.0      8.6   -240.0   -240.0   0.000   0.96x  FIXED
+drive  0.3 attack 7  dynamics                    -3.9      1.9   -240.0   -240.0   0.000   1.07x  FIXED
+drive  1.0 attack 0  chugs                        0.9     -4.2   -240.0   -240.0   0.000   0.94x  FIXED
+drive  1.0 attack 0  dynamics                    -1.8     -5.2   -240.0   -240.0   0.000   0.97x  FIXED
+drive  1.0 attack 7  chugs                       -3.7      2.3   -240.0   -240.0   0.000   1.02x  FIXED
+drive  1.0 attack 7  dynamics                    -4.6     -0.3   -240.0   -240.0   0.000   0.97x  FIXED
+chain  drive+CLEAN+power  chugs                 -11.3    -10.6   -145.3   -112.5   0.000   1.31x  FIXED
+chain  drive+CLEAN+power  chord decay            -8.2     -6.6   -133.3   -103.6   0.000   1.24x  FIXED
+chain  drive+CLEAN+power  dynamics               -9.8     -8.9   -142.9   -104.2   0.000   1.26x  FIXED
+chain  drive+CLEAN+power  sweep 50mV             -7.8     -6.1   -132.9   -103.2   0.000   1.65x  FIXED
+chain  drive+BLUE +power  chugs                  -9.5     -8.3   -109.1    -93.2   0.000   1.19x  FIXED
+chain  drive+BLUE +power  chord decay            -6.4     -4.3   -102.9    -91.0   0.000   1.11x  FIXED
+chain  drive+BLUE +power  dynamics               -7.8     -6.3   -104.2    -92.0   0.000   1.04x  FIXED
+chain  drive+BLUE +power  sweep 50mV             -5.4     -2.7   -112.9    -91.0   0.000   1.25x  FIXED
+chain  drive+RED  +power  chugs                  -5.8     -4.2   -109.6    -92.5   0.000   1.30x  FIXED
+chain  drive+RED  +power  chord decay            -4.3     -2.9   -105.2    -91.1   0.000   1.27x  FIXED
+chain  drive+RED  +power  dynamics               -5.9     -4.6   -106.1    -92.2   0.000   1.25x  FIXED
+chain  drive+RED  +power  sweep 50mV             -3.9     -1.8   -112.1    -90.2   0.000   1.60x  FIXED
+
+74 cases, 0 failed, 74 moved from the v0.5 baseline (new-base above -100 dB), 74 fixed.
+total time baseline 31530 ms, current 24662 ms -> 1.28x

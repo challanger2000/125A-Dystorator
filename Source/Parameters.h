@@ -62,6 +62,8 @@ inline constexpr const char* rvDamping   = "rvDamping";
 inline constexpr const char* rvWidth     = "rvWidth";
 inline constexpr const char* rvMix       = "rvMix";
 inline constexpr const char* outGain     = "outGain";
+inline constexpr const char* ampMode     = "ampMode";
+inline constexpr const char* quality     = "quality";
 
 inline juce::String eqBand (int i) { return "eq" + juce::String (i); }
 inline constexpr float eqFreqs[10] = { 31, 62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000 };
@@ -172,6 +174,12 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     layout.add (makeFloat (ids::rvMix, "Reverb Mix", 0.0f, 1.0f, 0.25f, "", 2));
 
     layout.add (makeFloat (ids::outGain, "Output", -24.0f, 24.0f, 0.0f, " dB"));
+    // Defaults preserve the confirmed stereo/HIGH project sound. Missing legacy
+    // fields are restored with these actual defaults by the existing migration.
+    layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { ids::ampMode, 1 },
+        "AMP MODE", juce::StringArray { "MONO", "STEREO" }, 1));
+    layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { ids::quality, 1 },
+        "QUALITY", juce::StringArray { "ECO", "STANDARD", "HIGH" }, 2));
 
     return layout;
 }
