@@ -1,0 +1,19 @@
+{
+  "source_commit": "4efb20e5d6df4282ff33bdf744335131d6278dd3",
+  "kernel": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "compiler": "c++ (Debian 14.2.0-19) 14.2.0",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "cpu_quota": "400000 100000",
+  "memory_limit": "34359738368",
+  "clock_and_scheduler": "steady_clock; governor/physical host load/realtime scheduler uncontrolled",
+  "profile_event": "cpu-clock:u,499Hz,DWARF16384",
+  "profile_scope": "warmed HIGH stereo 48k256 full Processor, builtin cab/cuts/drive on",
+  "run_order": [
+    "before1",
+    "after1",
+    "after2",
+    "before2"
+  ],
+  "owner_i9_11900K": "NOT RUN",
+  "native_before_source_pin": "398204e26d84c3f40bcd1c0af55dfa8e97893ca7"
+}

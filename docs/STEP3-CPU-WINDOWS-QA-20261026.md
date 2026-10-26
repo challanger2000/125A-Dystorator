@@ -4,7 +4,7 @@
 
 ## Kandidat und verbindliche Grenzen
 
-Dieser Bericht wird nach dem gebündelten Windows-Lauf mit dessen tatsächlichen Ergebnissen ergänzt. **Windows-Build, Windows-Heap-Probe, 125A Tester und Steinberg Validator sind bis zum belegten Lauf ausdrücklich NOT RUN.** Eine vorbereitete Workflow-Datei ist kein Windows-Nachweis. Die CPU-Messungen des endgültigen Kandidaten werden getrennt von den abgelehnten Prototypen ausgewertet.
+Dieser Bericht wird nach dem gebündelten Windows-Lauf mit dessen tatsächlichen Ergebnissen ergänzt. **Windows-Build, Windows-Heap-Probe, 125A Tester und Steinberg Validator sind bis zum belegten Lauf ausdrücklich NOT RUN.** Eine vorbereitete Workflow-Datei ist kein Windows-Nachweis. Die CPU-Messungen des endgültigen Kandidaten sind nachstehend getrennt von den abgelehnten Prototypen ausgewertet.
 
 Pflichteinstieg und relevante Engineering-/QA-Vorgaben wurden erneut geprüft: `125A-Engineering/START-HERE.md`, unveränderter Stand `b6df84b0a04d01e240cff745ccebf60d67750486`; README, relevante Guardrails/Standards, Release-/Realtime-/Audio-Fixture-QA, Oversampling-Research und Roadmap. „verstanden“ bestätigt. Kein genehmigtes Windows-FULL-Paket dieses Entwicklungsforks erfunden. Benutzerdefinierte Arbeitsbasis ist der oben genannte Commit.
 
@@ -36,17 +36,53 @@ Der Profiling-Lauf misst im Mittel 12700,4 µs/Callback, der anschließende unpr
 | Bestehende Klang-/Fehlerreferenzen | alter Tone-Test und Fault-Recovery, keine neuen Referenzen | PASS: 74 Tone-Fälle; Fault-Rohlog inklusive Extremsignalen |
 | Echter Linux-VST3 | alter Wrapper-Vertrag plus Transport/rasche Qualitäts-/Moduswechsel/Bypass, IR-Projekt auf Disk speichern/Instanz zerstören/frisch laden, fehlende IR mit Gain-Rollback, Rückkehr Built-in | PASS; tatsächliche PCM-Orakel für Transport und IR-Recall Maxdelta 0; kein Windows-/ASIO-Nachweis |
 | Erweiterte Aliasdaten | 64 Render, 44,1/48 kHz, 1/3/5/9 kHz, −30,46/−18,42 dBFS, HIGH/STANDARD/ECO/16×-Vergleich | PASS nur für endliche/nichtstumme Messdaten; keine Klangfreigabe |
-| Endgültige CPU-Matrix | 44,1/48 kHz × Mono/Stereo × 128/256 × alle Qualitäten, offline/getaktet, 160 gemessene Blöcke je Fall | Auswertung folgt; abgelehnte Kandidaten getrennt, keine PASS-Behauptung |
+| Endgültige CPU-Matrix | 44,1/48 kHz × Mono/Stereo × 128/256 × alle Qualitäten, offline/getaktet, 160 gemessene Blöcke je Fall | MEASURED: vier Läufe; Echtzeit-Gate FAIL (nachher 77/96 Fälle FAIL), Details unten |
 | Windows Release / tatsächlicher VST3 | gebündelter gezielter Workflow vorbereitet | NOT RUN bis belegtes CI-Ergebnis |
 | Windows Callback-Heap | processweite RtlAllocateHeap/RtlReAllocateHeap/RtlFreeHeap-Hooks, nur Audio-Thread-Zeitfenster, tatsächliche DLL-/CRT-Grenze | NOT RUN; Host-only `operator new` wäre hierfür unzureichend |
 | 125A Tester / Steinberg | Tester-Source `3dcf3fe607008e520dcf20d1f793d9c534a9b9e1` (v0.2.9), SDK `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96` (3.8.1 build84), Selbsttests und Positiv-/Negativfixtures vor Produkturteil vorgesehen | NOT RUN; kein geprüftes Tester-Releasepaket aus dem veralteten CURRENT-Eintrag erfunden |
 | Tatsächlicher i9-11900K, ASIO/Studio One, echte DI und Hörvergleich | keine entsprechende Hardware/DAW oder freigegebene DI in dieser Umgebung | NOT RUN, keine Aussetzer-/Klangfreigabe |
 
+## Endgültige Linux-CPU-Matrix – kein zusätzlicher Echtzeit-PASS
+
+Vier unprofilierte Läufe **Vorher A1 → Nachher B1 → Nachher B2 → Vorher A2**, je 48 Fälle: 44,1/48 kHz, MONO/STEREO, ECO/STANDARD/HIGH, 128/256 Samples, offline/getaktet. Je Fall 0,2 s Warm-up und 160 gemessene Blöcke. Gleicher Compiler/O3/Debugsymbol-Build, gleicher vollständiger Processor und identische Eingänge/Controls; keine parallelen eigenen Builds in diesen CPU-Läufen. Leichte Git-/Dokumentations-/Netzabfragen und unbekannte physische VM-Auslastung sind kein kontrollierter Realtime-Messplatz.
+
+| Qualität | Mittel der 16 relativen Einsparungen aus je zwei Laufmitteln | mittlere absolute Differenz zwischen Wiederholungen | belastbares Urteil |
+|---|---:|---:|---|
+| HIGH | 6,48 % | 8,07 % | beobachteter Vorteil, keine garantierte zusätzliche Einsparquote |
+| STANDARD | 3,04 % | 8,16 % | Vorteil kleiner als Wiederholungsdrift |
+| ECO | 3,54 % | 8,94 % | Vorteil kleiner als Wiederholungsdrift |
+
+Die Vergleichsrechnung mittelt zuerst je Konfiguration die beiden Before-/After-Mittelzeiten und berechnet dann deren relative Differenz. Perzentile werden **nicht** aus Perzentilen gemittelt und als gepoolte Quantile ausgegeben. Alle p95/p99/Maxima bleiben für jeden der vier tatsächlichen Läufe separat in den CSVs erhalten. Alle 48 Ausgangsenergien stimmen über sämtliche Wiederholungen gedruckt überein; der strengere separate PCM-Test prüft echte Samplewerte.
+
+**FAIL:** Vorher 86 von 96 Fällen mit mindestens einer Deadline-Verletzung, nachher **77 von 96**; nachher 19 Fälle ohne beobachtete Verletzung. Weder diese kurzen Einzel-PASS noch bessere Mittelwerte begründen eine Aussetzer-Freigabe. CPU-Overruns und getaktete Fertigstellungs-Misses sind separat ausgewiesen.
+
+Beispiel des ersten Paares A1/B1, HIGH bei 48 kHz, getaktet. Zellen jeweils Vorher → Nachher, Zeiten in µs:
+
+| Amp / Samples | Mittel | p95 | p99 | Maximum | Callback-Overruns / 160 | Deadline |
+|---|---:|---:|---:|---:|---:|---:|
+| MONO / 128 | 3152.46 → 2805.11 | 4248.50 → 3536.44 | 5513.74 → 5074.41 | 5840.67 → 5096.15 | 142 → 77 | 2666.67 |
+| MONO / 256 | 6256.42 → 5623.91 | 7737.50 → 6615.55 | 8770.01 → 7481.25 | 12843.40 → 8024.30 | 153 → 110 | 5333.33 |
+| STEREO / 128 | 6346.26 → 5555.94 | 7533.17 → 5985.84 | 17678.90 → 7645.09 | 18792.40 → 7683.87 | 160 → 160 | 2666.67 |
+| STEREO / 256 | 13272.30 → 12335.70 | 24950.70 → 15247.30 | 29939.60 → 21466.30 | 32246.30 → 36272.30 | 160 → 160 | 5333.33 |
+
+Volle Daten: [A1](qa/step3-cpu-20261026/final-before-1.csv), [B1](qa/step3-cpu-20261026/final-after-1.csv), [B2](qa/step3-cpu-20261026/final-after-2.csv), [A2](qa/step3-cpu-20261026/final-before-2.csv), [Vergleich](qa/step3-cpu-20261026/cpu-comparison.csv), [Zusammenfassung](qa/step3-cpu-20261026/cpu-summary.json).
+
+Das abschließende Sampling-Profil des endgültigen Kandidaten enthält 12877 Samples und 0 gemeldete Verluste. Profilierte/unprofilierte Langläufe: 12585,5 / 12321,9 µs Mittel; diese beobachtete Differenz von rund 2,14 % enthält erneut Lastdrift und darf nicht als universeller Profiler-Aufschlag subtrahiert werden. Preamp/Poweramp bleiben die Schwerpunkte, Matrix-AVX rund 11,87 % inklusive. Inline-Symbole erscheinen teils in mehreren Kontexten; der vollständige Bericht bleibt erhalten. Windows-CI und insbesondere der reale i9 sind separat zu beurteilen.
+
 ## ECO / STANDARD und Aliasing
 
 Zusätzlich zu den früheren 3-kHz-Messungen werden kohärente 1/3/5/9-kHz-Töne bei zwei Eingangspegeln im tatsächlichen nichtlinearen Amp gerendert. FFT 8192, Hann-Fenster; echte Grundfrequenz wird auf ein ungerades FFT-Bin gelegt. Messmaske umfasst auf Host-Nyquist gefaltete harmonische Bins bis Ordnung 256, ohne die ±4-Bin-Schutzbereiche echter hörbarer Harmonischer. Das Ergebnis `folded_bins_db` ist ein gezielter Alias-/Artefaktindikator relativ zur Fundamentalenergie, **keine perfekte Trennung von Aliasing, transienten Resten und sonstigen inharmonischen Anteilen**. Die zusätzliche 16×-Referenz ist ebenfalls nicht mathematisch aliasfrei und verwendet eine andere interne Integrationsrate.
 
-Schon die neuen Messungen zeigen erhebliche Pegel-/Frequenzabhängigkeit. ECO ist bei starkem 5-kHz-Eingang deutlich schlechter als HIGH; auch HIGH ist beim extremen 9-kHz-Test keine aliasfreie Referenz. HIGH bleibt der unveränderte Klangvertrag der Arbeitsbasis, nicht die Behauptung einer fehlerfreien analogen Referenz. Vollständige Zahlen werden archiviert. Keine automatische oder subjektiv unbelegte Klangfreigabe für ECO/STANDARD.
+Schon die neuen Messungen zeigen erhebliche Pegel-/Frequenzabhängigkeit. ECO ist bei starkem 5-kHz-Eingang deutlich schlechter als HIGH; auch HIGH ist beim extremen 9-kHz-Test keine aliasfreie Referenz. HIGH bleibt der unveränderte Klangvertrag der Arbeitsbasis, nicht die Behauptung einer fehlerfreien analogen Referenz. Vollständige Zahlen: [64 Messungen](qa/step3-cpu-20261026/alias-data.csv). Beispiel 48 kHz, 5-kHz-Ton, −18,42 dBFS Eingang: gefaltete-Bin-Energie relativ zur Fundamentalenergie HIGH −45,84 dB, STANDARD/ECO siehe Rohdaten (ECO −7,34 dB). Beim 9-kHz-Ton gleicher Stärke HIGH −27,76 dB, 16×-Referenz −48,77 dB. Das ist eine Grenze des unveränderten HIGH-Referenzmodells, kein durch diese Optimierung eingeführter Unterschied. Keine automatische oder subjektiv unbelegte Klangfreigabe für ECO/STANDARD.
+
+## Erster Windows-Lauf – Build-PASS, Testhost-Compiler-FAIL
+
+[Run 40375703107](https://github.com/challanger2000/125A-Dystorator/actions/runs/40375703107), Quellcommit `4efb20e5d6df4282ff33bdf744335131d6278dd3`. Windows Server 2022 / NT10.0.20348, MSVC14.44, AMD EPYC9V74, 2 Kerne/4 logische CPUs, MaxClock2596MHz laut CIM; **kein i9-11900K**. Befunde wurden vom Runner in Commit `4c6fa4726751dc9130d38c1bbd37bfb23180bb1b` gesichert.
+
+- PASS: tatsächliche Before- und After-Release-VST3s gebaut; native Root-CTest5/5; Tone74; Fault-Regression.
+- FAIL (Testinfrastruktur): Windows-Makro `max` aus dem neu eingebundenen Win32-Header expandiert bei `std::max` im echten VST3-Testhost (MSVC C2589/C2059). Der IR-Test selbst war gelinkt; der gemeinsame Build stoppt am Host.
+- NOT RUN: nachgelagerte Integration, Callback-Heap, tatsächliche Host-/IR-/Transport-Matrix, CPU, 125A Tester und Validator. Keine dieser Prüfungen wurde aus dem grünen Produktbuild abgeleitet.
+- Korrektur ausschließlich am Testhost: `NOMINMAX` vor Win32-Header und als Targetdefinition, keine DSP-/Grenzwertänderung. Ein gezielter gebündelter Folgelauf ist notwendig. [Vollständige erste Windows-Befunde](qa/step3-windows-4efb20e5d6df4282ff33bdf744335131d6278dd3/results.json).
 
 ## Windows-Verfahren und Reproduktion
 

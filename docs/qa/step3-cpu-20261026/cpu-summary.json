@@ -1,0 +1,24 @@
+{
+  "2": {
+    "mean_relative_saving_percent": 6.477127156268391,
+    "min_saving_percent": 0.4126521803259564,
+    "max_saving_percent": 12.072147161013003,
+    "mean_absolute_repeat_difference_percent": 8.069492952488785
+  },
+  "1": {
+    "mean_relative_saving_percent": 3.041192028055003,
+    "min_saving_percent": -12.19221247867559,
+    "max_saving_percent": 14.35669046673772,
+    "mean_absolute_repeat_difference_percent": 8.155208688659327
+  },
+  "0": {
+    "mean_relative_saving_percent": 3.5383054276056702,
+    "min_saving_percent": -4.399236773337489,
+    "max_saving_percent": 12.189728812866562,
+    "mean_absolute_repeat_difference_percent": 8.93645534364004
+  },
+  "before_deadline_failures": 86,
+  "after_deadline_failures": 77,
+  "cases_per_version": 96,
+  "all_energy_equal": true
+}

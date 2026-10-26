@@ -1,0 +1,3 @@
+Raw perf recordings stay in ignored local build/ (hundreds of MB); text reports are committed.
+ed993ad12088c717d79242563b040ab8c0b83c043aaf420c69ade85df10ef072  build/step3-before-perf.data
+17b7abaf79a92754aba73dc5ba3b2becde55d96c39c82872bfbb407bd62f3b88  build/step3-final-perf.data

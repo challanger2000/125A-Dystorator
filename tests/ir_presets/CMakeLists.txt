@@ -88,7 +88,7 @@ option(IR_BUILD_VST3_HOST "Build a separate headless host for the actual VST3 bu
 if(IR_BUILD_VST3_HOST)
     juce_add_console_app(compact_vst3_host PRODUCT_NAME "compact_vst3_host")
     target_sources(compact_vst3_host PRIVATE compact_vst3_host.cpp)
-    target_compile_definitions(compact_vst3_host PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_PLUGINHOST_VST3=1 JUCE_MODAL_LOOPS_PERMITTED=1)
+    target_compile_definitions(compact_vst3_host PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_PLUGINHOST_VST3=1 JUCE_MODAL_LOOPS_PERMITTED=1 NOMINMAX=1 WIN32_LEAN_AND_MEAN=1)
     target_link_libraries(compact_vst3_host PRIVATE juce::juce_audio_utils)
 endif()
 

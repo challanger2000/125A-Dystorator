@@ -1,0 +1,11 @@
+PASS byte-identical to 398204e:
+Source/Parameters.h
+Source/PluginProcessor.h
+Source/PluginProcessor.cpp
+Source/PluginEditor.h
+Source/PluginEditor.cpp
+Source/CabinetIR.h
+Source/PresetManager.h
+Source/dsp/PortSolve.h
+Source/dsp/TriodeNetwork.h
+Source/dsp/PowerAmp5150.h
