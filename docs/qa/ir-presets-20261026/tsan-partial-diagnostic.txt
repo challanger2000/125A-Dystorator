@@ -1,0 +1,78 @@
+PASS A04 factory restores built-in
+PASS B03 foreign XML rejects without parameter/name mutation
+PASS B04 invalid WAV preserves accepted IR path
+==================
+WARNING: ThreadSanitizer: data race (pid=5867)
+  Write of size 1 at 0x725000000798 by main thread (mutexes: write M0, write M1):
+    #0 pthread_mutex_destroy ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1332 (libtsan.so.2+0x52bcc) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 juce::dsp::BackgroundMessageQueue::~BackgroundMessageQueue() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:82 (ir_presets_test+0x6f6826) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 juce::dsp::ConvolutionMessageQueue::Impl::~Impl() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:132 (ir_presets_test+0x6f6826)
+    #3 juce::dsp::ConvolutionMessageQueue::Impl::~Impl() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:132 (ir_presets_test+0x6f6826)
+    #4 std::default_delete<juce::dsp::ConvolutionMessageQueue::Impl>::operator()(juce::dsp::ConvolutionMessageQueue::Impl*) const /usr/include/c++/14/bits/unique_ptr.h:93 (ir_presets_test+0x6f0486) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #5 std::unique_ptr<juce::dsp::ConvolutionMessageQueue::Impl, std::default_delete<juce::dsp::ConvolutionMessageQueue::Impl> >::~unique_ptr() /usr/include/c++/14/bits/unique_ptr.h:399 (ir_presets_test+0x6f0486)
+    #6 juce::dsp::ConvolutionMessageQueue::~ConvolutionMessageQueue() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:150 (ir_presets_test+0x6f0486)
+    #7 std::default_delete<juce::dsp::ConvolutionMessageQueue>::operator()(juce::dsp::ConvolutionMessageQueue*) const /usr/include/c++/14/bits/unique_ptr.h:93 (ir_presets_test+0x6f1268) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #8 std::__uniq_ptr_impl<juce::dsp::ConvolutionMessageQueue, std::default_delete<juce::dsp::ConvolutionMessageQueue> >::reset(juce::dsp::ConvolutionMessageQueue*) /usr/include/c++/14/bits/unique_ptr.h:205 (ir_presets_test+0x6f1268)
+    #9 std::unique_ptr<juce::dsp::ConvolutionMessageQueue, std::default_delete<juce::dsp::ConvolutionMessageQueue> >::reset(juce::dsp::ConvolutionMessageQueue*) /usr/include/c++/14/bits/unique_ptr.h:504 (ir_presets_test+0x6f1268)
+    #10 juce::OptionalScopedPointer<juce::dsp::ConvolutionMessageQueue>::reset() /workspace/juce-8.0.4/modules/juce_core/memory/juce_OptionalScopedPointer.h:146 (ir_presets_test+0x6f1268)
+    #11 juce::OptionalScopedPointer<juce::dsp::ConvolutionMessageQueue>::~OptionalScopedPointer() /workspace/juce-8.0.4/modules/juce_core/memory/juce_OptionalScopedPointer.h:116 (ir_presets_test+0x6f1268)
+    #12 juce::dsp::Convolution::Impl::~Impl() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1020 (ir_presets_test+0x6f1268)
+    #13 std::default_delete<juce::dsp::Convolution::Impl>::operator()(juce::dsp::Convolution::Impl*) const /usr/include/c++/14/bits/unique_ptr.h:93 (ir_presets_test+0x6f1268)
+    #14 std::unique_ptr<juce::dsp::Convolution::Impl, std::default_delete<juce::dsp::Convolution::Impl> >::~unique_ptr() /usr/include/c++/14/bits/unique_ptr.h:399 (ir_presets_test+0x6f1268)
+    #15 juce::dsp::Convolution::~Convolution() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1240 (ir_presets_test+0x6f1268)
+    #16 CabinetIR::load(juce::File const&) <null> (ir_presets_test+0xe662b) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #17 VibeAmpProcessor::loadIR(juce::File const&) /workspace/125A-Dystorator/Source/PluginProcessor.cpp:328 (ir_presets_test+0xf3f4d) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #18 main /workspace/125A-Dystorator/tests/ir_presets/ir_presets_test.cpp:216 (ir_presets_test+0xd923c) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+  Previous atomic read of size 1 at 0x725000000798 by thread T5:
+    #0 pthread_mutex_lock ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1341 (libtsan.so.2+0x558ce) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 juce::GenericScopedLock<juce::CriticalSection>::GenericScopedLock(juce::CriticalSection const&) /workspace/juce-8.0.4/modules/juce_core/threads/juce_ScopedLock.h:79 (ir_presets_test+0x6f9538) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 juce::dsp::BackgroundMessageQueue::run()::{lambda()#1}::operator()() const /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:112 (ir_presets_test+0x6f9538)
+    #3 juce::dsp::BackgroundMessageQueue::run() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:121 (ir_presets_test+0x6f9538)
+    #4 juce::Thread::threadEntryPoint() <null> (ir_presets_test+0x5c275a) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+  Location is heap block of size 488 at 0x725000000600 allocated by main thread:
+    #0 malloc ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:665 (libtsan.so.2+0x51656) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 operator new(unsigned long) /workspace/125A-Dystorator/tests/ir_presets/HeapProbe.h:15 (ir_presets_test+0xd5f00) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 std::__detail::_MakeUniq<juce::dsp::ConvolutionMessageQueue::Impl>::__single_object std::make_unique<juce::dsp::ConvolutionMessageQueue::Impl, int&>(int&) /usr/include/c++/14/bits/unique_ptr.h:1077 (ir_presets_test+0x6f0353) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #3 juce::dsp::ConvolutionMessageQueue::ConvolutionMessageQueue(int) /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:142 (ir_presets_test+0x6f0353)
+    #4 juce::dsp::ConvolutionMessageQueue::ConvolutionMessageQueue() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:138 (ir_presets_test+0x6f0415) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #5 std::__detail::_MakeUniq<juce::dsp::ConvolutionMessageQueue>::__single_object std::make_unique<juce::dsp::ConvolutionMessageQueue>() /usr/include/c++/14/bits/unique_ptr.h:1077 (ir_presets_test+0x6f34fe) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #6 juce::dsp::Convolution::Convolution(juce::dsp::Convolution::Latency const&) /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1217 (ir_presets_test+0x6f34fe)
+    #7 juce::dsp::Convolution::Convolution() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1207 (ir_presets_test+0x6f35c5) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #8 CabinetIR::makeEngine(CabinetIR::Source const*, juce::dsp::ProcessSpec const&) <null> (ir_presets_test+0xde329) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #9 CabinetIR::load(juce::File const&) <null> (ir_presets_test+0xe6570) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #10 VibeAmpProcessor::loadIR(juce::File const&) /workspace/125A-Dystorator/Source/PluginProcessor.cpp:328 (ir_presets_test+0xf3f4d) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #11 main /workspace/125A-Dystorator/tests/ir_presets/ir_presets_test.cpp:215 (ir_presets_test+0xd91c5) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+  Mutex M0 (0x7ffeaaead978) created at:
+    #0 pthread_mutex_lock ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1341 (libtsan.so.2+0x558ce) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 __gthread_mutex_lock /usr/include/x86_64-linux-gnu/c++/14/bits/gthr-default.h:762 (ir_presets_test+0xefe2b) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 __gthread_recursive_mutex_lock /usr/include/x86_64-linux-gnu/c++/14/bits/gthr-default.h:824 (ir_presets_test+0xefe2b)
+    #3 std::recursive_mutex::lock() /usr/include/c++/14/mutex:125 (ir_presets_test+0xefe2b)
+    #4 std::lock_guard<std::recursive_mutex>::lock_guard(std::recursive_mutex&) /usr/include/c++/14/bits/std_mutex.h:250 (ir_presets_test+0xefe2b)
+    #5 PresetManager::refresh() /workspace/125A-Dystorator/Source/PresetManager.h:124 (ir_presets_test+0xefe2b)
+    #6 PresetManager::PresetManager(juce::AudioProcessorValueTreeState&, std::function<bool (juce::File const&)>, std::function<juce::String ()>, juce::File, std::recursive_mutex*) /workspace/125A-Dystorator/Source/PresetManager.h:111 (ir_presets_test+0xefe2b)
+    #7 VibeAmpProcessor::VibeAmpProcessor(juce::File) /workspace/125A-Dystorator/Source/PluginProcessor.cpp:10 (ir_presets_test+0xefe2b)
+    #8 main /workspace/125A-Dystorator/tests/ir_presets/ir_presets_test.cpp:210 (ir_presets_test+0xd8e3f) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+  Mutex M1 (0x7ffeaaeb2798) created at:
+    #0 pthread_mutex_lock ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1341 (libtsan.so.2+0x558ce) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 CabinetIR::prepare(juce::dsp::ProcessSpec const&) <null> (ir_presets_test+0xdf0e2) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 VibeAmpProcessor::prepareToPlay(double, int) /workspace/125A-Dystorator/Source/PluginProcessor.cpp:80 (ir_presets_test+0xe84f9) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #3 main /workspace/125A-Dystorator/tests/ir_presets/ir_presets_test.cpp:210 (ir_presets_test+0xd8e64) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+  Thread T5 'JUCE v8.0.4: Convolution background loader' (tid=5885, finished) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1022 (libtsan.so.2+0x568a6) (BuildId: 99ef88596cb10a8ccf307fe1a9070f66a44b1624)
+    #1 juce::Thread::createNativeThread(juce::Thread::Priority) <null> (ir_presets_test+0x59f5eb) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #2 juce::dsp::ConvolutionMessageQueue::ConvolutionMessageQueue() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:138 (ir_presets_test+0x6f0415) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #3 std::__detail::_MakeUniq<juce::dsp::ConvolutionMessageQueue>::__single_object std::make_unique<juce::dsp::ConvolutionMessageQueue>() /usr/include/c++/14/bits/unique_ptr.h:1077 (ir_presets_test+0x6f34fe) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #4 juce::dsp::Convolution::Convolution(juce::dsp::Convolution::Latency const&) /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1217 (ir_presets_test+0x6f34fe)
+    #5 juce::dsp::Convolution::Convolution() /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:1207 (ir_presets_test+0x6f35c5) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #6 CabinetIR::makeEngine(CabinetIR::Source const*, juce::dsp::ProcessSpec const&) <null> (ir_presets_test+0xde329) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #7 CabinetIR::load(juce::File const&) <null> (ir_presets_test+0xe6570) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #8 VibeAmpProcessor::loadIR(juce::File const&) /workspace/125A-Dystorator/Source/PluginProcessor.cpp:328 (ir_presets_test+0xf3f4d) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+    #9 main /workspace/125A-Dystorator/tests/ir_presets/ir_presets_test.cpp:215 (ir_presets_test+0xd91c5) (BuildId: d2effd0cc9ef5ee44f96fa8dd4814aba60ec4593)
+
+SUMMARY: ThreadSanitizer: data race /workspace/juce-8.0.4/modules/juce_dsp/frequency/juce_Convolution.cpp:82 in juce::dsp::BackgroundMessageQueue::~BackgroundMessageQueue()
+==================

@@ -1,0 +1,10 @@
+FAIL A04 factory restores built-in
+FAIL B03 foreign XML rejects without parameter/name mutation
+FAIL B04 invalid WAV preserves accepted IR path
+PASS missing IR preserves accepted IR path
+PASS preset save/load restores IR A
+FAIL A04 user built-in preset clears IR A
+PASS host state restores IR A
+PASS concurrent load/process completes with finite audio
+FAIL B01 no load command touches a published/rendered convolver
+9 checks, 5 failures

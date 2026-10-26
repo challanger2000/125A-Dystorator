@@ -2,12 +2,21 @@
 #include "PluginEditor.h"
 #include "Parameters.h"
 
+#if defined (VAMP_IR_TEST_CAPTURE)
+// Observational integration-test tap; absent from shipping builds.
+extern void irTestCaptureCabinetInput (const float*, int);
+#endif
+
 VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     : AudioProcessor (BusesProperties()
                           .withInput ("Input", juce::AudioChannelSet::mono(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
       apvts (*this, nullptr, "PARAMS", vamp::createParameterLayout()),
-      presets (apvts, [this] (const juce::File& f) { loadIR (f); }, [this] { return getIRPath(); }, presetFolder)
+      presets (apvts, [this] (const juce::File& f)
+      {
+          if (f == juce::File()) return clearIR();
+          return loadIR (f);
+      }, [this] { return getIRPath(); }, presetFolder, &sceneMutex)
 {
     auto get = [this] (const juce::String& id)
     {
@@ -73,7 +82,7 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     shifter.prepare (sampleRate);
     comp.prepare (monoSpec);
     amp.prepare (sampleRate, maxBlock);
-    cab.prepare (monoSpec);
+    cabinet.prepare (monoSpec);
 
     // Built-in fallback cabinet (used until the user loads an IR): 4x12-ish curve
     using T = vamp::Biquad::Type;
@@ -262,18 +271,22 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
         for (auto& g : gateBandGain) g.store (1.0f);
     }
 
+   #if defined (VAMP_IR_TEST_CAPTURE)
+    irTestCaptureCabinetInput (mono, len);
+   #endif
+
     // ---- cabinet ----
     if (cabOn)
     {
-        if (irLoaded.load())
-            cab.process (monoCtx);
-        else
-            for (int i = 0; i < len; ++i)
+        cabinet.process (monoBlock, [this] (float* data, int count) noexcept
+        {
+            for (int i = 0; i < count; ++i)
             {
-                float v = mono[i];
+                float v = data[i];
                 for (auto& f : fallbackCab) v = f.process (v);
-                mono[i] = v;
+                data[i] = v;
             }
+        });
     }
 
     // ---- 10-band EQ ----
@@ -318,29 +331,21 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
 // ---------------------------------------------------------------------------
 // IR handling
 // ---------------------------------------------------------------------------
-void VibeAmpProcessor::loadIR (const juce::File& file)
+bool VibeAmpProcessor::loadIR (const juce::File& file)
 {
-    if (! file.existsAsFile())
-        return;
-
-    cab.loadImpulseResponse (file, juce::dsp::Convolution::Stereo::no, juce::dsp::Convolution::Trim::yes, 0,
-                             juce::dsp::Convolution::Normalise::yes);
-    {
-        const juce::SpinLock::ScopedLockType lock (irLock);
-        irPath = file.getFullPathName();
-    }
-    irLoaded = true;
+    std::lock_guard<std::recursive_mutex> lock (sceneMutex);
+    return cabinet.load (file);
 }
 
-void VibeAmpProcessor::clearIR()
+bool VibeAmpProcessor::clearIR()
 {
-    irLoaded = false;
-    const juce::SpinLock::ScopedLockType lock (irLock);
-    irPath.clear();
+    std::lock_guard<std::recursive_mutex> lock (sceneMutex);
+    return cabinet.clear();
 }
 
 void VibeAmpProcessor::stepIR (int direction)
 {
+    std::lock_guard<std::recursive_mutex> lock (sceneMutex);
     const auto current = getIRPath();
     if (current.isEmpty() || ! juce::File::isAbsolutePath (current))
         return;
@@ -359,8 +364,7 @@ void VibeAmpProcessor::stepIR (int direction)
 
 juce::String VibeAmpProcessor::getIRPath() const
 {
-    const juce::SpinLock::ScopedLockType lock (irLock);
-    return irPath;
+    return cabinet.getPath();
 }
 
 // ---------------------------------------------------------------------------
@@ -368,6 +372,7 @@ juce::String VibeAmpProcessor::getIRPath() const
 // ---------------------------------------------------------------------------
 void VibeAmpProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
+    std::lock_guard<std::recursive_mutex> lock (sceneMutex);
     auto state = apvts.copyState();
     state.setProperty ("irPath", getIRPath(), nullptr);
     state.setProperty ("presetName", presets.getCurrentName(), nullptr);
@@ -378,21 +383,38 @@ void VibeAmpProcessor::getStateInformation (juce::MemoryBlock& destData)
 
 void VibeAmpProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary (data, sizeInBytes));
-    if (xml == nullptr || ! xml->hasTagName (apvts.state.getType()))
-        return;
-
-    upgradeKnobCurves (*xml); // v0.3 sessions keep their sound
+    std::lock_guard<std::recursive_mutex> lock (sceneMutex);
+    if (data == nullptr || sizeInBytes <= 0 || sizeInBytes > 1024 * 1024) return;
+    auto xml = getXmlFromBinary (data, sizeInBytes);
+    if (! xml || ! validatePresetState (*xml, apvts, apvts.state.getType().toString())) return;
     auto tree = juce::ValueTree::fromXml (*xml);
-    apvts.replaceState (tree);
-
-    presets.setCurrentName (tree.getProperty ("presetName", juce::String()).toString()); // empty -> "(no preset)"
-
+    // Legacy partial states receive defined defaults, not values left over from
+    // the previous project. The existing root/tag/parameter IDs remain unchanged.
+    for (auto* parameter : getParameters())
+        if (auto* p = dynamic_cast<juce::RangedAudioParameter*> (parameter))
+        {
+            bool found = false;
+            for (auto child : tree)
+                found = found || child.getProperty ("id").toString() == p->paramID;
+            if (! found)
+            {
+                juce::ValueTree child ("PARAM");
+                child.setProperty ("id", p->paramID, nullptr);
+                child.setProperty ("value", p->convertFrom0to1 (p->getDefaultValue()), nullptr);
+                tree.addChild (child, -1, nullptr);
+            }
+        }
     const auto path = tree.getProperty ("irPath").toString();
-    if (path.isNotEmpty() && juce::File::isAbsolutePath (path) && juce::File (path).existsAsFile())
-        loadIR (juce::File (path));
-    else
-        clearIR();
+    if (path.isNotEmpty())
+    {
+        if (! juce::File::isAbsolutePath (path) || ! loadIR (juce::File (path))) return;
+    }
+    else if (! clearIR())
+        return;
+    // Validation and IR preparation have succeeded. Rejects above mutate none
+    // of the previously accepted parameters, preset name or cabinet selection.
+    apvts.replaceState (tree);
+    presets.setCurrentName (tree.getProperty ("presetName", juce::String()).toString());
 }
 
 juce::AudioProcessorEditor* VibeAmpProcessor::createEditor()

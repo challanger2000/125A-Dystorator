@@ -1,0 +1,73 @@
+PASS A04 factory restores built-in
+PASS B03 foreign XML rejects without parameter/name mutation
+PASS B04 invalid WAV preserves accepted IR path
+PASS missing IR preserves accepted IR path
+PASS preset save/load restores IR A
+PASS A04 user built-in preset clears IR A
+PASS host state restores IR A
+PASS foreign
+PASS rejected preset preserves whole serialized scene
+PASS empty
+PASS rejected preset preserves whole serialized scene
+PASS truncated
+PASS rejected preset preserves whole serialized scene
+PASS future
+PASS rejected preset preserves whole serialized scene
+PASS version
+PASS rejected preset preserves whole serialized scene
+PASS nan
+PASS rejected preset preserves whole serialized scene
+PASS range
+PASS rejected preset preserves whole serialized scene
+PASS junk
+PASS rejected preset preserves whole serialized scene
+PASS unknown
+PASS rejected preset preserves whole serialized scene
+PASS duplicate
+PASS rejected preset preserves whole serialized scene
+PASS fractional
+PASS rejected preset preserves whole serialized scene
+PASS relative
+PASS rejected preset preserves whole serialized scene
+PASS unusable preset IR rejects
+PASS unusable preset IR preserves all parameters/name/path
+PASS unusable host IR preserves previous scene
+PASS unusable preset IR rejects
+PASS unusable preset IR preserves all parameters/name/path
+PASS unusable host IR preserves previous scene
+PASS preset disappears after directory scan: rollback
+PASS truncated host binary rollback
+PASS null host state rollback
+PASS failed save reports failure
+PASS failed save preserves scene and existing destination
+PASS legacy partial preset accepted
+PASS legacy Attack migration and built-in recall
+PASS IR accepted before prepare
+PASS decoded prepared IR matches original JUCE file-load audio
+PASS IR error is returned to caller
+PASS IR error is returned to caller
+PASS IR resampling budget rejected before activation, previous asset retained
+PASS truncated WAV payload rejected
+PASS IEEE-float NaN IR rejected
+PASS all IR rejects leave old cabinet selected
+IR rollback tail: max_error=0 reference_peak=0.0559017
+PASS failed loads preserve a non-silent pending convolution tail
+PASS rapid updates settle to last built-in request on audio
+PASS sample-rate reprepare retains accepted decoded asset
+PASS reprepared IR actually produces audio after source deletion
+PASS save complete audible scene
+PASS reload saved preset in another processor
+Scene recall: host_max_error=0 preset_max_error=0 reference_energy=0.00183032
+PASS recall comparison exercises non-silent amp/cab audio
+PASS host recall preserves actual stereo output after IR transition
+PASS preset reload preserves actual stereo output
+Processor external IR: max_error=0 effect=0.120293
+PASS actual processor external IR matches original JUCE file-load oracle
+Built-in return: max_error=0 curve_effect=0.106661 reference_energy=8.73464
+PASS factory return routes actual processor audio through audited built-in curve
+PASS IR control preparation completes concurrently with paced processing
+PASS IR process/fade/handoff does no C++ new/delete
+IR-only callback microseconds: p95=371.376 p99=500.006 max=3735.31; deadline at 48k/64=1333.33 us (VM, no hard realtime claim)
+PASS concurrent load/process completes with finite audio
+PASS preset save/reload and host restore succeed during audio processing
+67 checks, 0 failures

@@ -2,6 +2,10 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Parameters.h"
 #include "dsp/Preamp5150.h"
+#include <mutex>
+#include <set>
+#include <sstream>
+#include <locale>
 
 // Knob scales that changed, so that older states and preset files keep their sound:
 //   1 -> 2 (v0.4): Gain / Master recalibrated against a real amp (see Preamp5150.h); states without the marker are v0.3
@@ -41,6 +45,58 @@ inline void upgradeKnobCurves (juce::XmlElement& xml)
     xml.setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
 }
 
+// Validate before any live parameter/IR mutation. Older partial presets remain
+// supported: missing parameters use their actual declared defaults.
+inline bool validatePresetState (juce::XmlElement& xml,
+                                 juce::AudioProcessorValueTreeState& state,
+                                 const juce::String& expectedTag)
+{
+    if (! xml.hasTagName (expectedTag)) return false;
+    const int curves = xml.getIntAttribute (kKnobCurvesAttr, 1);
+    if (curves < 1 || curves > kKnobCurvesVersion
+        || (xml.hasAttribute (kKnobCurvesAttr) && xml.getStringAttribute (kKnobCurvesAttr) != juce::String (curves))) return false;
+    if (xml.hasAttribute ("version"))
+    {
+        const auto v = xml.getStringAttribute ("version").upToFirstOccurrenceOf ("-", false, false);
+        const auto parts = juce::StringArray::fromTokens (v, ".", "");
+        if (parts.size() != 3) return false;
+        for (const auto& part : parts)
+            if (part.isEmpty() || part.length() > 4 || ! part.containsOnly ("0123456789")) return false;
+        const auto supported = juce::StringArray::fromTokens (
+            juce::String (JucePlugin_VersionString).upToFirstOccurrenceOf ("-", false, false), ".", "");
+        if (supported.size() != 3) return false;
+        for (int i = 0; i < 3; ++i)
+        {
+            if (parts[i].getIntValue() > supported[i].getIntValue()) return false;
+            if (parts[i].getIntValue() < supported[i].getIntValue()) break;
+        }
+    }
+    std::set<juce::String> seen;
+    for (auto* item : xml.getChildIterator())
+    {
+        if (! item->hasTagName ("PARAM") || item->getNumChildElements() != 0
+            || ! item->hasAttribute ("id") || ! item->hasAttribute ("value")) return false;
+        const auto id = item->getStringAttribute ("id");
+        auto* parameter = state.getParameter (id);
+        if (! parameter || ! seen.insert (id).second) return false;
+        const auto text = item->getStringAttribute ("value").trim().toStdString();
+        std::istringstream in (text);
+        in.imbue (std::locale::classic());
+        double value;
+        in >> std::noskipws >> value;
+        if (! in || ! in.eof() || ! std::isfinite (value)) return false;
+        const auto range = parameter->getNormalisableRange();
+        const double maximum = curves < 3 && id == ids::boostAttack ? 8.0 : range.end;
+        if (value < range.start || value > maximum) return false;
+        if (range.interval > 0 && std::abs ((value - range.start) / range.interval
+                                          - std::round ((value - range.start) / range.interval)) > 1e-5)
+            return false;
+    }
+    if (seen.empty()) return false;
+    upgradeKnobCurves (xml);
+    return true;
+}
+
 // Factory presets (built into the plugin) + user presets (XML files in
 // Documents/Djenty Donkey/Presets, easy to share). Call everything from the message thread.
 class PresetManager
@@ -50,11 +106,13 @@ public:
     struct Factory { const char* name; Values values; };
 
     PresetManager (juce::AudioProcessorValueTreeState& state,
-                   std::function<void (const juce::File&)> loadIRFn,
+                   std::function<bool (const juce::File&)> loadIRFn,
                    std::function<juce::String()> getIRPathFn,
-                   juce::File folderOverride = {})
+                   juce::File folderOverride = {},
+                   std::recursive_mutex* sharedMutex = nullptr)
         : apvts (state), loadIR (std::move (loadIRFn)), getIRPath (std::move (getIRPathFn)),
-          userFolder (folderOverride == juce::File() ? getUserFolder() : folderOverride)
+          userFolder (folderOverride == juce::File() ? getUserFolder() : folderOverride),
+          mutex (sharedMutex ? *sharedMutex : ownedMutex)
     {
         refresh();
     }
@@ -69,16 +127,18 @@ public:
 
     void refresh()
     {
+        std::lock_guard<std::recursive_mutex> lock (mutex);
         userFiles = userFolder.findChildFiles (juce::File::findFiles, false, "*.xml");
         userFiles.sort();
     }
 
     int getNumFactory() const { return (int) factory().size(); }
-    int getNumPresets() const { return getNumFactory() + userFiles.size(); }
+    int getNumPresets() const { std::lock_guard<std::recursive_mutex> lock (mutex); return getNumFactory() + userFiles.size(); }
     bool isUser (int index) const { return index >= getNumFactory(); }
 
     juce::String getName (int index) const
     {
+        std::lock_guard<std::recursive_mutex> lock (mutex);
         if (index < 0 || index >= getNumPresets()) return {};
         return isUser (index) ? userFiles[index - getNumFactory()].getFileNameWithoutExtension()
                               : juce::String (factory()[(size_t) index].name);
@@ -86,42 +146,55 @@ public:
 
     int indexOf (const juce::String& name) const
     {
+        std::lock_guard<std::recursive_mutex> lock (mutex);
         for (int i = 0; i < getNumPresets(); ++i)
             if (getName (i) == name) return i;
         return -1;
     }
 
-    juce::String getCurrentName() const { return currentName; }
-    void setCurrentName (const juce::String& n) { currentName = n; }
+    juce::String getCurrentName() const { std::lock_guard<std::recursive_mutex> lock (mutex); return currentName; }
+    void setCurrentName (const juce::String& n) { std::lock_guard<std::recursive_mutex> lock (mutex); currentName = n; }
+    juce::String getLastError() const { std::lock_guard<std::recursive_mutex> lock (mutex); return lastError; }
 
-    void load (int index)
+    bool load (int index)
     {
-        if (index < 0 || index >= getNumPresets()) return;
-
-        if (! isUser (index))
+        std::lock_guard<std::recursive_mutex> lock (mutex);
+        if (index < 0 || index >= getNumPresets()) return false;
+        std::unique_ptr<juce::XmlElement> xml;
+        juce::File ir;
+        if (isUser (index))
         {
-            resetAllToDefault();
+            const auto file = userFiles[index - getNumFactory()];
+            if (file.getSize() <= 0 || file.getSize() > 1024 * 1024)
+                return reject ("Preset file is missing, empty or too large");
+            xml = juce::XmlDocument::parse (file);
+            if (! xml || ! validatePresetState (*xml, apvts, "DjentyDonkeyPreset"))
+                return reject ("Invalid or unsupported preset");
+            const auto path = xml->getStringAttribute ("irPath");
+            if (path.isNotEmpty())
+            {
+                if (! juce::File::isAbsolutePath (path)) return reject ("IR path must be absolute");
+                ir = juce::File (path);
+            }
+        }
+        // Empty File is an explicit built-in request. A missing/non-decodable
+        // nonempty path rejects the ENTIRE scene before parameters/name change.
+        if (! loadIR (ir)) return reject ("Cannot load preset IR; previous scene retained");
+        resetAllToDefault();
+        if (xml)
+            for (auto* item : xml->getChildWithTagNameIterator ("PARAM"))
+                setParam (item->getStringAttribute ("id"), (float) item->getDoubleAttribute ("value"));
+        else
             for (auto& [id, value] : factory()[(size_t) index].values)
                 setParam (id, value);
-        }
-        else
-        {
-            std::unique_ptr<juce::XmlElement> xml (juce::XmlDocument::parse (userFiles[index - getNumFactory()]));
-            if (xml == nullptr) return;
-            upgradeKnobCurves (*xml);
-            resetAllToDefault();
-            for (auto* p : xml->getChildWithTagNameIterator ("PARAM"))
-                setParam (p->getStringAttribute ("id"), (float) p->getDoubleAttribute ("value"));
-
-            const juce::File ir (xml->getStringAttribute ("irPath"));
-            if (juce::File::isAbsolutePath (ir.getFullPathName()) && ir.existsAsFile())
-                loadIR (ir);
-        }
         currentName = getName (index);
+        lastError.clear();
+        return true;
     }
 
     bool save (const juce::String& rawName)
     {
+        std::lock_guard<std::recursive_mutex> lock (mutex);
         const auto name = juce::File::createLegalFileName (rawName.trim());
         if (name.isEmpty()) return false;
 
@@ -134,7 +207,8 @@ public:
         xml->setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
         xml->setAttribute ("irPath", getIRPath());
 
-        const bool ok = xml->writeTo (userFolder.getChildFile (name + ".xml"));
+        juce::TemporaryFile temporary (userFolder.getChildFile (name + ".xml"));
+        const bool ok = xml->writeTo (temporary.getFile()) && temporary.overwriteTargetFileWithTemporary();
         refresh();
         if (ok) currentName = name;
         return ok;
@@ -142,6 +216,7 @@ public:
 
     bool remove (int index)
     {
+        std::lock_guard<std::recursive_mutex> lock (mutex);
         if (! isUser (index) || index >= getNumPresets()) return false;
         const bool ok = userFiles[index - getNumFactory()].deleteFile();
         refresh();
@@ -211,9 +286,13 @@ private:
     }
 
     juce::AudioProcessorValueTreeState& apvts;
-    std::function<void (const juce::File&)> loadIR;
+    std::function<bool (const juce::File&)> loadIR;
     std::function<juce::String()> getIRPath;
     juce::File userFolder;
     juce::Array<juce::File> userFiles;
     juce::String currentName { "Default" };
+    juce::String lastError;
+    mutable std::recursive_mutex ownedMutex;
+    std::recursive_mutex& mutex;
+    bool reject (const juce::String& text) { lastError = text; return false; }
 };

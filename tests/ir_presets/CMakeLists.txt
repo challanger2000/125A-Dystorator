@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.24)
 project(IRPresetIntegration VERSION 0.5.6 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 if(NOT TARGET juce::juce_dsp)
@@ -13,6 +13,8 @@ endif()
 juce_add_console_app(ir_presets_test PRODUCT_NAME "IR/preset integration")
 target_sources(ir_presets_test PRIVATE ir_presets_test.cpp ../../Source/PluginProcessor.cpp ../../Source/PluginEditor.cpp)
 target_include_directories(ir_presets_test PRIVATE ../../Source)
+# Observe the real processor input to the cabinet without duplicating the amp.
+set_property(SOURCE ../../Source/PluginProcessor.cpp APPEND PROPERTY COMPILE_DEFINITIONS VAMP_IR_TEST_CAPTURE=1)
 target_compile_definitions(ir_presets_test PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_MODAL_LOOPS_PERMITTED=1 JucePlugin_Name="Djenty\ Donkey" JucePlugin_VersionString="0.5.6")
 target_link_libraries(ir_presets_test PRIVATE juce::juce_audio_utils juce::juce_dsp)
 include(CTest)
@@ -34,4 +36,13 @@ if(IR_TRACE_CONVOLUTION)
     endforeach()
     set_property(TARGET juce_dsp PROPERTY INTERFACE_SOURCES "${dsp_sources}")
     set_property(SOURCE ir_presets_test.cpp APPEND PROPERTY COMPILE_DEFINITIONS IR_TRACE_CONVOLUTION=1)
+endif()
+
+# Sanitizer configurations instrument all linked JUCE translation units too:
+# JUCE Thread uses detached threads plus atomic exit signalling, which a partial
+# instrumentation build cannot correctly observe. Never suppress those reports.
+set(IR_SANITIZER "" CACHE STRING "Optional thread or address,undefined sanitizer")
+if(IR_SANITIZER AND NOT MSVC)
+    target_compile_options(ir_presets_test PRIVATE "-fsanitize=${IR_SANITIZER}" -g -O1 -fno-omit-frame-pointer)
+    target_link_options(ir_presets_test PRIVATE "-fsanitize=${IR_SANITIZER}")
 endif()

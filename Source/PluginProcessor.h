@@ -7,10 +7,13 @@
 #include "dsp/PitchShifter.h"
 #include "dsp/StereoDelay.h"
 #include "PresetManager.h"
+#include "CabinetIR.h"
 
 class VibeAmpProcessor : public juce::AudioProcessor,
                          private juce::AsyncUpdater
 {
+private:
+    mutable std::recursive_mutex sceneMutex; // non-audio scene transactions only
 public:
     explicit VibeAmpProcessor (juce::File presetFolder = {});
     ~VibeAmpProcessor() override = default;
@@ -39,9 +42,12 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    // Cabinet IR handling (call from the message thread)
-    void loadIR (const juce::File& file);
-    void clearIR();
+    // Cabinet IR control API: message/host control threads only, never processBlock.
+    // Success means decoded/validated (and prepared if already active).
+    // Audio adopts the prepared engine at a block boundary.
+    bool loadIR (const juce::File& file);
+    juce::String getIRLoadError() const { return cabinet.getError(); }
+    bool clearIR();
     void stepIR (int direction); // next / previous IR in the same folder
     juce::String getIRPath() const;
 
@@ -98,7 +104,7 @@ private:
     juce::dsp::Compressor<float> comp;
     vamp::AmpSim amp;
     vamp::AmpSim::Settings ampSettings;
-    juce::dsp::Convolution cab;
+    CabinetIR cabinet;
     vamp::Biquad fallbackCab[5];
     vamp::Biquad eq[10];
     juce::dsp::Phaser<float> phaser;
@@ -123,9 +129,6 @@ private:
     std::atomic<int> targetLatency { 0 };
     std::atomic<float> inputPeak { 0.0f }, outputPeak { 0.0f };
     std::atomic<float> gateBandGain[3] { { 1.0f }, { 1.0f }, { 1.0f } };
-    std::atomic<bool> irLoaded { false };
-    mutable juce::SpinLock irLock;
-    juce::String irPath;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibeAmpProcessor)
 };
