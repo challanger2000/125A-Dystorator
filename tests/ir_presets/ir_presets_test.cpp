@@ -1,6 +1,7 @@
 #include "HeapProbe.h"
 #include "Parameters.h"
 #include "PluginProcessor.h"
+#include "matched_ir_oracle.h"
 #include <atomic>
 #include <chrono>
 #include <iostream>
@@ -169,8 +170,7 @@ static void cabinetAudio (const juce::File &dir, const juce::File &a, const juce
     check (cabinet.load (a), "IR accepted before prepare");
     cabinet.prepare ({48000, 64, 1});
     juce::dsp::Convolution reference;
-    reference.loadImpulseResponse (a, juce::dsp::Convolution::Stereo::no, juce::dsp::Convolution::Trim::yes,
-                                   0, juce::dsp::Convolution::Normalise::yes);
+    loadMatchedReference (reference, a, 1);
     reference.prepare ({48000, 64, 1});
     juce::AudioBuffer<float> x (1, 64), y (1, 64);
     auto builtin = [] (float *, int) noexcept {}; // identity stand-in, not an amp mock
@@ -188,7 +188,7 @@ static void cabinetAudio (const juce::File &dir, const juce::File &a, const juce
         for (int i = 0; i < 64; ++i)
             error = std::max (error, (double)std::abs (x.getSample (0, i) - y.getSample (0, i)));
     }
-    check (error < 1e-6, "decoded prepared IR matches original JUCE file-load audio");
+    check (error < 1e-6, "decoded prepared IR matches matched JUCE file oracle");
     // Leave a real echo pending across the block boundary before any reject.
     // A reset-to-empty-history bug must fail even if it retains the same IR path.
     x.clear ();
@@ -378,8 +378,7 @@ static void builtinReturnAudio (const juce::File &dir, const juce::File &ir)
     switched.loadIR (ir);
     switched.prepareToPlay (48000, 64);
     juce::dsp::Convolution originalIR;
-    originalIR.loadImpulseResponse (ir, juce::dsp::Convolution::Stereo::no, juce::dsp::Convolution::Trim::yes,
-                                    0, juce::dsp::Convolution::Normalise::yes);
+    loadMatchedReference (originalIR, ir, 1);
     originalIR.prepare ({48000, 64, 1});
     juce::AudioBuffer<float> audio (2, 64), captured (1, 64), expectedIR (1, 64);
     juce::MidiBuffer midi;
@@ -408,7 +407,7 @@ static void builtinReturnAudio (const juce::File &dir, const juce::File &ir)
     }
     std::cout << "Processor external IR: max_error=" << error << " effect=" << effect << std::endl;
     check (error < 1e-6 && energy > 1e-10 && effect > 1e-5,
-           "actual processor external IR matches original JUCE file-load oracle");
+           "actual processor external IR matches matched JUCE file oracle");
 
     switched.presets.load (0);
     vamp::Biquad curve[5];
@@ -685,6 +684,7 @@ int main (int argc, char** argv)
         p.setStateInformation (state.getData (), (int)state.getSize ());
         check (p.getIRPath () == a.getFullPathName (), "host state restores IR A");
         malformedScenes (p, dir, a);
+        check (cabMatchGainInvariants(), "IR gain scales with input amplitude and preserves anti-phase stereo");
         cabinetAudio (dir, a, b);
         sceneAudio (dir, a);
         builtinReturnAudio (dir, a);
