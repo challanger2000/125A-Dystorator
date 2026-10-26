@@ -127,5 +127,34 @@ foreach ($quality in @(0,1,2)) {
  $selected = @($comparison | Where-Object { $_.quality -eq $quality })
  $summary.meanSavingByQuality["$quality"] = ($selected | Measure-Object -Property meanSavingPercent -Average).Average
 }
+# Product priority: ECO (LOW) stereo must run live; HIGH is for offline bounce.
+# These are synthetic host timings only, not a substitute for ASIO/Studio One evidence.
+$eco = @($rows | Where-Object { $_.quality -eq 0 })
+$ecoStereo = @($eco | Where-Object { $_.caseKey.Split('/')[1] -eq '2' })
+$ecoMono = @($eco | Where-Object { $_.caseKey.Split('/')[1] -eq '1' })
+$highStereo = @($rows | Where-Object { $_.quality -eq 2 -and $_.caseKey.Split('/')[1] -eq '2' })
+$ecoLiveByRole = [ordered]@{}
+foreach ($role in @('before','after')) {
+ $chosenStereo = @($ecoStereo | Where-Object { $_.role -eq $role })
+ $chosenMono = @($ecoMono | Where-Object { $_.role -eq $role })
+ if ($chosenStereo.Count -ne 16 -or $chosenMono.Count -ne 16) { throw "Incomplete ECO role coverage: $role" }
+ $ecoLiveByRole[$role] = [ordered]@{
+  stereoCasesMeasured = $chosenStereo.Count
+  stereoDeadlineFailures = @($chosenStereo | Where-Object { $_.status -eq 'FAIL' }).Count
+  stereoCallbackOverruns = ($chosenStereo | Measure-Object -Property overruns -Sum).Sum
+  stereoScheduleMisses = ($chosenStereo | Measure-Object -Property scheduleMisses -Sum).Sum
+  monoDeadlineFailures = @($chosenMono | Where-Object { $_.status -eq 'FAIL' }).Count
+  monoCallbackOverruns = ($chosenMono | Measure-Object -Property overruns -Sum).Sum
+ }
+}
+$summary['acceptancePriority'] = 'ECO stereo for live tracking/mixing; HIGH for manually selected offline bounce'
+$summary['ecoRealtimeSynthetic'] = $ecoLiveByRole
+$summary['highStereoDiagnosticOnly'] = [ordered]@{
+ casesMeasured=$highStereo.Count
+ deadlineFailureCases=@($highStereo | Where-Object { $_.status -eq 'FAIL' }).Count
+ note='HIGH realtime deadlines are NOT the primary product gate. Offline PCM and high-quality render must still pass.'
+}
+$summary['requiredExternalAcceptance'] = 'Real owner i9-11900K / Studio One / ASIO / multiple stereo instruments: NOT RUN'
+
 $summary | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $OutputDir 'summary.json') -Encoding UTF8
 Write-Host ("192 case records saved in: {0}" -f $OutputDir)
