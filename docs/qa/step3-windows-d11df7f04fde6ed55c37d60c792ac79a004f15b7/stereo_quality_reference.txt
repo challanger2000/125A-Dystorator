@@ -1,0 +1,10 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=2 max_delta=0 reference_L_energy=7.82179 reference_R_energy=4.01804
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=0 max_delta=0 reference_L_energy=7.82822 reference_R_energy=4.00892
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=44100 quality=1 max_delta=0 reference_L_energy=7.82302 reference_R_energy=4.01825
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=2 max_delta=0 reference_L_energy=7.96462 reference_R_energy=3.99461
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=0 max_delta=0 reference_L_energy=7.97086 reference_R_energy=3.98448
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=48000 quality=1 max_delta=0 reference_L_energy=7.96584 reference_R_energy=3.99459
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=2 max_delta=0 reference_L_energy=7.55461 reference_R_energy=3.61825
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=0 max_delta=0 reference_L_energy=7.56091 reference_R_energy=3.59983
+PASS STEREO R-only then distinct L/R vs independent circuits and integer padding, fs=96000 quality=1 max_delta=0 reference_L_energy=7.55726 reference_R_energy=3.61515

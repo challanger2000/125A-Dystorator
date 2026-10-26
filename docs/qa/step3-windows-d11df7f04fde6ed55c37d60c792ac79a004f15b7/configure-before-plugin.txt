@@ -1,0 +1,38 @@
+COMMAND: cmake ["-S","build/win-before","-B","build/win-plugin-before","-G","Visual Studio 17 2022","-A","x64","-DFETCHCONTENT_SOURCE_DIR_JUCE=D:\\a\\125A-Dystorator\\125A-Dystorator/build/tools/JUCE"]
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- The C compiler identification is MSVC 19.44.35229.0
+-- The CXX compiler identification is MSVC 19.44.35229.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- Testing juceaide
+-- Finished setting up juceaide
+CMake Warning at D:/a/125A-Dystorator/125A-Dystorator/build/tools/JUCE/extras/Build/CMake/JUCEUtils.cmake:1722 (message):
+  Target DjentyDonkey has JUCE_BUNDLE_ID 'com.Djenty Donkey.DjentyDonkey',
+  which contains spaces.  Use the BUNDLE_ID option to specify a valid ID.
+Call Stack (most recent call first):
+  D:/a/125A-Dystorator/125A-Dystorator/build/tools/JUCE/extras/Build/CMake/JUCEUtils.cmake:2106 (_juce_set_fallback_properties)
+  D:/a/125A-Dystorator/125A-Dystorator/build/tools/JUCE/extras/Build/CMake/JUCEUtils.cmake:2189 (_juce_initialise_target)
+  CMakeLists.txt:26 (juce_add_plugin)
+
+
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Configuring done (56.8s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin-before

@@ -1,0 +1,8 @@
+125A Plugin Tester / Isolated I/O + Event Probe
+Plugin: D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadIO.vst3
+ExitCode: 1
+Result: FAIL
+FirstFailure: Bus arrangement - out-of-range bus index was accepted
+
+[PASS] Bus activation/restoration - 2 bus(es), 2 reversible transition(s), 0 fixed/rejected transition(s), 0 auxiliary audio input(s)
+[FAIL] Bus arrangement - out-of-range bus index was accepted

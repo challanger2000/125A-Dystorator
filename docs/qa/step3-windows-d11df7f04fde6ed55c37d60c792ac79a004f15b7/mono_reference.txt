@@ -1,0 +1,4 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 
+PASS MONO R-only vs independent average -> original HIGH AmpSim -> duplicate, fs=44100 max_delta=0 reference_energy=8.00575
+PASS MONO R-only vs independent average -> original HIGH AmpSim -> duplicate, fs=48000 max_delta=0 reference_energy=7.96021
+PASS MONO R-only vs independent average -> original HIGH AmpSim -> duplicate, fs=96000 max_delta=0 reference_energy=7.24695

@@ -1,0 +1,28 @@
+COMMAND: cmake ["-S","D:\\a\\125A-Dystorator\\125A-Dystorator/build/tools/tester","-B","build/win-tester","-G","Visual Studio 17 2022","-A","x64","-DFETCHCONTENT_SOURCE_DIR_VST3SDK=D:\\a\\125A-Dystorator\\125A-Dystorator/build/tools/vst3sdk","-DSMTG_CREATE_PLUGIN_LINK=OFF"]
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- The CXX compiler identification is MSVC 19.44.35229.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The C compiler identification is MSVC 19.44.35229.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- [SMTG] SMTG_AAX_SDK_PATH is not set. If you need it, please download the AAX SDK!
+-- Could NOT find LIBJACK (missing: LIBJACK_LIBRARIES LIBJACK_INCLUDE_DIR) 
+-- Performing Test SMTG_USE_STDATOMIC_H
+-- Performing Test SMTG_USE_STDATOMIC_H - Failed
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQAGoodControl
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQABadLifecycle
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQABadNaN
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQABadState
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQABadIO
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQAGoodEditor
+-- [SMTG] Setup running moduleinfotool for PluginTester125AQABadEditor
+-- Configuring done (4.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: D:/a/125A-Dystorator/125A-Dystorator/build/win-tester

@@ -1,0 +1,1 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 

@@ -1,0 +1,43 @@
+COMMAND: cmake ["--build","build/win-integration","--config","Release","--target","ir_presets_test","compact_vst3_host","--parallel","2"]
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  1>Checking Build System
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  ir_presets_test_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test_rc_lib.dir\Release\ir_presets_test_rc_lib.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  quality_audio.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         with [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty=int [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         and [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         [ [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:             _Ty2=float [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54): warning C4244:         ] [D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test.vcxproj]
+  (compiling source file '../../tests/ir_presets/quality_audio.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(274,54):
+      the template instantiation context (the oldest one first) is
+          D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(254,17):
+          see reference to function template instantiation 'std::pair<const char *,float>::pair<const char*const &,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=const char *const &,
+              _Other2=int
+          ]
+              D:\a\125A-Dystorator\125A-Dystorator\Source\PresetManager.h(251,53):
+              see the first reference to 'std::pair<const char *,float>::pair' in 'PresetManager::factory'
+  
+  juce_dsp.cpp
+  Generating Code...
+  ir_presets_test.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\ir_presets_test_artefacts\Release\ir_presets_test.exe
+MSBuild version 17.14.60+43b635718 for .NET Framework
+
+  Checking File Globs
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  compact_vst3_host_rc_lib.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_rc_lib.dir\Release\compact_vst3_host_rc_lib.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  step3_detours.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\Release\step3_detours.lib
+  Building Custom Rule D:/a/125A-Dystorator/125A-Dystorator/tests/ir_presets/CMakeLists.txt
+  compact_vst3_host.vcxproj -> D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe

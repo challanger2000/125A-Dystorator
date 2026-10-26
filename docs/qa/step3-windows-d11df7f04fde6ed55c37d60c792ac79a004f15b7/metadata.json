@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "d11df7f04fde6ed55c37d60c792ac79a004f15b7",
+  "baselineCommit": "398204e26d84c3f40bcd1c0af55dfa8e97893ca7",
+  "branch": "dev/compact-stereo-on-ir-fix-20261026",
+  "utc": "2026-10-26T19:04:51.9953685Z",
+  "runner": "GitHub Actions 1000010689",
+  "runnerOs": "Windows",
+  "cpu": {
+    "Name": "AMD EPYC 7763 64-Core Processor                ",
+    "NumberOfCores": 2,
+    "NumberOfLogicalProcessors": 4,
+    "MaxClockSpeed": 2445
+  },
+  "os": "Microsoft Windows NT 10.0.20348.0",
+  "juceCommit": "51d11a2be6d5c97ccf12b4e5e827006e19f0555a",
+  "sdkCommit": "3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96",
+  "testerCommit": "3dcf3fe607008e520dcf20d1f793d9c534a9b9e1",
+  "detoursCommit": "e4bfd6b03e50de46b47abfbd1e46b384f0c5f833",
+  "hardwareQualification": "Windows shared CI runner, NOT owner i9-11900K/ASIO",
+  "NOT_RUN": [
+    "Actual owner i9-11900K machine",
+    "Real ASIO device/DAW/Studio One playback and recorded dropouts",
+    "Licensed real DI and level-matched listening",
+    "Musical approval of ECO/STANDARD",
+    "Manual GUI/control acceptance"
+  ]
+}

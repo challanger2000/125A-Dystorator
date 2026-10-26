@@ -1,0 +1,56 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe "pcm"
+PCM fs=44100 channel=0 drive=-1 max=1.49012e-08 residual_db=-157.13 energy=19.6376
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=0 drive=0 max=1.49012e-08 residual_db=-157.486 energy=35.111
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=0 drive=1 max=2.98023e-08 residual_db=-157.032 energy=58.401
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=-1 max=1.49012e-08 residual_db=-159.144 energy=15.8385
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=0 max=7.45058e-09 residual_db=-156.738 energy=13.2002
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=1 max=7.45058e-09 residual_db=-158.001 energy=14.6205
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=-1 max=1.49012e-08 residual_db=-156.449 energy=12.9604
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=0 max=7.45058e-09 residual_db=-159.215 energy=10.789
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=1 max=7.45058e-09 residual_db=-160.057 energy=11.4694
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=-1 max=1.11759e-08 residual_db=-161.71 energy=20.1927
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=0 max=1.49012e-08 residual_db=-162.85 energy=35.6689
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=1 max=1.49012e-08 residual_db=-169.747 energy=58.9194
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=-1 max=7.45058e-09 residual_db=-164.562 energy=17.2106
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=0 max=7.45058e-09 residual_db=-160.81 energy=13.6425
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=1 max=3.72529e-09 residual_db=-165.017 energy=14.6697
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=-1 max=1.49012e-08 residual_db=-161.399 energy=13.4084
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=0 max=3.72529e-09 residual_db=-164.647 energy=11.2079
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=1 max=7.45058e-09 residual_db=-161.273 energy=11.755
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=-1 max=7.45058e-09 residual_db=-164.995 energy=30.9003
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=0 max=1.49012e-08 residual_db=-164.99 energy=45.8559
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=1 max=2.98023e-08 residual_db=-162.265 energy=75.6359
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=-1 max=7.45058e-09 residual_db=-164.291 energy=23.5951
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=0 max=7.45058e-09 residual_db=-168.126 energy=20.1742
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=1 max=7.45058e-09 residual_db=-163.33 energy=20.8508
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=-1 max=7.45058e-09 residual_db=-163.188 energy=19.1925
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=0 max=1.49012e-08 residual_db=-158.505 energy=18.0593
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=1 max=7.45058e-09 residual_db=-163.142 energy=18.1667
+PASS HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+27 checks, 0 failures
