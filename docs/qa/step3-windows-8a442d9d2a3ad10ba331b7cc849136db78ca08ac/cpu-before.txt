@@ -1,0 +1,23 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe ["D:\\a\\125A-Dystorator\\125A-Dystorator/build/win-plugin-before/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3","step3-cpu","before"]
+HOST_STAGE enter argc=4
+HOST_STAGE install heap=0
+HOST_STAGE initialize JUCE
+HOST_STAGE discover
+HOST_STAGE discovered=1
+HOST_STAGE cpu instantiate fs=44100 lanes=1
+FAIL Windows unhandled SEH 0xe06d7363 address=00007FFF53F8F22C
+STACK 0 00007FF616FE1CA9 module=D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe offset=0x11ca9 symbol=step3Crash::stack+0x49
+STACK 1 00007FF616FDD4A8 module=D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe offset=0xd4a8 symbol=step3Crash::exception+0x38
+STACK 2 00007FFF5400080D module=C:\Windows\System32\KERNELBASE.dll offset=0xb080d symbol=UnhandledExceptionFilter+0x1bd
+STACK 3 00007FFF566894D5 module=C:\Windows\SYSTEM32\ntdll.dll offset=0xa94d5 symbol=memset+0x2455
+STACK 4 00007FFF5666F1B6 module=C:\Windows\SYSTEM32\ntdll.dll offset=0x8f1b6 symbol=_C_specific_handler+0x96
+STACK 5 00007FFF566852CF module=C:\Windows\SYSTEM32\ntdll.dll offset=0xa52cf symbol=_chkstk+0x12f
+STACK 6 00007FFF5661193E module=C:\Windows\SYSTEM32\ntdll.dll offset=0x3193e symbol=RtlVirtualUnwind2+0x35e
+STACK 7 00007FFF5662FB21 module=C:\Windows\SYSTEM32\ntdll.dll offset=0x4fb21 symbol=RtlRaiseException+0x1f1
+STACK 8 00007FFF53F8F22C module=C:\Windows\System32\KERNELBASE.dll offset=0x3f22c symbol=RaiseException+0x6c
+STACK 9 00007FFF4BC755A9 module=C:\Windows\SYSTEM32\VCRUNTIME140.dll offset=0x55a9 symbol=CxxThrowException+0x99
+STACK 10 00007FF616FDD344 module=D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe offset=0xd344 symbol=step3Hosted::cpu+0x1844
+STACK 11 00007FF616FE2A2B module=D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe offset=0x12a2b symbol=main+0x4db
+STACK 12 00007FF6172326B4 module=D:\a\125A-Dystorator\125A-Dystorator\build\win-integration\compact_vst3_host_artefacts\Release\compact_vst3_host.exe offset=0x2626b4 symbol=__scrt_common_main_seh+0x10c
+STACK 13 00007FFF55F24F80 module=C:\Windows\System32\KERNEL32.DLL offset=0x14f80 symbol=BaseThreadInitThunk+0x10
+STACK 14 00007FFF5665EDCB module=C:\Windows\SYSTEM32\ntdll.dll offset=0x7edcb symbol=RtlUserThreadStart+0x2b

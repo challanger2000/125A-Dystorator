@@ -1,0 +1,29 @@
+125A Plugin Tester / setProcessing Return Diagnostic
+Version: 0.2.9
+Plugin: D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadLifecycle.vst3
+
+Class initialization: 125A QA Bad Lifecycle -> kResultTrue/kResultOk [signed=0, hex=0x00000000]
+canProcessSampleSize(32): yes
+canProcessSampleSize(64): no
+
+Class: 125A QA Bad Lifecycle
+Mode: realtime
+SampleSize: 32-bit
+setupProcessing: kResultTrue/kResultOk [signed=0, hex=0x00000000]
+setActive(true): kResultTrue/kResultOk [signed=0, hex=0x00000000]
+setProcessing(true): kResultFalse [signed=1, hex=0x00000001]
+setProcessing(false): not called because start was rejected
+setActive(false): kResultTrue/kResultOk [signed=0, hex=0x00000000]
+
+Class: 125A QA Bad Lifecycle
+Mode: offline
+SampleSize: 32-bit
+setupProcessing: kResultTrue/kResultOk [signed=0, hex=0x00000000]
+setActive(true): kResultTrue/kResultOk [signed=0, hex=0x00000000]
+setProcessing(true): kResultFalse [signed=1, hex=0x00000001]
+setProcessing(false): not called because start was rejected
+setActive(false): kResultTrue/kResultOk [signed=0, hex=0x00000000]
+
+AudioEffectClasses: 1
+SUMMARY: 125A QA Bad Lifecycle realtime 32-bit setProcessing(true)=kResultFalse [signed=1, hex=0x00000001]
+SUMMARY: 125A QA Bad Lifecycle offline 32-bit setProcessing(true)=kResultFalse [signed=1, hex=0x00000001]

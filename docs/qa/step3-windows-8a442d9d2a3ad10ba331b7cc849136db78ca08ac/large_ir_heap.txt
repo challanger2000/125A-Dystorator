@@ -1,0 +1,12 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 
+LARGE_IR_STAGE install heap
+PASS IR_HEAP channels=1 block=128 allocations=0 frees=0 pcm_max=0 reference_energy=0.0651798
+PASS IR_HEAP channels=1 block=256 allocations=0 frees=0 pcm_max=0 reference_energy=0.12753
+PASS IR_HEAP channels=1 block=8192 allocations=0 frees=0 pcm_max=0 reference_energy=4.11534
+PASS IR_HEAP channels=1 block=8193 allocations=0 frees=0 pcm_max=7.45058e-09 reference_energy=4.11568
+PASS IR_HEAP channels=1 block=16384 allocations=0 frees=0 pcm_max=8.84756e-09 reference_energy=8.23287
+PASS IR_HEAP channels=2 block=128 allocations=0 frees=0 pcm_max=0 reference_energy=0.0705522
+PASS IR_HEAP channels=2 block=256 allocations=0 frees=0 pcm_max=0 reference_energy=0.13796
+PASS IR_HEAP channels=2 block=8192 allocations=0 frees=0 pcm_max=0 reference_energy=4.44208
+PASS IR_HEAP channels=2 block=8193 allocations=0 frees=0 pcm_max=7.45058e-09 reference_energy=4.4427
+PASS IR_HEAP channels=2 block=16384 allocations=0 frees=0 pcm_max=8.3819e-09 reference_energy=8.88585

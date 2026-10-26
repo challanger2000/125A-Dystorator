@@ -1,0 +1,4 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/compact_vst3_host_artefacts/Release/compact_vst3_host.exe "step3-heap-selftest"
+HOST_STAGE enter argc=2
+HOST_STAGE install heap=1
+PASS standalone process-heap positive self-test

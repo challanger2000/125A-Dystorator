@@ -1,0 +1,1 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-tester/Release/125A_Plugin_Tester.exe "D:\\a\\125A-Dystorator\\125A-Dystorator\\build\\win-tester\\VST3\\Release\\125A_QA_BadLifecycle.vst3"

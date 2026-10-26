@@ -1,0 +1,10 @@
+COMMAND: cmake ["-S","tests/ir_presets","-B","build/win-integration","-G","Visual Studio 17 2022","-A","x64","-DJUCE_SOURCE_DIR=D:\\a\\125A-Dystorator\\125A-Dystorator/build/tools/JUCE","-DIR_PRODUCT_SOURCE_DIR=D:\\a\\125A-Dystorator\\125A-Dystorator/Source","-DIR_TEST_MAIN=large_ir_heap.cpp","-DIR_TRACE_CONVOLUTION=OFF","-DIR_DISCARD_RIGHT_MUTATION=OFF","-DIR_BUILD_VST3_HOST=ON","-DSTEP3_DETOURS_DIR=D:\\a\\125A-Dystorator\\125A-Dystorator/build/tools/Detours","-DCMAKE_BUILD_TYPE=Release"]
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- Testing juceaide
+-- Finished setting up juceaide
+-- Configuring done (1.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/a/125A-Dystorator/125A-Dystorator/build/win-integration

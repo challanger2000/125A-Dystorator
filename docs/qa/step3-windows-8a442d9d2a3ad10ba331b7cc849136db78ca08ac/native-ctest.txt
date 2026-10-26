@@ -1,0 +1,67 @@
+COMMAND: ctest ["--test-dir","build/win-plugin","-C","Release","-V"]
+Internal ctest changing into directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+UpdateCTestConfiguration  from :D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin/DartConfiguration.tcl
+UpdateCTestConfiguration  from :D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin/DartConfiguration.tcl
+Test project D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: guitar_cuts_stereo
+
+1: Test command: D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\guitar_cuts_test.exe
+1: Working Directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+1: Test timeout computed to be: 10000000
+1: guitar_cuts_test: PASS (0 failures)
+1/5 Test #1: guitar_cuts_stereo ...............   Passed    0.04 sec
+test 2
+    Start 2: quality_solver_auto
+
+2: Test command: D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_auto.exe
+2: Working Directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+2: Test timeout computed to be: 10000000
+2: BACKEND AVX
+2: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+2: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+2: PASS singular reduced solve rejects
+2: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+2/5 Test #2: quality_solver_auto ..............   Passed    0.02 sec
+test 3
+    Start 3: quality_solver_sse2
+
+3: Test command: D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_sse2.exe
+3: Working Directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+3: Test timeout computed to be: 10000000
+3: BACKEND SSE2
+3: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+3: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+3: PASS singular reduced solve rejects
+3: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+3/5 Test #3: quality_solver_sse2 ..............   Passed    0.02 sec
+test 4
+    Start 4: quality_solver_scalar
+
+4: Test command: D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\quality_solver_scalar.exe
+4: Working Directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+4: Test timeout computed to be: 10000000
+4: BACKEND SCALAR
+4: PASS reduced port steps match independent full Jacobian elimination, 2000 conducting/nonconducting cases
+4: PASS SIMD/scalar ordered matrix products bit-exact for 512 shapes, odd tails and guard values
+4: PASS singular reduced solve rejects
+4: PASS zero/negative screen yields zero finite currents and derivatives without divide-by-zero
+4/5 Test #4: quality_solver_scalar ............   Passed    0.02 sec
+test 5
+    Start 5: step3_rails_original_pcm
+
+5: Test command: D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\Release\step3_rails_test.exe
+5: Working Directory: D:/a/125A-Dystorator/125A-Dystorator/build/win-plugin
+5: Test timeout computed to be: 10000000
+5: PASS per-sample rail source scheduling matches frozen 398204e, channel/crunch fades/custom initial rails max=0 energy=264.055
+5/5 Test #5: step3_rails_original_pcm .........   Passed    0.15 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   0.30 sec

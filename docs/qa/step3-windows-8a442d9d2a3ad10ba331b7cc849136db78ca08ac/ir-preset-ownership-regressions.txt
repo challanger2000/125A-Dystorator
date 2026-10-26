@@ -1,0 +1,159 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 
+PASS VST3 exported program zero has a non-empty name (Steinberg Scan Programs)
+PASS A04 factory restores built-in
+PASS B03 foreign XML rejects without parameter/name mutation
+PASS B04 invalid WAV preserves accepted IR path
+PASS missing IR preserves accepted IR path
+PASS preset save/load restores IR A
+PASS A04 user built-in preset clears IR A
+PASS host state restores IR A
+PASS foreign
+PASS rejected preset preserves whole serialized scene
+PASS empty
+PASS rejected preset preserves whole serialized scene
+PASS truncated
+PASS rejected preset preserves whole serialized scene
+PASS future
+PASS rejected preset preserves whole serialized scene
+PASS version
+PASS rejected preset preserves whole serialized scene
+PASS nan
+PASS rejected preset preserves whole serialized scene
+PASS range
+PASS rejected preset preserves whole serialized scene
+PASS junk
+PASS rejected preset preserves whole serialized scene
+PASS unknown
+PASS rejected preset preserves whole serialized scene
+PASS duplicate
+PASS rejected preset preserves whole serialized scene
+PASS fractional
+PASS rejected preset preserves whole serialized scene
+PASS relative
+PASS rejected preset preserves whole serialized scene
+PASS unusable preset IR rejects
+PASS unusable preset IR preserves all parameters/name/path
+PASS unusable host IR preserves previous scene
+PASS unusable preset IR rejects
+PASS unusable preset IR preserves all parameters/name/path
+PASS unusable host IR preserves previous scene
+PASS preset disappears after directory scan: rollback
+PASS truncated host binary rollback
+PASS null host state rollback
+PASS failed save reports failure
+PASS failed save preserves scene and existing destination
+PASS legacy partial preset accepted
+PASS legacy Attack migration and built-in recall
+PASS IR accepted before prepare
+PASS decoded prepared IR matches original JUCE file-load audio
+PASS IR error is returned to caller
+PASS IR error is returned to caller
+PASS IR resampling budget rejected before activation, previous asset retained
+PASS truncated WAV payload rejected
+PASS IEEE-float NaN IR rejected
+PASS all IR rejects leave old cabinet selected
+IR rollback tail: max_error=0 reference_peak=0.0559017
+PASS failed loads preserve a non-silent pending convolution tail
+PASS rapid updates settle to last built-in request on audio
+PASS sample-rate reprepare retains accepted decoded asset
+PASS reprepared IR actually produces audio after source deletion
+PASS save complete audible scene
+PASS reload saved preset in another processor
+Scene recall: host_max_error=0 preset_max_error=0 reference_energy=0.00183032
+PASS recall comparison exercises non-silent amp/cab audio
+PASS host recall preserves actual stereo output after IR transition
+PASS preset reload preserves actual stereo output
+Processor external IR: max_error=0 effect=0.120332
+PASS actual processor external IR matches original JUCE file-load oracle
+Built-in return: max_error=0 curve_effect=0.121104 reference_energy=8.67733
+PASS factory return routes actual processor audio through audited built-in curve
+PASS IR control preparation completes concurrently with paced processing
+PASS IR process/fade/handoff does no C++ new/delete
+IR-only callback microseconds: p95=14.3 p99=17.1 max=35.7; deadline at 48k/64=1333.33 us (VM, no hard realtime claim)
+PASS compact stereo bus contract accepts 2-in/2-out
+PASS L-only drives independent left amp
+PASS L-only leaves right amp untouched
+PASS compact stereo bus contract accepts 2-in/2-out
+PASS R-only drives independent right amp (would fail original)
+PASS R-only leaves left amp untouched
+PASS write stereo impulse fixture
+PASS stereo impulse IR preflight succeeds
+PASS stereo IR preserves opposite-sign L/R impulses
+Cut processor oracle: max_error=0 effect=741.321 energy=62.9812 low=100 high=5000
+PASS actual post-cab LOW/HIGH CUT matches independent frame-based stereo DSP reference
+CORE fs=44100 max_delta=0 energy=10.1957 latency=5
+PASS both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+CORE fs=48000 max_delta=0 energy=7.42205 latency=5
+PASS both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+CORE fs=96000 max_delta=0 energy=1.32266 latency=4
+PASS both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=44100 max_delta=0 energy=0.501154
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=48000 max_delta=0 energy=0.41396
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=96000 max_delta=0 energy=1.05676
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=44100 max_delta=0 energy=0.467764
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=48000 max_delta=0 energy=0.416301
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=96000 max_delta=0 energy=1.10104
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS stereo/cuts scene saved
+STATE/FX automation max_delta=0 energy=0.0682812 new=0 delete=0
+PASS stereo IR/state and cuts automation identical despite every retired FX parameter changing
+PASS full processor automation callback does no observed C++ new/delete
+CAB bypass warm_max=3.85568e-07
+PASS CAB off/on keeps stereo convolution history warm through reactivation
+PASS compact stereo preset reload succeeds
+PASS compact preset restores IR and all new cut controls
+PASS legacy host state supplies neutral defaults for new cuts
+PASS stereo WAV inner data beyond EOF rejects even when RIFF size matches snapshot
+PASS restore valid stereo fixture before independent NaN test
+PASS NaN confined to right IR channel rejects whole stereo scene
+PASS valid stereo AIFF passes bounded container and decoder validation
+PASS actual stereo AIFF convolution preserves both channel responses
+PASS AIFF inner sound data beyond snapshot rejects without replacing valid stereo asset
+ROUTING fs=48000 downmix_max=0 mono_split_max=0 energy=1.76122
+PASS wet stereo-to-mono average and mono-to-stereo split survive reprepare, oversized blocks and hostile samples
+ROUTING fs=44100 downmix_max=0 mono_split_max=0 energy=3.52861
+PASS wet stereo-to-mono average and mono-to-stereo split survive reprepare, oversized blocks and hostile samples
+ROUTING fs=96000 downmix_max=0 mono_split_max=0 energy=3.41249
+PASS wet stereo-to-mono average and mono-to-stereo split survive reprepare, oversized blocks and hostile samples
+PASS rapid concurrent mono/stereo IR and clear settles to last coherent stereo scene without a later control call
+PASS stereo IR crossfade/handoff has no observed audio C++ new/delete
+PASS bypass bus setup
+BYPASS 1->1 latency=5 dry_max=0 warm_wet_max=0 energy=0.170632
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 1->2 latency=5 dry_max=0 warm_wet_max=0 energy=0.341265
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->1 latency=5 dry_max=0 warm_wet_max=0 energy=0.0448728
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->2 latency=5 dry_max=0 warm_wet_max=0 energy=0.243386
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS concurrent load/process completes with finite audio
+PASS preset save/reload and host restore succeed during audio processing
+PASS B01 no load command touches a published/rendered convolver
+133 checks, 0 failures

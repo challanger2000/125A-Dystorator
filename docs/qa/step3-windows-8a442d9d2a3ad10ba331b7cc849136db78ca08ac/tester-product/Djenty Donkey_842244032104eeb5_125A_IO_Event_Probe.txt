@@ -1,0 +1,12 @@
+125A Plugin Tester / Isolated I/O + Event Probe
+Plugin: D:\a\125A-Dystorator\125A-Dystorator/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3
+ExitCode: 0
+Result: PASS
+FirstFailure: None
+
+[PASS] Bus activation/restoration - 2 bus(es), 2 reversible transition(s), 0 fixed/rejected transition(s), 0 auxiliary audio input(s)
+[PASS] Bus arrangement roundtrip - current layouts accepted and preserved
+[PASS] Bus arrangement alternate - accepted mono/stereo change was truthful and reversible
+[INFO] Sidechain stress - Not applicable: no auxiliary audio input bus
+[INFO] Event stress - Not applicable: no event input bus
+[PASS] I/O and event probe completed for 1 AudioEffect class(es)

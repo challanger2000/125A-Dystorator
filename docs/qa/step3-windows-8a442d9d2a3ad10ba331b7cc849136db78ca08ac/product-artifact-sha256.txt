@@ -1,0 +1,17 @@
+
+Algorithm : SHA256
+Hash      : 410F3C76D6FF6B21DD53BCC1288E4C1ED5EF2F2C73B35A67C69E576925E6952F
+Path      : D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\VST3\Djenty Donkey.exp
+
+Algorithm : SHA256
+Hash      : FE1CA58A536005486FA38A85751171BC0719D80A753C7300CEA4504C5AD8407E
+Path      : D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\VST3\Djenty Donkey.lib
+
+Algorithm : SHA256
+Hash      : B729D13CA497313F019D1E633C85FDE0E6F0DE1D9AB1333A21572AA9EF7999A3
+Path      : D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\VST3\Djenty Donkey.vst3\Contents\Resources\moduleinfo.json
+
+Algorithm : SHA256
+Hash      : A72C18D3B70E473A8615CA48658CA20A2493786698F9850912C08B0F186E4361
+Path      : D:\a\125A-Dystorator\125A-Dystorator\build\win-plugin\DjentyDonkey_artefacts\Release\VST3\Djenty Donkey.vst3\Contents\x86_64-win\Djenty Donkey.vst3
+

@@ -1,0 +1,31 @@
+125A Plugin Tester / Editor Lifecycle Probe
+Version: 0.2.9
+Plugin: D:\a\125A-Dystorator\125A-Dystorator\build\win-tester\VST3\Release\125A_QA_BadEditor.vst3
+
+Stage: module load
+Stage: native host window class
+Stage: class 125A QA Bad Editor - component create
+Stage: class 125A QA Bad Editor - component initialize
+Stage: class 125A QA Bad Editor - controller acquire/connect
+Stage: class 125A QA Bad Editor - cycle 1 - createView
+Stage: class 125A QA Bad Editor - cycle 1 - getSize
+Stage: class 125A QA Bad Editor - cycle 1 - create HWND
+Stage: class 125A QA Bad Editor - cycle 1 - platform support
+Stage: class 125A QA Bad Editor - cycle 1 - setFrame
+Stage: class 125A QA Bad Editor - cycle 1 - attached
+Stage: class 125A QA Bad Editor - cycle 1 - runtime/message pump
+Stage: class 125A QA Bad Editor - cycle 1 - focus
+Stage: class 125A QA Bad Editor - cycle 1 - removed
+Stage: class 125A QA Bad Editor - cycle 1 - setFrame(nullptr)
+Stage: class 125A QA Bad Editor - cycle 1 - destroy HWND
+Stage: class 125A QA Bad Editor - cycle 1 - release view
+Stage: class 125A QA Bad Editor - cycle 1 - complete
+Stage: class 125A QA Bad Editor - cycle 2 - createView
+Stage: class 125A QA Bad Editor - cycle 2 - getSize
+Stage: class 125A QA Bad Editor - cycle 2 - create HWND
+Stage: class 125A QA Bad Editor - cycle 2 - platform support
+Stage: class 125A QA Bad Editor - cycle 2 - setFrame
+Stage: class 125A QA Bad Editor - cycle 2 - attached
+Stage: class 125A QA Bad Editor - cycle 2 - runtime/message pump
+Stage: class 125A QA Bad Editor - cycle 2 - focus
+Stage: class 125A QA Bad Editor - cycle 2 - removed

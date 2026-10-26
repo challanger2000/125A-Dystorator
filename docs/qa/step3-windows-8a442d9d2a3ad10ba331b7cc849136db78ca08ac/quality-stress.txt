@@ -1,0 +1,5 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe "stress"
+PASS concurrent stereo IR/preset/host-state/mode/quality and host bypass complete with finite audio
+PASS concurrent mode/IR callback has no C++ new/delete
+PASS concurrent last mono/ECO selection becomes active
+3 checks, 0 failures

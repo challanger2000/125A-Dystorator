@@ -1,0 +1,56 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe 
+PCM fs=44100 channel=0 drive=-1 max=0 residual_db=-3012.93 energy=19.6376
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=0 drive=0 max=0 residual_db=-3015.01 energy=31.7037
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=0 drive=1 max=0 residual_db=-3016.47 energy=44.3776
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=-1 max=0 residual_db=-3012 energy=15.8385
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=0 max=0 residual_db=-3011.7 energy=14.808
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=1 drive=1 max=0 residual_db=-3011.83 energy=15.2411
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=-1 max=0 residual_db=-3011.13 energy=12.9604
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=0 max=0 residual_db=-3010.87 energy=12.2075
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=44100 channel=2 drive=1 max=0 residual_db=-3010.93 energy=12.3817
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=-1 max=0 residual_db=-3013.05 energy=20.1927
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=0 max=0 residual_db=-3015.05 energy=31.9887
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=0 drive=1 max=0 residual_db=-3016.56 energy=45.2733
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=-1 max=0 residual_db=-3012.36 energy=17.2106
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=0 max=0 residual_db=-3011.73 energy=14.9044
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=1 drive=1 max=0 residual_db=-3011.86 energy=15.3586
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=-1 max=0 residual_db=-3011.27 energy=13.4084
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=0 max=0 residual_db=-3010.92 energy=12.3526
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=48000 channel=2 drive=1 max=0 residual_db=-3010.98 energy=12.5349
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=-1 max=0 residual_db=-3014.9 energy=30.9003
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=0 max=0 residual_db=-3015.98 energy=39.5912
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=0 drive=1 max=0 residual_db=-3017.68 energy=58.6217
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=-1 max=0 residual_db=-3013.73 energy=23.5951
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=0 max=0 residual_db=-3013.15 energy=20.6637
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=1 drive=1 max=0 residual_db=-3013.26 energy=21.1648
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=-1 max=0 residual_db=-3012.83 energy=19.1925
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=0 max=0 residual_db=-3012.72 energy=18.7112
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+PCM fs=96000 channel=2 drive=1 max=0 residual_db=-3012.74 energy=18.7742
+PASS HIGH vs pinned 398204e PCM, dynamic knobs/channel/tube-set (no threshold relaxation)
+27 checks, 0 failures

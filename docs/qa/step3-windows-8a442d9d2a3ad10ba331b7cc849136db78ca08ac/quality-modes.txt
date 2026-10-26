@@ -1,0 +1,68 @@
+COMMAND: D:\a\125A-Dystorator\125A-Dystorator/build/win-integration/ir_presets_test_artefacts/Release/ir_presets_test.exe "modes"
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS dense switches finish latest request without resetting active warm/fade
+PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+PASS save mode/quality preset
+PASS host state restores actual audible mono/ECO bank
+PASS preset restores mode/quality selection
+PASS preset reload drives actual mono/ECO signal path
+PASS legacy host scene migrates to original STEREO/HIGH defaults
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS dense switches finish latest request without resetting active warm/fade
+PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+PASS save mode/quality preset
+PASS host state restores actual audible mono/ECO bank
+PASS preset restores mode/quality selection
+PASS preset reload drives actual mono/ECO signal path
+PASS legacy host scene migrates to original STEREO/HIGH defaults
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS MONO averages R-only into one audible amp and duplicates output before cabinet
+PASS actual processor accepts both AMP MODEs and all effective host-rate quality factors
+PASS quality/mode switches preserve the truthful padded HIGH latency
+PASS dense switches finish latest request without resetting active warm/fade
+PASS live switches produce finite non-silent PCM with zero callback C++ new/delete
+PASS save mode/quality preset
+PASS host state restores actual audible mono/ECO bank
+PASS preset restores mode/quality selection
+PASS preset reload drives actual mono/ECO signal path
+PASS legacy host scene migrates to original STEREO/HIGH defaults
+66 checks, 0 failures
