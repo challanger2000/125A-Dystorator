@@ -1,0 +1,11 @@
+{
+  "branch": "dev/compact-stereo-on-ir-fix-20261026",
+  "protectedRemoteRefs": {
+    "refs/heads/fix/ir-presets-block1-20261026": "1009fa6906746f46516107baf059bf12d473a04f",
+    "refs/heads/main": "81cc90dfd076f1510c02bf6ccc8318575dc4aa45"
+  },
+  "sourceTree": "23fe6fa178f2248c23726a31ad080a82f9e991bc",
+  "noMergeToMain": true,
+  "GUIAndParameterFilesByteIdenticalToBaseline": true,
+  "FINAL": "NOT APPROVED"
+}

@@ -4,7 +4,7 @@
 
 ## Kandidat und verbindliche Grenzen
 
-Dieser Entwicklungsbericht enthält tatsächlich ausgeführte Linux-Prüfungen und die unten einzeln belegten Windows-Läufe einschließlich ihrer Fehler. Der zuletzt ergänzte Produktstand `40f16554adac6d4dd483ca556fab6d619933b0aa` und der Testhoststand `9226bdc738354c4a396b1e3fa2d1d1f0e392c441` warten auf ihren gezielten Windows-Nachweis; frühere PASS werden nicht automatisch auf ihn übertragen. CPU-Daten sind von abgelehnten Prototypen und Profiling-Zeiten getrennt.
+Dieser Entwicklungsbericht enthält tatsächlich ausgeführte Linux-Prüfungen und die unten einzeln belegten Windows-Läufe einschließlich ihrer Fehler. Die Windows-Funktionsprüfung des Produkt-Source-Trees `23fe6fa178f2248c23726a31ad080a82f9e991bc` ist unter Quellcommit `8a442d9d2a3ad10ba331b7cc849136db78ca08ac` ausgeführt. Die vollständige Windows-CPU-Wiederholung ist gemessen:33/48 Fälle FAIL, keine nennenswerte zusätzliche Einsparung belegt. Keine FINAL-Freigabe. CPU-Daten sind von abgelehnten Prototypen und Profiling-Zeiten getrennt.
 
 Pflichteinstieg und relevante Engineering-/QA-Vorgaben wurden erneut geprüft: `125A-Engineering/START-HERE.md`, unveränderter Stand `b6df84b0a04d01e240cff745ccebf60d67750486`; README, relevante Guardrails/Standards, Release-/Realtime-/Audio-Fixture-QA, Oversampling-Research und Roadmap. „verstanden“ bestätigt. Kein genehmigtes Windows-FULL-Paket dieses Entwicklungsforks erfunden. Benutzerdefinierte Arbeitsbasis ist der oben genannte Commit.
 
@@ -26,7 +26,7 @@ Der Profiling-Lauf misst im Mittel 12700,4 µs/Callback, der anschließende unpr
 
 **Verworfen:** Separater SIMD-Eliminationshelfer und vollständig isolierte SIMD-Port-Solve-Variante. Beide erhalten mathematisch dieselbe Elimination; der erste besteht 12000 bitgenaue Matrizenprüfungen pro AVX/SSE2/Scalar-Backend. Trotzdem kein belegter End-to-End-Vorteil: der erste Kandidat im HIGH-Mittel der 16 gepaarten Fälle −8,77 % Einsparung, also langsamer; die zweite Variante ebenfalls kein Gewinn im erneuten langen Callback-Lauf. VM-Drift begrenzt kausale Prozentbehauptungen. Die Entscheidung ist konservativ: **keiner dieser Solver-Kandidaten ist im Produkt aktiv**, `PortSolve.h` bleibt bytegleich zur Basis. Prototypen, fehlerfreie Rechenprüfungen und negative Performance-Daten bleiben zur Nachvollziehbarkeit unter Tests/Evidenz erhalten.
 
-## Bisher tatsächlich ausgeführt
+## Ausgeführte Prüfungen
 
 | Anforderung | Nachweis | Status / Grenze |
 |---|---|---|
@@ -36,10 +36,10 @@ Der Profiling-Lauf misst im Mittel 12700,4 µs/Callback, der anschließende unpr
 | Bestehende Klang-/Fehlerreferenzen | alter Tone-Test und Fault-Recovery, keine neuen Referenzen | PASS: 74 Tone-Fälle; Fault-Rohlog inklusive Extremsignalen |
 | Echter Linux-VST3 | alter Wrapper-Vertrag plus Transport/rasche Qualitäts-/Moduswechsel/Bypass, IR-Projekt auf Disk speichern/Instanz zerstören/frisch laden, fehlende IR mit Gain-Rollback, Rückkehr Built-in | PASS; tatsächliche PCM-Orakel für Transport und IR-Recall Maxdelta 0; kein Windows-/ASIO-Nachweis |
 | Erweiterte Aliasdaten | 64 Render, 44,1/48 kHz, 1/3/5/9 kHz, −30,46/−18,42 dBFS, HIGH/STANDARD/ECO/16×-Vergleich | PASS nur für endliche/nichtstumme Messdaten; keine Klangfreigabe |
-| Endgültige CPU-Matrix | 44,1/48 kHz × Mono/Stereo × 128/256 × alle Qualitäten, offline/getaktet, 160 gemessene Blöcke je Fall | MEASURED: vier Läufe; Echtzeit-Gate FAIL (nachher 77/96 Fälle FAIL), Details unten |
-| Windows Release / tatsächlicher VST3 | gebündelter gezielter Workflow vorbereitet | NOT RUN bis belegtes CI-Ergebnis |
-| Windows Callback-Heap | processweite RtlAllocateHeap/RtlReAllocateHeap/RtlFreeHeap-Hooks, nur Audio-Thread-Zeitfenster, tatsächliche DLL-/CRT-Grenze | NOT RUN; Host-only `operator new` wäre hierfür unzureichend |
-| 125A Tester / Steinberg | Tester-Source `3dcf3fe607008e520dcf20d1f793d9c534a9b9e1` (v0.2.9), SDK `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96` (3.8.1 build84), Selbsttests und Positiv-/Negativfixtures vor Produkturteil vorgesehen | NOT RUN; kein geprüftes Tester-Releasepaket aus dem veralteten CURRENT-Eintrag erfunden |
+| Linux-CPU-Matrix | 44,1/48 kHz × Mono/Stereo × 128/256 × alle Qualitäten, offline/getaktet, 160 gemessene Blöcke je Fall | MEASURED: vier Läufe; Echtzeit-Gate FAIL (nachher 77/96 Fälle FAIL), Details unten |
+| Windows Release / tatsächlicher VST3 | vollständiger MSVC-x64-Release/LTO-Build und realer Wrapper-/State-/IR-/Transport-/Bypass-Test | PASS unter `8a442d9`,13/13 Host-Gates; reale DAW separat NOT RUN |
+| Windows Callback-Heap | processweite RtlAllocateHeap/RtlReAllocateHeap/RtlFreeHeap-Hooks, nur Audio-Thread-Zeitfenster, tatsächliche DLL-/CRT-Grenze | PASS:0 beobachtete Alloc/Realloc und Frees, positiver Selbsttest, IR bis16384; keine Aussage über sämtliche OS-Aufrufe |
+| 125A Tester / Steinberg | Tester-Source `3dcf3fe607008e520dcf20d1f793d9c534a9b9e1` (v0.2.9), SDK `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96` (3.8.1 build84), Selbsttests und7 Positiv-/Negativfixtures | PASS: Tester40/40, Steinberg47/47; eigenes Build aus gepinnter Quelle, kein verifiziertes Releasepaket aus dem veralteten CURRENT-Eintrag erfunden |
 | Tatsächlicher i9-11900K, ASIO/Studio One, echte DI und Hörvergleich | keine entsprechende Hardware/DAW oder freigegebene DI in dieser Umgebung | NOT RUN, keine Aussetzer-/Klangfreigabe |
 
 ## Endgültige Linux-CPU-Matrix – kein zusätzlicher Echtzeit-PASS
@@ -91,9 +91,9 @@ Schon die neuen Messungen zeigen erhebliche Pegel-/Frequenzabhängigkeit. ECO is
 - PASS: reale Before-/After-Release-VST3s; Root5/5; Tone74; Fault;132 bisherige IR-/Preset-/Ownership-Prüfungen; Quality/Modes66, historische PCM27, Stress3; neue HIGH-PCM27 zur Arbeitsbasis; Mono-/Stereo-Orakel;64 Aliasdaten endlich/nichtstumm.
 - FAIL: eigener realer VST3-Testhost vor der ersten Ergebniszeile mit `0xC0000005`; beide CPU-Aufrufe mit `0xC0000409`. **Keine CPU-Matrix gemessen.** Der Prozessstatus beweist einen Testfehler, nicht dessen Ursache; keine vermeintlichen Deadline-Zahlen aus diesen Aufrufen.
 - PASS: unveränderter125A Tester aus gepinnter Quelle gebaut; Job-Object-/Validator-Selbsttest; sieben positive/negative Fixtures mit den jeweils erwarteten konkreten Diagnosen. Die negativen Exit1 sind ausschließlich für die absichtlich defekten Fixtures erwartet.
-- FAIL: tatsächlicher125A-Produktbericht39 PASS/0 WARNING/1 FAIL. Steinberg46/47: `Scan Programs` beanstandet `Programlist 000->Program 000: has no name!!!`. `PluginProcessor.h::getProgramName` liefert bei angebotenem Programm0 einen leeren String. Separates Windows-I/O, fünf frische Instanzen/State-Roundtrips und fünf Editor-Lebenszyklen bestehen; das ersetzt keine manuelle GUI-/DAW-Prüfung. 64-bit-Processing ist ausdrücklich nicht unterstützt; die entsprechenden Validator-„Succeeded“-Einträge sind keine ausgeführten Double-DSP-Tests.
+- FAIL: tatsächlicher125A-Produktbericht39 PASS/0 WARNING/1 FAIL. Steinberg46/47: `Scan Programs` beanstandet `Programlist 000->Program 000: has no name!!!`. `PluginProcessor.h::getProgramName` liefert bei angebotenem Programm 0 einen leeren String. Separates Windows-I/O, fünf frische Instanzen/State-Roundtrips und fünf Editor-Lebenszyklen bestehen; das ersetzt keine manuelle GUI-/DAW-Prüfung. 64-bit-Processing ist ausdrücklich nicht unterstützt; die entsprechenden Validator-„Succeeded“-Einträge sind keine ausgeführten Double-DSP-Tests.
 
-[Vollständige Rohdaten](qa/step3-windows-d3238810d0d6a2d2495d1c8eaccacb97f95670d8/results.json). Absturzdiagnostik (ungepufferte Stufen, C++-/CRT-/SEH-Fehler samt Modul/Stack) wird ausschließlich im Testhost ergänzt. Kein Ausblenden der Fehler, kein Lockern der Validator-Anforderung. Der ergänzte echte Processor-Test reproduziert den leeren Namen als FAIL: [133 Checks, genau dieser eine Fehler](qa/step3-cpu-20261026/host-program-before.txt); Korrektur: nur Programm0 erhält den festen Namen `Default`. Danach PASS Name und unveränderter vollständiger Szenenzustand beim erneuten Anwählen, [2 Checks](qa/step3-cpu-20261026/host-program-after.txt). Parameter/IDs und Preset-Namen bleiben unverändert; die Windows-Validator-Wiederholung bleibt bis zum Ergebnis offen.
+[Vollständige Rohdaten](qa/step3-windows-d3238810d0d6a2d2495d1c8eaccacb97f95670d8/results.json). Absturzdiagnostik (ungepufferte Stufen, C++-/CRT-/SEH-Fehler samt Modul/Stack) wird ausschließlich im Testhost ergänzt. Kein Ausblenden der Fehler, kein Lockern der Validator-Anforderung. Der ergänzte echte Processor-Test reproduziert den leeren Namen als FAIL: [133 Checks, genau dieser eine Fehler](qa/step3-cpu-20261026/host-program-before.txt); Korrektur: nur Programm 0 erhält den festen Namen `Default`. Danach PASS Name und unveränderter vollständiger Szenenzustand beim erneuten Anwählen, [2 Checks](qa/step3-cpu-20261026/host-program-after.txt). Parameter/IDs und Preset-Namen bleiben unverändert; die folgende Windows-Validator-Wiederholung unter `8a442d9` besteht47/47.
 
 ## Zusätzliche Sanitizer-Prüfung des IR-Kandidaten
 
@@ -109,13 +109,13 @@ Die bisherige C++-new/delete-Prüfung erfasst direkte C-Allokationen nicht. Quel
 
 **PASS nach Reparatur:** 10 Fälle (Mono/Stereo ×128/256/8192/**8193**/16384), null beobachtete C-Heap-Aufrufe. Vergleich gegen unmodifizierte große JUCE-Convolution über sämtliche PCM-Samples: maximal8,84756e−9, unveränderte Grenze1e−6; bis8192 Delta0. Zusätzlich gebautes echtes Linux-VST3 mit IR/Host-Reprepare16384: Delta0 zur äquivalenten Referenz, nichtstumm; alle132 bestehenden IR-/Preset-/Routing-/Ownership-Checks erneut PASS. [Nachher](qa/step3-cpu-20261026/large-ir-after.txt), [reales VST3](qa/step3-cpu-20261026/large-ir-host.txt).
 
-Die vorherige „bytegleiches Cabinet“-Hashliste bezieht sich ausdrücklich auf den CPU-Kandidaten4efb20e. Dieser spätere, belegte Grenzfall erweitert die Implementierung, ohne die IR-Reparaturverträge aufzugeben. Die CPU-Matrix4efb20e verwendet Built-in-Cab und128/256; sie wird nicht als Messung einer langen IR ausgegeben. Der abschließende Windows-Lauf muss den neuen Quellstand und den Prozessheap auch bei16384 verifizieren. **Windows-Nachweis dieses Zusatzes bis dahin NOT RUN.**
+Die vorherige „bytegleiches Cabinet“-Hashliste bezieht sich ausdrücklich auf den CPU-Kandidaten4efb20e. Dieser spätere, belegte Grenzfall erweitert die Implementierung, ohne die IR-Reparaturverträge aufzugeben. Die CPU-Matrix4efb20e verwendet Built-in-Cab und128/256; sie wird nicht als Messung einer langen IR ausgegeben. **Windows-PASS unter `8a442d9`:**10/10 IR-Heap-Grenzfälle sowie tatsächliche DLL bei16384 ohne beobachteten Heap-Aufruf, siehe folgenden Abschnitt.
 
 ## Windows-Funktionsnachweis des bereinigten Produkts
 
-[Run40386792595](https://github.com/challanger2000/125A-Dystorator/actions/runs/40386792595), Source`8a442d9d2a3ad10ba331b7cc849136db78ca08ac`, Windows2022/AMD EPYC9V74,2Kerne/4Threads, MSVC-Release/LTO. Vollständige Befunde in Dokumentationscommit`06ad8f10407a86503307ebfb936df4425c8bb5de`. **53 einzelne Build-/Test-Gates PASS; ausschließlich die beiden CPU-Aufrufe FAIL.** Keine FINAL-Freigabe aus dem Tool-Text `RELEASE: PASS` ableiten.
+[Run 40386792595](https://github.com/challanger2000/125A-Dystorator/actions/runs/40386792595), Quellcommit `8a442d9d2a3ad10ba331b7cc849136db78ca08ac`, Windows2022/AMD EPYC9V74,2Kerne/4Threads, MSVC-Release/LTO. Vollständige Befunde in Dokumentationscommit`06ad8f10407a86503307ebfb936df4425c8bb5de`. **53 einzelne Build-/Test-Gates PASS; ausschließlich die beiden CPU-Aufrufe FAIL.** Keine FINAL-Freigabe aus dem Tool-Text `RELEASE: PASS` ableiten.
 
-- PASS: Windows-x64-VST3 Before/After, Root5/5, Tone74, Fault,133 IR/Preset/Routing/Ownership-Checks,66 Modes/Recall,3 Concurrent-Stress, historische und neue27er HIGH-PCM-Orakel, Mono/Stereo-Referenzen und64 endliche Aliasdaten. Beide HIGH-Orakel Maxdelta0.
+- PASS: Windows-x64-VST3 Before/After, Root5/5, Tone74, Fault,133 IR/Preset/Routing/Ownership-Checks,66 Modes/Recall,3 Concurrent-Stress, historische und neue27er HIGH-PCM-Orakel, Mono/Stereo-Referenzen und64 endliche Aliasdaten. Neues Orakel zur bestätigten398204e-Arbeitsbasis: Maxdelta0. Historisches8ca580d-Orakel: Maxdelta2,98023e−8, innerhalb seiner unveränderten1e−6-/−100dB-Grenzen.
 - PASS: tatsächliche13 VST3-Host-Gates, darunter positiver Heap-Selbsttest, Stop/Play/Cycle mit dichten Mode/Quality/Bypass-Requests, IR-Disk-Save/Destroy/Fresh-Recall, fehlendeIR/Gain-Rollback und Built-in-Rückkehr. Transport-, Recall- und16384er PCM jeweils Maxdelta0.
 - PASS: echter Prozessheap unterhalb getrennter Host-/Plugin-CRTs: **0 Alloc/Realloc,0 Frees** während der beobachteten Callbacks. Separater positiver Heap-Control besteht. Mono/Stereo-IR ×128/256/8192/8193/16384:10/10,0Heap, größtes Sampledelta8,84756e−9 zur unmodifizierten JUCE-Referenz. Keine Behauptung über sämtliche OS-Speicher-/Lock-/Treiberaufrufe.
 - PASS: unveränderter125A Tester v0.2.9: **40 PASS/0 WARNING/0 FAIL**, Steinberg **47/47**, Selbsttests und alle7 Good/Bad-Fixtures mit konkretem Erwartungstext. Automatisierte Editor-Zyklen/I/O/Fresh-State enthalten, manuelle Bedien-/DAW-Abnahme NOT RUN. 64-bit-DSP weiterhin nicht unterstützt.
@@ -124,6 +124,54 @@ Die vorherige „bytegleiches Cabinet“-Hashliste bezieht sich ausdrücklich au
 [Rohstatus](qa/step3-windows-8a442d9d2a3ad10ba331b7cc849136db78ca08ac/results.json), [tatsächlicher DLL-/Heap-/Transport-Test](qa/step3-windows-8a442d9d2a3ad10ba331b7cc849136db78ca08ac/packaged-vst3-host.txt), [IR-Heap-Grenzen](qa/step3-windows-8a442d9d2a3ad10ba331b7cc849136db78ca08ac/large_ir_heap.txt), [Preflight vor Korrektur](qa/step3-cpu-20261026/cpu-fixture-reproduced-failure.txt), [danach](qa/step3-cpu-20261026/cpu-fixture-after.txt).
 
 Der anschließende gezielte CPU-Lauf darf lange Funktionssuiten nur überspringen, wenn Source-Tree und Root-CMake exakt zu diesem funktional geprüften Commit passen und alle benötigten früheren Funktionsgates belegt PASS sind. Diese Identität wird im Runner geprüft und protokolliert. Vollsuiten werden im CPU-Lauf als NOT RUN vermerkt und mit ihrer ursprünglichen Evidenz verknüpft; keine neue Ausführung behauptet. Heap-Selbsttest, tatsächlicher DLL-Host und der neue CPU-Preflight werden trotzdem erneut ausgeführt. Aktueller Produkt-Source-Tree: `23fe6fa178f2248c23726a31ad080a82f9e991bc`.
+
+## Windows-CPU-Vorher/Nachher – gemessen, Leistungsziel FAIL
+
+[Run 40406692088](https://github.com/challanger2000/125A-Dystorator/actions/runs/40406692088), getesteter Quellcommit `0d8aa76bc9450f1f057ae06c02ef5164e55b5924`, Rohbefundcommit `dd85086abc6f52303d75ca59c073b6f54298005d`. Windows2022, **AMD EPYC9V45**,2Kerne/4Threads, CIM-MaxClock2596MHz. Das ist weder der i9-11900K noch derselbe Runner wie die Funktionsprüfung aufEPYC9V74. Verglichen werden ausschließlich Before und After **innerhalb dieses einen CPU-Laufs**.
+
+PASS: beide Release-VST3s frisch aus gepinnten Sources gebaut; Source-Tree/Root-CMake zum funktional geprüften8a442d9 identisch; positiver Prozessheap-Test und tatsächliche13 DLL-/State-/IR-/Transport-/Heap-Gates erneut bestanden. Neuer CPU-Preflight jeweils8/8 vor und nach der Optimierung. Die langen nativen Suiten und der unabhängige Tester/Validator sind in diesem gezielten CPU-Lauf **NOT RUN**, ihre ursprünglichen PASS unter8a442d9 werden über `functional-reference.json` separat belegt.
+
+**48/48 angeforderte Konfigurationen je Version vollständig gemessen**,44,1/48k ×MONO/STEREO ×ECO/STANDARD/HIGH ×128/256 ×offline/getaktet, je160 gemessene Callbacks nach0,2s Warm-up. Tatsächliche vollständige Release-DLL inkl. VST3-Wrapper, Built-in-Cab/Cuts an, RED/Gain9/Drive8/DriveVolume7, beide Kanäle nichtstumm. Alle96 Komponenten-State-Prüfungen PASS; gedruckte linke/rechte Ausgangsenergien in allen48 Paaren gleich. Der unabhängige27er PCM-Test bleibt das strengere Audio-Orakel, kein Ableiten von Klanggleichheit allein aus Energie.
+
+| Windows-CI-Messung | Vorher398204e | Nachher |
+|---|---:|---:|
+| Konfigurationen mit bestandenem Echtzeit-Gate |18/48 |15/48 |
+| Konfigurationen mit mindestens einer Deadline-Verletzung |**30/48 FAIL** |**33/48 FAIL** |
+| Callback-Overruns, gemessene Wallzeit >Blockdeadline |2568/7680 |2591/7680 |
+| getaktete Fertigstellungs-Misses |1887/3840 |1936/3840 |
+
+Mittel der16 relativen Laufmittel-Unterschiede je Qualität: HIGH **+0,19% Einsparung**, STANDARD **−1,08%**, ECO **−1,02%** (negative Einsparung bedeutet in diesem Lauf langsamer). **Keine nennenswerte zusätzliche Windows-CPU-Reduktion belegt; Priorität1 bleibt nicht erreicht.** Ein einzelnes Vorher/Nachher-Paar auf geteilter CI erlaubt weder eine robuste Gewinnbehauptung noch die kausale Zuordnung der kleinen negativen Unterschiede. Windows-ABBA-Wiederholungen: NOT RUN; keine zusätzliche CI-Runde, um einen günstigeren Messwert zu suchen. Die mathematisch gleichwertigen Umstellungen bleiben als geprüfter Entwicklungsstand ohne Leistungs-/FINAL-Freigabe; ihre Zielhardwarebewertung ist offen.
+
+HIGH, getaktet; Zeitenµs. Jede Zelle Vorher → Nachher. Alle p95/p99 sind echte **jeweilige Fallquantile**, keine aus Quantilen gemittelten Sammelwerte.
+
+| Fs / Amp / Block | Mittel | p95 | p99 | Maximum | Callback-Overruns /160 | Scheduler-Misses /160 |
+|---|---:|---:|---:|---:|---:|---:|
+| 44.1k / MONO /128 | 2366.92 → 2284.36 | 2436.80 → 2354.80 | 2498.60 → 2422.60 | 2594.00 → 2441.50 | 0 → 0 | 108 → 87 |
+| 44.1k / MONO /256 | 4673.72 → 4747.50 | 4840.20 → 4912.10 | 4975.00 → 4987.80 | 5530.40 → 4999.10 | 0 → 0 | 50 → 40 |
+| 44.1k / STEREO /128 | 5095.24 → 5051.95 | 5211.50 → 5176.60 | 5757.00 → 5221.90 | 6406.90 → 5275.00 | 160 → 160 | 160 → 160 |
+| 44.1k / STEREO /256 | 10688.50 → 10025.90 | 12730.00 → 10251.30 | 17721.80 → 10539.90 | 18222.40 → 10917.60 | 160 → 160 | 160 → 160 |
+| 48k / MONO /128 | 2345.72 → 2382.20 | 2439.50 → 2455.50 | 2749.70 → 2553.80 | 3029.50 → 2908.20 | 2 → 1 | 129 → 130 |
+| 48k / MONO /256 | 4650.33 → 4725.92 | 4752.50 → 4848.50 | 4905.30 → 7370.70 | 5130.90 → 7508.40 | 0 → 2 | 88 → 99 |
+| 48k / STEREO /128 | 5279.01 → 4944.81 | 8204.40 → 5110.20 | 9763.70 → 5191.20 | 11143.80 → 5285.00 | 160 → 160 | 160 → 160 |
+| 48k / STEREO /256 | 9952.76 → 10102.30 | 10115.10 → 11004.20 | 14626.20 → 16999.70 | 16154.60 → 19878.50 | 160 → 160 | 160 → 160 |
+
+Blockdeadline:44,1k/128=2902,49µs;44,1k/256=5804,99µs;48k/128=2666,67µs;48k/256=5333,33µs. HIGH-Stereo verfehlt hier schon im Mittel die Blockdeadline. Kein stummer Kanal/abgeschalteter Drive als vermeintliche Einsparung; kein abgesenkter Solver- oder Testgrenzwert.
+
+[Alle48 Vorherfälle](qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924/cpu-before.csv), [alle48 Nachherfälle](qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924/cpu-after.csv), [paarweiser Vergleich](qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924/cpu-comparison.csv), [Zusammenfassung inkl. Rohlog-SHA256](qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924/cpu-summary.json), [Original-Runnerstatus](qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924/results.json). Reproduzierbare Auswertung: `python docs/qa/step3-cpu-20261026/extract_windows_cpu.py docs/qa/step3-windows-0d8aa76bc9450f1f057ae06c02ef5164e55b5924`. Die gedruckten Fallaggregate bleiben unverändert; einzelne Callback-Dauern wurden vom Host nicht als separate Zeitreihe gespeichert.
+
+## Vollständige Laufprovenienz
+
+| Actions-Run | getesteter Quellstand | Tatsächlicher Ausgang |
+|---|---|---|
+| [40375703107](https://github.com/challanger2000/125A-Dystorator/actions/runs/40375703107) |4efb20e | Release-Build PASS, Testhost-Compiler FAIL; nachgelagert NOT RUN |
+| [40378455766](https://github.com/challanger2000/125A-Dystorator/actions/runs/40378455766) |d323881 | native Audio-/IR-Tests PASS; Host-/CPU-Aufrufe FAIL; Programlist46/47 |
+| [40382507982](https://github.com/challanger2000/125A-Dystorator/actions/runs/40382507982) |d11df7f | neuer IR-Quellstand gebaut/native Regressionen PASS; großer Heap-Probetest und DLL-Host AV, CPU-Setup FAIL, Programlist46/47; keine verwertbare Heap-/CPU-Freigabe |
+| [40385148764](https://github.com/challanger2000/125A-Dystorator/actions/runs/40385148764) |40f1655 | in Warteschlange ersetzt, kein Windows-Job/Build ausgeführt, NOT RUN |
+| [40386272396](https://github.com/challanger2000/125A-Dystorator/actions/runs/40386272396) |9226bdc | in Warteschlange ersetzt, kein Windows-Job/Build ausgeführt, NOT RUN |
+| [40386792595](https://github.com/challanger2000/125A-Dystorator/actions/runs/40386792595) |8a442d9 |53 Build-/Funktionsgates PASS, einschließlich Heap und47/47 Validator; zwei CPU-Setup-Aufrufe FAIL |
+| [40406692088](https://github.com/challanger2000/125A-Dystorator/actions/runs/40406692088) |0d8aa76 | gezielter CPU-Lauf:12 Build-/Host-/Setupgates PASS; zwei vollständige CPU-Matrizen wegen Deadlines FAIL; Vollsuiten NOT RUN mit geprüftem Funktionsreferenz-Link |
+
+Alle fünf ausgeführten Windows-Jobs haben daher korrekt den Gesamtstatus **FAIL**; ein bestandener Funktionsabschnitt macht den gesamten Schritt nicht grün. Die zwei abgelösten Warteschlangenstände haben keinen zusätzlichen Windows-Build ausgeführt. Der falsche Anzeigename gehörte zum neu ergänzten Benchmark und war kein Plugin-Parameterfehler. Der gezielte letzte Lauf dauert laut nativen Einzellogs rund8,7 Minuten; die schon belegten langen Funktionssuiten wurden nicht erneut gebaut/ausgeführt. Keine weiteren Builds für die Dokumentationsübergabe.
 
 ## Windows-Verfahren und Reproduktion
 
@@ -138,25 +186,53 @@ Die neuen PCM-Orakel prüfen zusätzlich beide Referenz-/Kandidatenströme und a
 
 Nach der Metadatenkorrektur: PASS133/133 echte IR/Preset/Routing/Ownership-Checks und PASS11/11 gebautes Linux-Release-VST3, einschließlich strenger Endlichkeitsprüfung beider PCM-Ströme. [Integration](qa/step3-cpu-20261026/final-ir-preset-regressions.txt), [VST3](qa/step3-cpu-20261026/final-linux-vst3-host.txt). Alle17 eingefrorenen Baseline-Header erneut gegen398204e inklusive SHA256 und ausschließlich Namespace-Ersetzung geprüft. [Produkt-Manifest](qa/step3-cpu-20261026/product-source-40f1655.json).
 
-Der Windows-Heap-Beobachter wird außerdem gegen Zugriffe während der Thread-/Loader-Initialisierung abgesichert: Hooks lesen zuerst einen reservierten festen Win32-TEB-TLS-Slot, bevor C++-TLS-Counter berührt werden. Scope initialisiert die Counter, bevor dieser Slot aktiv wird; GetLastError bleibt erhalten. Fehlende Slots, fehlgeschlagene Installation/Selbsttest oder Detach sind Fehler, kein PASS. Das behebt eine unsichere Annahme des Beobachters; die konkrete Absturzursache und Funktionsfähigkeit bleiben bis zum neuen Windows-Ergebnis unbestätigt. Ausschließlich Testhost, keine Plugin-Hooks.
+Der Windows-Heap-Beobachter wird außerdem gegen Zugriffe während der Thread-/Loader-Initialisierung abgesichert: Hooks lesen zuerst einen reservierten festen Win32-TEB-TLS-Slot, bevor C++-TLS-Counter berührt werden. Scope initialisiert die Counter, bevor dieser Slot aktiv wird; GetLastError bleibt erhalten. Fehlende Slots, fehlgeschlagene Installation/Selbsttest oder Detach sind Fehler, kein PASS. Das behebt eine unsichere Annahme des Beobachters; die Funktionsfähigkeit ist nun unter `8a442d9` durch positive Controls und tatsächliche DLL-Callbacks bestätigt. Die früheren AVs besitzen keine verwertbaren Stacklogs; deren exakter historischer Faulting-Zugriff wird deshalb nicht nachträglich als bewiesen ausgegeben. Ausschließlich Testhost, keine Plugin-Hooks.
 
 
 ## Anforderungs-/Testmatrix und Grenzen
 
 | Vertrag und Kette | Positiver Nachweis | Negativ-/Grenzfall und tatsächliches Orakel | Ergebnis / verbleibende Grenze |
 |---|---|---|---|
-| HIGH: Controls → beide Amp-Lanes → PCM |27 Render zur eingefrorenen398204e-Basis,44,1/48/96k, alle Kanäle/Drive-Modelle | wechselnde Gain/Presence/Tube/Channel/Boost/Model; finite Referenz und echter Samplefehler statt nur Pegelvergleich | Linux und Windows2 PASS Maxdelta0; reales DI/level-matched Hören NOT RUN |
-| Rails → aktive/fadende Schaltung → Audio/Versorgungsströme |24000 Samples gegen separat eingefrorenen Preamp | Custom-Initialrails311/326, Sample-Railmodulation, Kanal/Crunch-Blenden; alle sechs Werte endlich und exakt gleich | Linux PASS; frühere Windows-Railprüfung PASS, verschärfte Endlichkeitsassertion im neuen Lauf offen |
-| Solver/Matrix/CPU-Dispatch | unabhängiger vollständiger Jacobian, Scalar/SSE2/Auto; Root5/5 | Conducting/Nonconducting-Ports, Pivot/Singularität, SIMD-Restlängen/Guards; bestehende Grenzen unverändert | Linux/Windows2 PASS; abgelehnte Prototypen nicht im Produkt |
-| LOW/HIGH Cuts und bestehende Signalmodelle |74 alte Tone-Checks, echte Processor-Cut-Orakel, Stereo-Referenz | hohe Pegel/Extreme/Fault-Recovery; Hashgleichheit der übrigen Röhren-/Solverquellen | Linux/Windows2 PASS; keine neue analoge Klangbehauptung |
-| IR-Datei → Decoder → vorbereitete Engine → Mono/Stereo-Audio | echte WAV/AIFF-Impulse, Resampling, zwei unabhängige Kanäle | beschädigte/trunkierte/fremde/fehlende Dateien, unsupported Multichannel, Größenlimit; vorherige vollständige Szene bleibt gültig | Linux133/133 einschließlich neuer Program-Metadaten; Windows2 bisherige132/132 PASS |
-| Große IR-Blöcke → JUCE-FFT → PCM/Heap |Mono/Stereo ×128/256/8192/8193/16384, unmodifizierte JUCE als Sample-Orakel | vorher16384:24 malloc+24 free/6Calls; nachher0 und Delta<9e−9, strikte1e−6-Grenze | Linux PASS; Windows-Prozessheap muss eigenen positiven Selbsttest bestehen |
-| Preset/Host-Scene → Disk → frische Instanz → hörbarer Recall | reale VST3-Speicherung, Instanz zerstört, aus Datei neu geladen | fehlende IR plus geänderter Gain: vollständiger Rollback; ClearIR muss Pfad leeren und PCM ändern | Linux PASS Delta0; Windows native Recall PASS; endgültiger DLL-Host noch offen |
+| HIGH: Controls → beide Amp-Lanes → PCM |27 Render zur eingefrorenen398204e-Basis,44,1/48/96k, alle Kanäle/Drive-Modelle | wechselnde Gain/Presence/Tube/Channel/Boost/Model; finite Referenz und echter Samplefehler statt nur Pegelvergleich | Linux und Windows unter `8a442d9` PASS Maxdelta0; reales DI/level-matched Hören NOT RUN |
+| Rails → aktive/fadende Schaltung → Audio/Versorgungsströme |24000 Samples gegen separat eingefrorenen Preamp | Custom-Initialrails311/326, Sample-Railmodulation, Kanal/Crunch-Blenden; alle sechs Werte endlich und exakt gleich | Linux und Windows unter `8a442d9` PASS inklusive verschärfter Endlichkeitsassertion |
+| Solver/Matrix/CPU-Dispatch | unabhängiger vollständiger Jacobian, Scalar/SSE2/Auto; Root5/5 | Conducting/Nonconducting-Ports, Pivot/Singularität, SIMD-Restlängen/Guards; bestehende Grenzen unverändert | Linux/Windows unter `8a442d9` PASS; abgelehnte Prototypen nicht im Produkt |
+| LOW/HIGH Cuts und bestehende Signalmodelle |74 alte Tone-Checks, echte Processor-Cut-Orakel, Stereo-Referenz | hohe Pegel/Extreme/Fault-Recovery; Hashgleichheit der übrigen Röhren-/Solverquellen | Linux/Windows unter `8a442d9` PASS; keine neue analoge Klangbehauptung |
+| IR-Datei → Decoder → vorbereitete Engine → Mono/Stereo-Audio | echte WAV/AIFF-Impulse, Resampling, zwei unabhängige Kanäle | beschädigte/trunkierte/fremde/fehlende Dateien, unsupported Multichannel, Größenlimit; vorherige vollständige Szene bleibt gültig | Linux133/133 einschließlich neuer Program-Metadaten; Windows unter `8a442d9` ebenfalls133/133 PASS |
+| Große IR-Blöcke → JUCE-FFT → PCM/Heap |Mono/Stereo ×128/256/8192/8193/16384, unmodifizierte JUCE als Sample-Orakel | vorher16384:24 malloc+24 free/6Calls; nachher0 und Delta<9e−9, strikte1e−6-Grenze | Linux und Windows unter `8a442d9` PASS; Windows-Prozessheap mit bestandenem positiven Selbsttest |
+| Preset/Host-Scene → Disk → frische Instanz → hörbarer Recall | reale VST3-Speicherung, Instanz zerstört, aus Datei neu geladen | fehlende IR plus geänderter Gain: vollständiger Rollback; ClearIR muss Pfad leeren und PCM ändern | Linux und Windows unter `8a442d9` PASS, tatsächlicher DLL-Recall Maxdelta0 |
 | Audio/Control nebenläufig: IR/Presets/Quality/Bypass |66 Modes +3 Stresstests, tatsächliche Audioausgabe | schnelle überlappende Requests, zuletzt angeforderter Zustand wird aktiv, keine C++new/delete; ASan/UBSan und TSan ohne Report | Linux PASS; Windows native66+3 PASS; C++new/delete allein beweist keinen DLL-/C-Heap |
-| Modus/Quality/Automation/Transport → VST3 → PCM | bewegter Stop/Play/Cycle-Kontext gegen durchgehenden Referenzstream,180 Blöcke |30 dichte Modus-/Quality-Requests, Bypass70/95, keine Latenzänderung und nichtstumm; tatsächliche Samplewerte | Linux11 Wrapper-Checks PASS; keine Abnahme der Sample-Offset-Genauigkeit sämtlicher Parameter oder realer Host-Transportwechsel |
-| Latenz/Bypass → Host-Dry/Warm-Wet |44,1/48/96k Mono/Stereo und alle effektiven OS-Faktoren; gepaddete HIGH-Latenz | R-only, Reprepare, leere/kleine/große Blöcke; Dry muss zeitverschoben exakt stimmen und Wet weiterlaufen | native Linux/Windows2 PASS; Windows-DLL-Nachweis im abschließenden Lauf |
+| Modus/Quality/Automation/Transport → VST3 → PCM | bewegter Stop/Play/Cycle-Kontext gegen durchgehenden Referenzstream,180 Blöcke |30 dichte Modus-/Quality-Requests, Bypass70/95, keine Latenzänderung und nichtstumm; tatsächliche Samplewerte | Linux11 und Windows13 Wrapper-Checks PASS; keine Abnahme der Sample-Offset-Genauigkeit sämtlicher Parameter oder realer Host-Transportwechsel |
+| Latenz/Bypass → Host-Dry/Warm-Wet |44,1/48/96k Mono/Stereo und alle effektiven OS-Faktoren; gepaddete HIGH-Latenz | R-only, Reprepare, leere/kleine/große Blöcke; Dry muss zeitverschoben exakt stimmen und Wet weiterlaufen | native Linux/Windows unter `8a442d9` PASS; Windows unter `8a442d9` zusätzlich tatsächlicher DLL-Dry/Warm-Wet-/Quality-Nachweis |
 | Qualitätsdaten → Alias-/Artefaktindikator |64 synthetische Spektralrender mit16×-Vergleich |1/3/5/9k, zwei Pegel, tatsächliche kohärente Frequenz und Messmasken ausgewiesen | Messdaten PASS; ECO/STANDARD Klangfreigabe NOT RUN, deutliche Alias-Nachteile belegt |
-| Realtime-CPU → komplette Verarbeitung → Deadline | ABBA192 Konfigurationen, je160 gemessene Callbacks |44,1/48k ×128/256 ×Mono/Stereo ×alle Qualitäten ×offline/getaktet, bereits eine Verletzung FAIL | Linux FAIL nachher77/96; bisherige Windows-CPU-Aufrufe abgestürzt, keine Messmatrix |
-| Export-Metadaten → VST3 Programlist → Validator | fester Programm0-Name und unveränderte Szene beim Anwählen | alter leerer Name reproduziert133Checks/1FAIL; Validator46/47 im zweiten Lauf | lokale Korrektur2/2 PASS; Windows-Validatorwiederholung offen |
-| Unabhängige125A QA → Produkt-VST3 | unveränderter gepinnter Tester, Job-Object-/Validator-Selbsttest und7 Positiv-/Negativfixtures | konkrete erwartete Fehlertexte, kein pauschales Akzeptieren von Exit1; Editor5Zyklen, I/O und Fresh-State geprüft | Tool-Selbstprüfung Windows2 PASS; Produkt FAIL wegen Programlist, keine FINAL |
+| Realtime-CPU → komplette Verarbeitung → Deadline | 48 Konfigurationen in4 ABBA-Läufen (192 Fallläufe), je160 gemessene Callbacks |44,1/48k ×128/256 ×Mono/Stereo ×alle Qualitäten ×offline/getaktet, bereits eine Verletzung FAIL | Linux FAIL nachher77/96; vollständige Windows-Matrix unter0d8aa76 FAIL nachher33/48, beide Kanäle/States gültig |
+| Export-Metadaten → VST3 Programlist → Validator | fester Programm 0-Name und unveränderte Szene beim Anwählen | alter leerer Name reproduziert133Checks/1FAIL; Validator46/47 im zweiten Lauf | lokale Korrektur2/2 und Windows unter `8a442d9` Validator47/47 PASS |
+| Unabhängige125A QA → Produkt-VST3 | unveränderter gepinnter Tester, Job-Object-/Validator-Selbsttest und7 Positiv-/Negativfixtures | konkrete erwartete Fehlertexte, kein pauschales Akzeptieren von Exit1; Editor5Zyklen, I/O und Fresh-State geprüft | Windows unter `8a442d9` Tool-Selbstprüfung, Produkt40/40 und Validator47/47 PASS; keine FINAL |
 | Tatsächlicher Arbeitsplatz → ASIO/DAW → aufgezeichnete Audioausgabe | Owner-i9-11900K, StudioOne/ASIO, reale DI, Export/Realtime-Vergleich erforderlich | lange Sitzung, Dropout-Aufzeichnung, schnelle Umschaltungen, Projekt schließen/öffnen, Hörabgleich | NOT RUN: entsprechende Hardware/DAW/Fixtures fehlen; CI ersetzt diese Kette nicht |
+
+
+## Änderungen und verbleibender Reparaturplan
+
+Die Produktänderung gegenüber398204e betrifft ausschließlich sechs Dateien:
+
+| Datei | Technische Änderung |
+|---|---|
+| `Source/dsp/AmpSim.h` | identisches Pedal-Mischgewicht zwischenspeichern |
+| `Source/dsp/Preamp5150.h` | exakte Rails nur unmittelbar vor konsumierenden/fadenden Schaltungen schreiben |
+| `Source/dsp/Simd.h` | AVX-Einstieg und privaten MSVC-Inline-Helfer getrennt kennzeichnen |
+| `Source/dsp/DKCircuit.h` | Tile-Helfer privat und innerhalb des geschützten AVX-Einstiegs inlinebar |
+| `Source/CabinetIR.h` | FFT-/Convolution-Quantum auf8192 begrenzen; große Hostblöcke ohne Besitz/Allokation unterteilen |
+| `Source/PluginProcessor.h` | angebotenen festen Host-Programmeintrag0 als `Default` benennen |
+
+Zusätzlich: Root-CMake baut sämtliche registrierten QA-Executables; neue unabhängige Referenz-/Rail-/PCM-/Aliastests, tatsächlicher VST3-Host und Windows-Prozessheap-Beobachter, begrenzter Windows-Workflow und Rohbefunde. Kein Detours-/Tester-Code im Produkt. Kein geänderter Parameter/ID, keine GUI-Datei, kein zusätzlicher Effekt, keine geänderte Röhrenkennlinie, Solver-Toleranz oder Iterationsgrenze. Der ausgeschlossene SIMD-Solver bleibt ausschließlich als abgelehntes Testexperiment erhalten.
+
+**P1 – CPU-/Aussetzerfreigabe offen.** Die Linux-Matrix verfehlt die strikten Deadlines; Windows verfehlt das Gate nachher in33/48 Fällen; die zusätzliche HIGH-Einsparung von0,19% ist praktisch nicht belastbar. Normale CI-Threads und `sleep_until` sind keine ASIO-Terminierung. Callback-Wallzeiten, Scheduler-Misses und DSP-Hotspots sind getrennt zu interpretieren. Lange externe IRs und die zusätzliche Last während Quality-/Mode-Blenden sind nicht durch die Built-in-/Steady-State-CPU-Matrix abgenommen. Der i9-11900K ist NOT RUN.
+
+**Empfohlener nächster Schritt:** denselben398204e-Before- und aktuellen After-Stand auf dem tatsächlichen i9-11900K in einem echten Windows-ASIO-/DAW-Signalweg bei44,1/48k und128/256 Samples messen, einschließlich RED/hohemGain/Drive, Built-in sowie repräsentativer Mono-/Stereo-IR und schnellen Umschaltungen. Erst damit das verbleibende CPU-Budget bestimmen und gezielt Preamp/Poweramp/Newton auf dieser Plattform profilieren. Keine Solver-Iteration kürzen, bevor unabhängige PCM-/Fehlerorakel eine mathematisch gleichwertige alternative Implementierung belegen. Die bisher geprüften langsameren Solver-Varianten bleiben verworfen.
+
+**P2 – Klangabnahme offen.** ECO/STANDARD haben belegte frequenz-/pegelabhängige Alias-Nachteile. Reale lizenzierte DI, level-matched Hörvergleich, Dynamik-/Exportkontrolle und Langzeitsitzung im Zielhost bleiben NOT RUN. HIGH bleibt die398204e-Referenz; daraus folgt keine Behauptung aliasfreier Analogmodellierung.
+
+**P2 – Host-/Echtzeitgrenze.** Der Prozessheap-Test belegt null beobachtete Heap-Aufrufe in seinen Callback-Fenstern, nicht sämtliche direkten OS-Allokationen/Locks/Treiberpfade. Automatisierte Prozesskontexte, State-Dateien und Editor-Zyklen ersetzen keine reale StudioOne-Projektsitzung mit aufgezeichneten Dropouts. Keine vollständige Sample-Offset-Automationsabnahme aller72 vorhandenen IDs behauptet. Die alte Host-Logzeile trägt noch die historische Beschriftung `Linux packaged VST3`; Plattformnachweis des Windows-Laufs sind dessen PE-Release-Build, `.exe`-Aufruf und Windows-Metadaten.
+
+**Keine FINAL-/Release-Freigabe.** `main` und der ursprüngliche IR-Reparaturbranch bleiben unverändert. Kein Merge. Alle alten FAIL-Protokolle bleiben im Repository erhalten.
+
+Vollständige Dateiliste gegenüber398204e: [changed-files.txt](qa/step3-cpu-20261026/changed-files.txt). [Abschließendes Source-/Hashmanifest](qa/step3-cpu-20261026/final-product-source-manifest.json):32 Produktdateien, davon26 bytegleich zur Basis und genau die oben genannten6 Änderungen; Source-Tree identisch zu beiden Windows-Nachweisen.

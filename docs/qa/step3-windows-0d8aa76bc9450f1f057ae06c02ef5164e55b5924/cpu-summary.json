@@ -1,0 +1,37 @@
+{
+  "sourceCommit": "0d8aa76bc9450f1f057ae06c02ef5164e55b5924",
+  "derivedFromSHA256": {
+    "cpu-before.txt": "3e1205c4f1eb3316c1d63a0f2c85135b8ab1a80be1dc19b115fb54063c9ba0c1",
+    "cpu-after.txt": "ec131f97631cb97234d50dd1bb52ecdb383fcda0e4df350f5e6d86f1b1852681"
+  },
+  "method": "One pair on one shared runner; same flags and fixture. Percentiles remain per case; no pooled quantiles. Mean saving averages relative case means, not a confidence interval.",
+  "hardwareQualification": "Windows CI, NOT owner i9-11900K or real ASIO/DAW",
+  "before": {
+    "cases": 48,
+    "callbacksMeasured": 7680,
+    "pacedCallbacksMeasured": 3840,
+    "casesPASS": 18,
+    "casesFAIL": 30,
+    "callbackOverruns": 2568,
+    "pacedScheduleMisses": 1887,
+    "componentStateAllPASS": true,
+    "bothChannelsFiniteAndAudible": true
+  },
+  "after": {
+    "cases": 48,
+    "callbacksMeasured": 7680,
+    "pacedCallbacksMeasured": 3840,
+    "casesPASS": 15,
+    "casesFAIL": 33,
+    "callbackOverruns": 2591,
+    "pacedScheduleMisses": 1936,
+    "componentStateAllPASS": true,
+    "bothChannelsFiniteAndAudible": true
+  },
+  "qualityMeanRelativeSavingPercent": {
+    "2": 0.188319835250899,
+    "1": -1.0835692125112213,
+    "0": -1.017800537513735
+  },
+  "printedChannelEnergyEqualAllCases": true
+}
