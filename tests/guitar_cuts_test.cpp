@@ -31,6 +31,16 @@ double response (double fs, double frequency, bool low, bool high)
 int main()
 {
     for (double fs : { 44100.0, 48000.0, 96000.0 }) {
+        // Independently derived bilinear-transform Butterworth magnitude.
+        // 0.02 dB allows finite-window energy error, without changing old gates.
+        for(double frequency : {100.0, 1000.0, 5000.0}) {
+            const double lowRatio=std::tan(pi*frequency/fs)/std::tan(pi*100.0/fs);
+            const double highRatio=std::tan(pi*frequency/fs)/std::tan(pi*5000.0/fs);
+            const double hp=20*std::log10(lowRatio*lowRatio/std::sqrt(1+std::pow(lowRatio,4)));
+            const double lp=-10*std::log10(1+std::pow(highRatio,4));
+            check(std::abs(response(fs,frequency,true,false)-hp)<.02,"low cut matches independently derived Butterworth response");
+            check(std::abs(response(fs,frequency,false,true)-lp)<.02,"high cut matches independently derived Butterworth response");
+        }
         check (response (fs, 30.0, true, false) < -19.0, "low cut attenuates sub-bass");
         check (std::abs (response (fs, 1000.0, true, false)) < 0.1, "low cut preserves 1 kHz");
         check (response (fs, 12000.0, false, true) < -15.0, "high cut attenuates treble");

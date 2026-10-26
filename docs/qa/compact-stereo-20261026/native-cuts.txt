@@ -1,0 +1,20 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/compact-plugin/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/compact-plugin
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: guitar_cuts_stereo
+
+1: Test command: /workspace/125A-Dystorator/build/compact-plugin/guitar_cuts_test
+1: Working Directory: /workspace/125A-Dystorator/build/compact-plugin
+1: Test timeout computed to be: 10000000
+1: guitar_cuts_test: PASS (0 failures)
+1/1 Test #1: guitar_cuts_stereo ...............   Passed    0.04 sec
+
+100% tests passed out of 1
+
+Total Test time (real) =   0.04 sec

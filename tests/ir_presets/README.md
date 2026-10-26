@@ -88,7 +88,7 @@ not a scheduling/ASIO acceptance gate.
   host-state recall with a continuously processed reference, after the 50 ms IR
   transition. Host restore before and after prepare are covered across these
   cases; this is an in-process host-API harness, not a DAW integration test.
-- Supported input safety budgets: file <=64 MiB, decoded mono <=4,194,304 samples,
+- Supported input safety budgets: file <=64 MiB, one or two decoded channels, each <=4,194,304 samples,
   sample rate 8–768 kHz; prepared/resampled IR also <=4,194,304 samples.
   Already before activation, every candidate is checked against 768 kHz to
   keep ordinary later sample-rate changes within the same budget: maximum
@@ -96,3 +96,61 @@ not a scheduling/ASIO acceptance gate.
   host-state blobs <=1 MiB. Oversized candidates are rejected, not truncated.
 - IRs remain path-based in saved states. Embedding, file identity hashes and the
   other audit findings are outside this repair block.
+
+## Compact stereo continuation (2026-10-26)
+
+The full runner also includes `compact_stereo_regressions.h`. It verifies both
+actual amp lanes against the unchanged `AmpSim`, including the original 50-ms
+JUCE gain startup, oversampling, channel/drive/tube-set changes and variable
+blocks. Cabinet tests compare both channels to the original JUCE file loader at
+44.1/48/96 kHz. Stereo WAV/AIFF, malformed inner chunks, right-channel NaN,
+rapid concurrent IR/clear, state, presets, retired-FX inertness, host bypass and
+cabinet bypass are covered. Full-processor C++ new/delete checks complement the
+older cabinet-only probe; neither intercepts every C/OS operation.
+
+Useful focused modes (same executable): `cuts`, `stereo`, `bypass`, `ir-invalid`,
+`right`, `cpu`. The default CTest executes all functional cases. `cpu` is separate
+because its deadline gates depend on the machine: it reports mean/p95/p99/max,
+work-time overruns and paced completion misses for 1/2 amp lanes, 44.1/48 kHz,
+32/64/128/256/512 frames, original 8x quality, RED, boost OFF, built-in cabinet and
+both cuts ON. Each case has 24 warm-up and 160 measured blocks. Timer overhead is
+measured separately. A deadline violation prints FAIL and returns failure; an
+uncontrolled VM result is not an ASIO guarantee. Run without concurrent builds.
+
+Negative control, in a **separate build directory**:
+
+```sh
+cmake -S tests/ir_presets -B build/discard-right -DJUCE_SOURCE_DIR=/path/to/JUCE \
+  -DCMAKE_BUILD_TYPE=Release -DIR_TRACE_CONVOLUTION=OFF -DIR_DISCARD_RIGHT_MUTATION=ON
+cmake --build build/discard-right --target ir_presets_test
+# EXPECT NONZERO: L-to-R bleed and discarded R-only input must be detected.
+build/discard-right/ir_presets_test_artefacts/Release/ir_presets_test right
+```
+
+This mutates a generated build-local Processor copy, never shipping source.
+Never use a mutation build for performance or positive acceptance.
+
+Optional actual-bundle host (no editor/device required):
+
+```sh
+cmake -S tests/ir_presets -B build/ir-presets -DIR_BUILD_VST3_HOST=ON
+cmake --build build/ir-presets --target compact_vst3_host
+build/ir-presets/compact_vst3_host_artefacts/Release/compact_vst3_host /absolute/path/to/plugin.vst3
+# Same 40 CPU cases through the actual built bundle, including its LTO profile:
+build/ir-presets/compact_vst3_host_artefacts/Release/compact_vst3_host /absolute/path/to/plugin.vst3 cpu
+```
+
+The host discovers and loads the real built VST3, negotiates stereo buses and
+checks R-only audio, crosstalk, component/controller state and wrapper bypass
+parameter delivery with delayed dry and continuously warm wet audio. This is
+separate from direct `VibeAmpProcessor` tests and from an official Validator or
+real Windows DAW. No GUI is opened. Licensed guitar DI/listening, Windows ASIO,
+Studio One, official Validator and 125A Plugin Tester remain separate gates.
+
+`HostedCPUBenchmark.h` checks critical actual Component-state values after warm-up,
+before starting its measured window. In particular, the existing Amp Volume
+range is skewed around 0 dB: normalized 0.5 means 0 dB, not 40/52. A wrong setup
+returns failure before collecting acceptance timings. State inspection and all
+logging stay outside the measured callback. Host recall uses non-default audible
+Gain/Master/Cut values and verifies both serialized values and PCM, so ignoring
+the restored state cannot pass as a default-to-default comparison.

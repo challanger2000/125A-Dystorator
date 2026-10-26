@@ -1,6 +1,11 @@
 # 125A High-Gain Amp – Compact Stereo Implementation Status
 
-**Date:** 2026-10-26. **Status: WIP / NOT JUCE-VERIFIED / NOT WINDOWS-VERIFIED / NOT RELEASE-READY.**
+**Date:** 2026-10-26. This document records the historical WIP at
+`30988fcae3785e1efb5e491277948416d1c97935`.
+Current continuation, fixes, executable evidence and remaining gates:
+[Stereo completion QA](STEREO-COMPLETION-QA-20261026.md).
+
+**Historical status at that source commit: WIP / NOT JUCE-VERIFIED / NOT WINDOWS-VERIFIED / NOT RELEASE-READY.**
 
 ## Source provenance
 - Repair baseline: fix/ir-presets-block1-20261026 at 1009fa6906746f46516107baf059bf12d473a04f (B01/A04/B03/B04).

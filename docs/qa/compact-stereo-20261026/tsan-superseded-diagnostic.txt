@@ -1,0 +1,74 @@
+UpdateCTestConfiguration  from :/workspace/125A-Dystorator/build/compact-tsan/DartConfiguration.tcl
+Parse Config file:/workspace/125A-Dystorator/build/compact-tsan/DartConfiguration.tcl
+Test project /workspace/125A-Dystorator/build/compact-tsan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: ir_presets_integration
+
+1: Test command: /workspace/125A-Dystorator/build/compact-tsan/ir_presets_test_artefacts/Release/ir_presets_test
+1: Working Directory: /workspace/125A-Dystorator/build/compact-tsan
+1: Test timeout computed to be: 1500
+1: PASS A04 factory restores built-in
+1: PASS B03 foreign XML rejects without parameter/name mutation
+1: PASS B04 invalid WAV preserves accepted IR path
+1: PASS missing IR preserves accepted IR path
+1: PASS preset save/load restores IR A
+1: PASS A04 user built-in preset clears IR A
+1: PASS host state restores IR A
+1: PASS foreign
+1: PASS rejected preset preserves whole serialized scene
+1: PASS empty
+1: PASS rejected preset preserves whole serialized scene
+1: PASS truncated
+1: PASS rejected preset preserves whole serialized scene
+1: PASS future
+1: PASS rejected preset preserves whole serialized scene
+1: PASS version
+1: PASS rejected preset preserves whole serialized scene
+1: PASS nan
+1: PASS rejected preset preserves whole serialized scene
+1: PASS range
+1: PASS rejected preset preserves whole serialized scene
+1: PASS junk
+1: PASS rejected preset preserves whole serialized scene
+1: PASS unknown
+1: PASS rejected preset preserves whole serialized scene
+1: PASS duplicate
+1: PASS rejected preset preserves whole serialized scene
+1: PASS fractional
+1: PASS rejected preset preserves whole serialized scene
+1: PASS relative
+1: PASS rejected preset preserves whole serialized scene
+1: PASS unusable preset IR rejects
+1: PASS unusable preset IR preserves all parameters/name/path
+1: PASS unusable host IR preserves previous scene
+1: PASS unusable preset IR rejects
+1: PASS unusable preset IR preserves all parameters/name/path
+1: PASS unusable host IR preserves previous scene
+1: PASS preset disappears after directory scan: rollback
+1: PASS truncated host binary rollback
+1: PASS null host state rollback
+1: PASS failed save reports failure
+1: PASS failed save preserves scene and existing destination
+1: PASS legacy partial preset accepted
+1: PASS legacy Attack migration and built-in recall
+1: PASS IR accepted before prepare
+1: PASS decoded prepared IR matches original JUCE file-load audio
+1: PASS IR error is returned to caller
+1: PASS IR error is returned to caller
+1: PASS IR resampling budget rejected before activation, previous asset retained
+1: PASS truncated WAV payload rejected
+1: PASS IEEE-float NaN IR rejected
+1: PASS all IR rejects leave old cabinet selected
+1: IR rollback tail: max_error=0 reference_peak=0.0559017
+1: PASS failed loads preserve a non-silent pending convolution tail
+1: PASS rapid updates settle to last built-in request on audio
+1: PASS sample-rate reprepare retains accepted decoded asset
+1: PASS reprepared IR actually produces audio after source deletion
+1: PASS save complete audible scene
+1: PASS reload saved preset in another processor

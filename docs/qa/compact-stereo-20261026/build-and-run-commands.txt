@@ -1,0 +1,52 @@
+Source baseline: 30988fcae3785e1efb5e491277948416d1c97935
+JUCE: /workspace/juce-8.0.4, commit 51d11a2be6d5c97ccf12b4e5e827006e19f0555a
+CMake: /workspace/cloud-tools/cmake/data/bin/cmake
+Ninja: /workspace/cloud-tools/bin/ninja
+Local dependency environment (no secrets):
+  CPATH=/workspace/sysroot/usr/include:/workspace/sysroot/usr/include/freetype2
+  LIBRARY_PATH=/workspace/sysroot/usr/lib/x86_64-linux-gnu
+  PKG_CONFIG_PATH=/workspace/sysroot/usr/lib/x86_64-linux-gnu/pkgconfig:/workspace/sysroot/usr/share/pkgconfig
+  PKG_CONFIG_SYSROOT_DIR=/workspace/sysroot
+Common configure flags:
+  -G Ninja -DCMAKE_MAKE_PROGRAM=/workspace/cloud-tools/bin/ninja
+  -DCMAKE_BUILD_TYPE=Release
+  -DCMAKE_CXX_FLAGS="-I/workspace/sysroot/usr/include -I/workspace/sysroot/usr/include/freetype2"
+  -DCMAKE_EXE_LINKER_FLAGS="-L/workspace/sysroot/usr/lib/x86_64-linux-gnu"
+Root plugin configure:
+  cmake -S . -B build/compact-plugin <common> -DFETCHCONTENT_SOURCE_DIR_JUCE=/workspace/juce-8.0.4 -DCMAKE_MODULE_LINKER_FLAGS="-L/workspace/sysroot/usr/lib/x86_64-linux-gnu"
+Root build:
+  cmake --build build/compact-plugin --parallel 2 --target DjentyDonkey_VST3 DjentyDonkey_Standalone guitar_cuts_test tone_regress dsp_test
+Native execution:
+  ctest --test-dir build/compact-plugin -V
+  build/compact-plugin/tone_regress
+  build/compact-plugin/dsp_test fault
+Integration configure:
+  cmake -S tests/ir_presets -B build/ir-presets <common> -DJUCE_SOURCE_DIR=/workspace/juce-8.0.4 -DIR_TRACE_CONVOLUTION=OFF -DIR_DISCARD_RIGHT_MUTATION=OFF -DIR_BUILD_VST3_HOST=ON
+  cmake --build build/ir-presets --parallel 2
+  ctest --test-dir build/ir-presets -V
+Trace: same integration build, -DIR_TRACE_CONVOLUTION=ON, build target ir_presets_test, run CTest.
+Discard-right negative: same build, trace OFF, -DIR_DISCARD_RIGHT_MUTATION=ON; run executable with argument right. Expected exit 1. Restore both flags OFF before positive testing/CPU.
+Full ThreadSanitizer:
+  cmake -S tests/ir_presets -B build/compact-tsan <common> -DJUCE_SOURCE_DIR=/workspace/juce-8.0.4 -DIR_TRACE_CONVOLUTION=OFF -DIR_SANITIZER=thread
+  cmake --build build/compact-tsan --parallel 2
+  TSAN_OPTIONS=halt_on_error=1 ctest --test-dir build/compact-tsan -V
+Full AddressSanitizer / UndefinedBehaviorSanitizer:
+  cmake -S tests/ir_presets -B build/compact-asan <common> -DJUCE_SOURCE_DIR=/workspace/juce-8.0.4 -DIR_TRACE_CONVOLUTION=OFF -DIR_SANITIZER=address,undefined
+  cmake --build build/compact-asan --parallel 2
+  ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 ctest --test-dir build/compact-asan -V
+VST3 bundle smoke:
+  build/ir-presets/compact_vst3_host_artefacts/Release/compact_vst3_host "/workspace/125A-Dystorator/build/compact-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+CPU (untraced, no sanitizer, no concurrent builds/tests):
+  build/ir-presets/ir_presets_test_artefacts/Release/ir_presets_test cpu
+Each command's underlying exit code was retained by the tool runner (no tee/status masking).
+No GitHub Actions, no Windows/ASIO execution.
+
+Actual-bundle CPU (same bundle/SHA as functional smoke; no product rebuild):
+  cmake --build build/ir-presets --parallel 2 --target compact_vst3_host
+  build/ir-presets/compact_vst3_host_artefacts/Release/compact_vst3_host "/workspace/125A-Dystorator/build/compact-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3" cpu
+  Settings are independently checked against the actual serialized IComponent/PARAMS state outside the timed window.
+  Initial wrong linear Amp Volume assumption is retained as a rejected setup diagnostic; final normalized value 0.5 gives the declared 0 dB skew center.
+  Both CPU runners returned 1 for deadline FAIL; all functional suites returned 0.
+  Final bundle smoke additionally uses non-default Gain 3/Master 2/Cuts ON before save/restore/prepare, checks actual component values and PCM, exit 0.
+
+Evidence text is normalized to LF and trailing line padding is removed for Git whitespace checks; numeric values, assertions and exit statuses are unchanged.

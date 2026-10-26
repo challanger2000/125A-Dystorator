@@ -1,0 +1,55 @@
+-- The C compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+-- Checking for module 'alsa'
+--   Found alsa, version 1.2.14
+-- Checking for modules 'freetype2;fontconfig'
+--   Found freetype2, version 26.2.20
+--   Found fontconfig, version 2.15.0
+-- Checking for module 'gl'
+--   Found gl, version 1.2
+-- Checking for module 'libcurl'
+--   Found libcurl, version 8.14.1
+-- Checking for modules 'webkit2gtk-4.0;gtk+-x11-3.0'
+--   Package 'webkit2gtk-4.0', required by 'virtual:world', not found
+--   Package 'gtk+-x11-3.0', required by 'virtual:world', not found
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- Testing juceaide
+-- Finished setting up juceaide
+-- Configuring done (52.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/125A-Dystorator/build/compact-asan
+[0/2] Re-checking globbed directories...
+[1/22] Building CXX object CMakeFiles/ir_presets_test.dir/ir_presets_test.cpp.o
+[2/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/125A-Dystorator/Source/PluginProcessor.cpp.o
+[3/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/125A-Dystorator/Source/PluginEditor.cpp.o
+[4/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_utils/juce_audio_utils.cpp.o
+[5/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors_ara.cpp.o
+[6/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors_lv2_libs.cpp.o
+[7/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_gui_extra/juce_gui_extra.cpp.o
+[8/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors.cpp.o
+[9/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics.cpp.o
+[10/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_gui_basics/juce_gui_basics.cpp.o
+[11/22] Building C object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Sheenbidi.c.o
+[12/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_events/juce_events.cpp.o
+[13/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+[14/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_core/juce_core_CompilationTime.cpp.o
+[15/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_data_structures/juce_data_structures.cpp.o
+[16/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_core/juce_core.cpp.o
+[17/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_basics/juce_audio_basics.cpp.o
+[18/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_devices/juce_audio_devices.cpp.o
+[19/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_audio_formats/juce_audio_formats.cpp.o
+[20/22] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/juce-8.0.4/modules/juce_dsp/juce_dsp.cpp.o
+[21/22] Linking CXX executable ir_presets_test_artefacts/Release/ir_presets_test

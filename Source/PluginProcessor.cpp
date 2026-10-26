@@ -67,6 +67,8 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     sampleRateHz = sampleRate;
     maxBlock = juce::jmax (1, samplesPerBlock);
     stereoBuf.setSize (2, maxBlock);
+    dryBuf.setSize (2, maxBlock);
+    cabinetDry.setSize (2, maxBlock);
 
     const juce::dsp::ProcessSpec stereoSpec { sampleRate, (juce::uint32) maxBlock, 2 };
     inputGain.prepare (stereoSpec);
@@ -95,11 +97,29 @@ void VibeAmpProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     cuts.prepare (sampleRate);
     inGateOn = false;
     const int latency = amp[0].getLatencySamples();
+    dryLatency = latency;
+    dryDelay.setSize (2, latency + 1);
+    dryDelay.clear();
+    dryPosition = 0;
+    bypassMix.reset (sampleRate, 0.005);
+    bypassMix.setCurrentAndTargetValue (0.0f);
+    cabinetMix.reset (sampleRate, 0.005);
+    cabinetMix.setCurrentAndTargetValue (pCabOn->load() > 0.5f ? 1.0f : 0.0f);
     targetLatency = latency;
     setLatencySamples (latency);
 }
 
 void VibeAmpProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+{
+    processAudio (buffer, false);
+}
+
+void VibeAmpProcessor::processBlockBypassed (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+{
+    processAudio (buffer, true);
+}
+
+void VibeAmpProcessor::processAudio (juce::AudioBuffer<float>& buffer, bool bypassed)
 {
     juce::ScopedNoDenormals noDenormals;
     const int numIn = getTotalNumInputChannels();
@@ -135,6 +155,8 @@ void VibeAmpProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mid
     ampSettings.boostModel = juce::roundToInt (pBoostModel->load());
 
     cabOn = pCabOn->load() > 0.5f;
+    cabinetMix.setTargetValue (cabOn ? 1.0f : 0.0f);
+    bypassMix.setTargetValue (bypassed ? 1.0f : 0.0f);
     cuts.setCutoffs (pLowCutHz->load(), pHighCutHz->load());
     cuts.setEnabled (pLowCutOn->load() > 0.5f, pHighCutOn->load() > 0.5f);
     outputGain.setGainDecibels (pOutGain->load());
@@ -168,6 +190,20 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
     if (ampLanes == 1)
         stereoBuf.copyFrom (1, 0, stereoBuf, 0, 0, len);
 
+    // Continuously advance the pre-gain dry delay, including while wet. Both
+    // output layouts share one frame clock; no state/allocation on bypass entry.
+    for (int i = 0; i < len; ++i)
+    {
+        for (int channel = 0; channel < 2; ++channel)
+        {
+            const float input = stereoBuf.getSample (channel, i);
+            dryDelay.setSample (channel, dryPosition, input);
+            const int read = (dryPosition + 1) % (dryLatency + 1);
+            dryBuf.setSample (channel, i, dryDelay.getSample (channel, read));
+        }
+        dryPosition = (dryPosition + 1) % (dryLatency + 1);
+    }
+
     auto stereoBlock = juce::dsp::AudioBlock<float> (stereoBuf).getSubBlock (0, (size_t) len);
     juce::dsp::ProcessContextReplacing<float> stereoCtx (stereoBlock);
     inputGain.process (stereoCtx);
@@ -188,8 +224,10 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
     irTestCaptureCabinetInput (stereoBuf.getReadPointer (0), len);
 #endif
 
-    if (cabOn)
-        cabinet.processStereo (stereoBlock, [this] (float* data, int count, int channel) noexcept
+    for (int channel = 0; channel < 2; ++channel)
+        cabinetDry.copyFrom (channel, 0, stereoBuf, channel, 0, len);
+    // Keep convolution history and pending IR transitions warm while CAB is off.
+    cabinet.processStereo (stereoBlock, [this] (float* data, int count, int channel) noexcept
         {
             for (int i = 0; i < count; ++i)
             {
@@ -198,6 +236,17 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
                 data[i] = value;
             }
         });
+    for (int i = 0; i < len; ++i)
+    {
+        const float wet = cabinetMix.getNextValue();
+        for (int channel = 0; channel < 2; ++channel)
+        {
+            const float dry = cabinetDry.getSample (channel, i);
+            if (wet == 0.0f) stereoBuf.setSample (channel, i, dry);
+            else if (wet != 1.0f)
+                stereoBuf.setSample (channel, i, dry + wet * (stereoBuf.getSample (channel, i) - dry));
+        }
+    }
 
     // 2-pole Butterworth cuts with common coefficients and separate L/R
     // states. On/off and cutoff modulation are smoothed by GuitarCuts.
@@ -207,6 +256,17 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
         cuts.processStereo (left[i], right[i]);
 
     outputGain.process (stereoCtx);
+    for (int i = 0; i < len; ++i)
+    {
+        const float bypass = bypassMix.getNextValue();
+        if (bypass == 0.0f) continue;
+        for (int channel = 0; channel < 2; ++channel)
+        {
+            const float dry = dryBuf.getSample (channel, i);
+            const float wet = stereoBuf.getSample (channel, i);
+            stereoBuf.setSample (channel, i, bypass == 1.0f ? dry : wet + bypass * (dry - wet));
+        }
+    }
     updatePeak (outputPeak, juce::jmax (stereoBuf.getMagnitude (0, 0, len),
                                         stereoBuf.getMagnitude (1, 0, len)));
 

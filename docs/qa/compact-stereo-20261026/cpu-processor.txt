@@ -1,0 +1,122 @@
+TIMER p99_us=0.031
+CPU fs=44100 lanes=1 frames=32 mode=offline mean_us=1051.36 p95_us=1262.58 p99_us=1376.13 max_us=1652.34 deadline_us=725.624 utilization_percent=144.891 overruns=160 schedule_misses=0 energy=9.61691 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=32 mode=paced mean_us=1080.82 p95_us=1279.83 p99_us=1377.44 max_us=1906.96 deadline_us=725.624 utilization_percent=148.95 overruns=160 schedule_misses=160 energy=11.3156 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=64 mode=offline mean_us=2193.92 p95_us=2695.95 p99_us=2968.75 max_us=4631.47 deadline_us=1451.25 utilization_percent=151.175 overruns=160 schedule_misses=0 energy=22.3264 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=64 mode=paced mean_us=2084.08 p95_us=2385.59 p99_us=3531.53 max_us=4231.18 deadline_us=1451.25 utilization_percent=143.606 overruns=160 schedule_misses=160 energy=22.1251 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=128 mode=offline mean_us=4358.74 p95_us=5638.73 p99_us=8384.9 max_us=8659.04 deadline_us=2902.49 utilization_percent=150.172 overruns=160 schedule_misses=0 energy=43.8856 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=128 mode=paced mean_us=4447.77 p95_us=4987.09 p99_us=7684.88 max_us=11085.1 deadline_us=2902.49 utilization_percent=153.24 overruns=160 schedule_misses=160 energy=43.5947 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=256 mode=offline mean_us=9060.92 p95_us=10538.3 p99_us=12071.9 max_us=12541.1 deadline_us=5804.99 utilization_percent=156.089 overruns=160 schedule_misses=0 energy=86.6986 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=256 mode=paced mean_us=9327.88 p95_us=12378.2 p99_us=23000.7 max_us=23403.5 deadline_us=5804.99 utilization_percent=160.687 overruns=160 schedule_misses=160 energy=86.5137 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=512 mode=offline mean_us=18039 p95_us=19680.2 p99_us=21302.9 max_us=49602.2 deadline_us=11610 utilization_percent=155.375 overruns=160 schedule_misses=0 energy=172.951 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=1 frames=512 mode=paced mean_us=18801.1 p95_us=22226.5 p99_us=29569 max_us=34237.4 deadline_us=11610 utilization_percent=161.939 overruns=160 schedule_misses=160 energy=172.927 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=32 mode=offline mean_us=1958.75 p95_us=2257.81 p99_us=3120.72 max_us=3382.61 deadline_us=725.624 utilization_percent=269.94 overruns=160 schedule_misses=0 energy=6.54793 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=32 mode=paced mean_us=1932.25 p95_us=2183.31 p99_us=2391.45 max_us=2395.63 deadline_us=725.624 utilization_percent=266.288 overruns=160 schedule_misses=160 energy=7.66869 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=64 mode=offline mean_us=4063.61 p95_us=4581.19 p99_us=7651.39 max_us=8620.15 deadline_us=1451.25 utilization_percent=280.008 overruns=160 schedule_misses=0 energy=15.1109 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=64 mode=paced mean_us=4060.51 p95_us=4530.38 p99_us=5233.02 max_us=6517.29 deadline_us=1451.25 utilization_percent=279.795 overruns=160 schedule_misses=160 energy=14.9611 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=128 mode=offline mean_us=7867.6 p95_us=8515.26 p99_us=9120.82 max_us=9568.87 deadline_us=2902.49 utilization_percent=271.063 overruns=160 schedule_misses=0 energy=29.6534 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=128 mode=paced mean_us=8779.16 p95_us=13511.7 p99_us=16561.2 max_us=17568.9 deadline_us=2902.49 utilization_percent=302.469 overruns=160 schedule_misses=160 energy=29.4465 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=256 mode=offline mean_us=16093.9 p95_us=18259 p99_us=23898.5 max_us=24609.2 deadline_us=5804.99 utilization_percent=277.243 overruns=160 schedule_misses=0 energy=58.5675 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=256 mode=paced mean_us=16017.5 p95_us=18068.9 p99_us=18816.4 max_us=19059.6 deadline_us=5804.99 utilization_percent=275.926 overruns=160 schedule_misses=160 energy=58.434 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=512 mode=offline mean_us=33844.9 p95_us=39002.8 p99_us=56758.7 max_us=87994.4 deadline_us=11610 utilization_percent=291.515 overruns=160 schedule_misses=0 energy=116.786 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=44100 lanes=2 frames=512 mode=paced mean_us=33788.8 p95_us=39115.9 p99_us=51240.3 max_us=56865.6 deadline_us=11610 utilization_percent=291.032 overruns=160 schedule_misses=160 energy=116.768 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=32 mode=offline mean_us=1104.12 p95_us=1409.59 p99_us=2032.33 max_us=2491.65 deadline_us=666.667 utilization_percent=165.618 overruns=160 schedule_misses=0 energy=9.26919 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=32 mode=paced mean_us=1076.18 p95_us=1338.74 p99_us=1529.88 max_us=1803.83 deadline_us=666.667 utilization_percent=161.427 overruns=160 schedule_misses=160 energy=11.2626 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=64 mode=offline mean_us=2128.17 p95_us=2467.81 p99_us=2742.16 max_us=2887.82 deadline_us=1333.33 utilization_percent=159.613 overruns=160 schedule_misses=0 energy=22.3841 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=64 mode=paced mean_us=2104.15 p95_us=2380.68 p99_us=3212.28 max_us=4114.99 deadline_us=1333.33 utilization_percent=157.811 overruns=160 schedule_misses=160 energy=22.1633 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=128 mode=offline mean_us=4161.31 p95_us=4600.29 p99_us=5053.72 max_us=5092.57 deadline_us=2666.67 utilization_percent=156.049 overruns=160 schedule_misses=0 energy=43.9127 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=128 mode=paced mean_us=4189.83 p95_us=4640.25 p99_us=5101.8 max_us=5440.9 deadline_us=2666.67 utilization_percent=157.119 overruns=160 schedule_misses=160 energy=43.6159 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=256 mode=offline mean_us=8706.11 p95_us=9546.1 p99_us=10760.6 max_us=11544.3 deadline_us=5333.33 utilization_percent=163.24 overruns=160 schedule_misses=0 energy=86.7946 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=256 mode=paced mean_us=8520.07 p95_us=9410.92 p99_us=10118.6 max_us=10370.5 deadline_us=5333.33 utilization_percent=159.751 overruns=160 schedule_misses=160 energy=86.5659 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=512 mode=offline mean_us=17280.5 p95_us=20629.9 p99_us=26399.7 max_us=30953.4 deadline_us=10666.7 utilization_percent=162.005 overruns=160 schedule_misses=0 energy=172.937 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=1 frames=512 mode=paced mean_us=17120.3 p95_us=20540.2 p99_us=24822.7 max_us=26398.1 deadline_us=10666.7 utilization_percent=160.503 overruns=160 schedule_misses=160 energy=172.895 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=32 mode=offline mean_us=2129.59 p95_us=3003.71 p99_us=4455.82 max_us=4624.79 deadline_us=666.667 utilization_percent=319.439 overruns=160 schedule_misses=0 energy=6.30811 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=32 mode=paced mean_us=2128.86 p95_us=2857.52 p99_us=4696.84 max_us=6361.12 deadline_us=666.667 utilization_percent=319.329 overruns=160 schedule_misses=160 energy=7.62479 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=64 mode=offline mean_us=3952.62 p95_us=4422.71 p99_us=4715.46 max_us=5034.51 deadline_us=1333.33 utilization_percent=296.446 overruns=160 schedule_misses=0 energy=15.1598 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=64 mode=paced mean_us=4260.47 p95_us=5310.28 p99_us=7196.48 max_us=9130.09 deadline_us=1333.33 utilization_percent=319.536 overruns=160 schedule_misses=160 energy=15.0002 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=128 mode=offline mean_us=8831.43 p95_us=12215.4 p99_us=17116.8 max_us=17209.9 deadline_us=2666.67 utilization_percent=331.179 overruns=160 schedule_misses=0 energy=29.6965 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=128 mode=paced mean_us=8391.92 p95_us=10195.3 p99_us=10995.7 max_us=12361.2 deadline_us=2666.67 utilization_percent=314.697 overruns=160 schedule_misses=160 energy=29.4833 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=256 mode=offline mean_us=16197.2 p95_us=18071 p99_us=19993.2 max_us=20285.7 deadline_us=5333.33 utilization_percent=303.698 overruns=160 schedule_misses=0 energy=58.6288 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=256 mode=paced mean_us=17462.9 p95_us=21444.6 p99_us=26778.9 max_us=28662.6 deadline_us=5333.33 utilization_percent=327.429 overruns=160 schedule_misses=160 energy=58.4661 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=512 mode=offline mean_us=33706.8 p95_us=42247.3 p99_us=58784.7 max_us=63475.8 deadline_us=10666.7 utilization_percent=316.001 overruns=160 schedule_misses=0 energy=116.815 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+CPU fs=48000 lanes=2 frames=512 mode=paced mean_us=34025.6 p95_us=40908 p99_us=48122.5 max_us=64755.3 deadline_us=10666.7 utilization_percent=318.99 overruns=160 schedule_misses=160 energy=116.785 status=FAIL
+PASS CPU workload has actual finite non-silent amp output
+FAIL CPU block work and paced completion meet the actual audio deadline
+80 checks, 40 failures

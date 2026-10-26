@@ -23,7 +23,9 @@ public:
     void releaseResources() override {}
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlockBypassed (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
     using AudioProcessor::processBlock;
+    using AudioProcessor::processBlockBypassed;
 
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override { return true; }
@@ -63,6 +65,7 @@ public:
     PresetManager presets;
 
 private:
+    void processAudio (juce::AudioBuffer<float>&, bool bypassed);
     void processChunk (juce::AudioBuffer<float>& buffer, int start, int len, int numIn, int numOut);
     void handleAsyncUpdate() override { setLatencySamples (targetLatency.load()); }
 
@@ -93,6 +96,9 @@ private:
     double sampleRateHz = 44100.0;
     int maxBlock = 512;
     juce::AudioBuffer<float> stereoBuf;
+    juce::AudioBuffer<float> dryBuf, cabinetDry, dryDelay;
+    int dryPosition = 0, dryLatency = 0;
+    juce::SmoothedValue<float> bypassMix, cabinetMix;
 
     // Compact stereo amplifier. Each lane has its own nonlinear circuit state.
     juce::dsp::Gain<float> inputGain, outputGain;

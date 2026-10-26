@@ -1,0 +1,4 @@
+FAIL stereo WAV inner data beyond EOF rejects even when RIFF size matches snapshot
+PASS restore valid stereo fixture before independent NaN test
+PASS NaN confined to right IR channel rejects whole stereo scene
+3 checks, 1 failures

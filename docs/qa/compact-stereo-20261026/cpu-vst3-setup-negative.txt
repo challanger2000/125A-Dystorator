@@ -1,0 +1,8 @@
+SETUP ampGain=5 expected=5
+SETUP master=3 expected=3
+SETUP channel=2 expected=2
+SETUP cabOn=1 expected=1
+SETUP lowCutOn=1 expected=1
+SETUP highCutOn=1 expected=1
+SETUP ampVolume=7.08412 expected=0
+FAIL actual VST3 component benchmark setup ampVolume

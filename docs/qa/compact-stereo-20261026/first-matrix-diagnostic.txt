@@ -1,0 +1,57 @@
+CORE fs=44100 max_delta=1.98372e-06 energy=1.56028 latency=5
+FAIL both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+CORE fs=48000 max_delta=2.95043e-06 energy=1.35844 latency=5
+FAIL both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+CORE fs=96000 max_delta=1.6056e-06 energy=0.372523 latency=4
+FAIL both actual amp lanes match unchanged AmpSim including oversampling and block boundaries
+PASS processor latency equals unchanged oversampling latency
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=44100 max_delta=0 energy=0.501154
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=48000 max_delta=0 energy=0.41396
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=1 fs=96000 max_delta=0 energy=1.05676
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=44100 max_delta=0 energy=0.467764
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=48000 max_delta=0 energy=0.416301
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS mono/stereo IR accepted before activation
+IR channels=2 fs=96000 max_delta=0 energy=1.10104
+PASS both IR channels/resampling match original JUCE file oracle at variable blocks
+PASS unsupported multichannel IR rejects without replacing stereo scene
+PASS stereo/cuts scene saved
+STATE/FX automation max_delta=0 energy=0.0682812 new=0 delete=0
+PASS stereo IR/state and cuts automation identical despite every retired FX parameter changing
+PASS full processor automation callback does no observed C++ new/delete
+FAIL compact stereo preset reload succeeds
+FAIL compact preset restores IR and all new cut controls
+PASS legacy host state supplies neutral defaults for new cuts
+PASS bypass bus setup
+BYPASS 1->1 latency=5 dry_max=0 warm_wet_max=0 energy=0.170632
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 1->2 latency=5 dry_max=0 warm_wet_max=0 energy=0.341265
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->1 latency=5 dry_max=0 warm_wet_max=0 energy=0.0448728
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->2 latency=5 dry_max=0 warm_wet_max=0 energy=0.243386
+PASS host bypass is dry with reported latency and intended bus mapping
+PASS host bypass advances the complete wet path
+42 checks, 5 failures

@@ -1,0 +1,7 @@
+CUT sample k=0 i=0 capture=1.48522e-08 expected=1.4836e-08 actual=6.18166e-12 right=6.18166e-12
+CUT sample k=0 i=1 capture=3.26628e-05 expected=3.25914e-05 actual=2.71595e-08 right=2.71595e-08
+CUT sample k=1 i=0 capture=0.0247065 expected=0.0229867 actual=0.000622556 right=0.000622556
+CUT sample k=1 i=1 capture=0.024695 expected=0.022933 actual=0.000630657 right=0.000630657
+Cut processor oracle: max_error=0.112496 effect=741.321 energy=62.9812 low=100 high=5000
+FAIL actual post-cab LOW/HIGH CUT matches independent frame-based stereo DSP reference
+1 checks, 1 failures

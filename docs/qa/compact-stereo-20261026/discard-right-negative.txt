@@ -1,0 +1,7 @@
+PASS compact stereo bus contract accepts 2-in/2-out
+PASS L-only drives independent left amp
+FAIL L-only leaves right amp untouched
+PASS compact stereo bus contract accepts 2-in/2-out
+FAIL R-only drives independent right amp (would fail original)
+PASS R-only leaves left amp untouched
+6 checks, 2 failures

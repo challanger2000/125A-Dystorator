@@ -1,0 +1,4 @@
+PASS: git diff --exit-code 30988fc -- Source/Parameters.h Source/PluginEditor.cpp Source/PluginEditor.h Source/UI Source/dsp CMakeLists.txt
+PASS: git diff --exit-code 1009fa6 -- Source/dsp ':!Source/dsp/GuitarCuts.h'
+Both commands returned exit 0, no diff. No parameter-ID, GUI, original amp/model/solver/oversampling or product-root-CMake change in this continuation.
+Original DSP source is unchanged; these source checks alone do not replace executed audio tests.

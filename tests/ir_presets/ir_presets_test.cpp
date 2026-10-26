@@ -549,7 +549,6 @@ static void compactCutProcessorOracle (const juce::File& dir)
     // Reference the exact live signal just before the cabinet, without
     // comparing independently simulated nonlinear amplifiers.
     VibeAmpProcessor p (dir);
-    p.prepareToPlay (48000.0, 64);
     param (p, ids::cabOn, 0);
     param (p, ids::inGateOn, 0);
     param (p, ids::ampNoise, 0);
@@ -557,10 +556,16 @@ static void compactCutProcessorOracle (const juce::File& dir)
     param (p, ids::lowCutHz, 100);
     param (p, ids::highCutOn, 1);
     param (p, ids::highCutHz, 5000);
+    p.prepareToPlay (48000.0, 64);
     vamp::GuitarCuts reference;
     reference.prepare (48000.0);
     reference.setCutoffs (100.0, 5000.0);
     reference.setEnabled (true, true);
+    juce::dsp::Gain<float> outputReference;
+    outputReference.prepare ({48000.0,64,2});
+    outputReference.setRampDurationSeconds (.05);
+    outputReference.setGainDecibels (0);
+    juce::AudioBuffer<float> expectedOutput (2,64);
     juce::AudioBuffer<float> captured (1, 64), audio (2, 64);
     juce::MidiBuffer midi;
     double maxError = 0.0, actualEffect = 0.0, referenceEnergy = 0.0;
@@ -576,24 +581,51 @@ static void compactCutProcessorOracle (const juce::File& dir)
         {
             float l = captured.getSample (0, i), r = l;
             reference.processStereo (l, r);
-            for (int channel = 0; channel < 2; ++channel)
-                maxError = std::max (maxError, std::abs ((double)audio.getSample (channel, i)
-                                                          - (channel == 0 ? l : r)));
+            expectedOutput.setSample(0,i,l); expectedOutput.setSample(1,i,r);
             actualEffect += std::abs ((double)l - captured.getSample (0, i));
             referenceEnergy += (double)l * l;
         }
+        // Match the original JUCE Gain's 50-ms startup ramp, including its
+        // float stepping. The observation tap is before this existing Gain.
+        auto outputBlock=juce::dsp::AudioBlock<float>(expectedOutput);
+        juce::dsp::ProcessContextReplacing<float> outputContext(outputBlock);
+        outputReference.process(outputContext);
+        for(int i=0;i<64;++i) {
+            for (int channel = 0; channel < 2; ++channel)
+                maxError = std::max (maxError, std::abs ((double)audio.getSample (channel, i)
+                                                          - expectedOutput.getSample(channel,i)));
+        }
     }
+    std::cout << "Cut processor oracle: max_error=" << maxError << " effect=" << actualEffect
+              << " energy=" << referenceEnergy << " low=" << p.apvts.getRawParameterValue(ids::lowCutHz)->load()
+              << " high=" << p.apvts.getRawParameterValue(ids::highCutHz)->load() << std::endl;
     check (maxError < 1e-6 && actualEffect > 1e-2 && referenceEnergy > 1e-6,
            "actual post-cab LOW/HIGH CUT matches independent frame-based stereo DSP reference");
 }
 
 
-int main ()
+#include "compact_stereo_regressions.h"
+
+int main (int argc, char** argv)
 {
     juce::ScopedJuceInitialiser_GUI init;
     const auto dir = juce::File::getSpecialLocation (juce::File::tempDirectory)
                          .getNonexistentChildFile ("125a-ir-tests", "", false);
     dir.createDirectory ();
+    if (argc > 1)
+    {
+        const std::string mode = argv[1];
+        if (mode == "cuts") compactCutProcessorOracle (dir);
+        else if (mode == "bypass") compactBypass (dir);
+        else if (mode == "stereo") compactRegressions (dir);
+        else if (mode == "cpu") compactCPU (dir);
+        else if (mode == "right") stereoInputRegressions (dir);
+        else if (mode == "ir-invalid") compactMalformedStereo (dir);
+        else { std::cerr << "Unknown test mode\n"; return 2; }
+        dir.deleteRecursively();
+        std::cout << checks << " checks, " << failures << " failures\n";
+        return failures ? 1 : 0;
+    }
     try
     {
         const auto a = wav (dir, "a.wav"), b = wav (dir, "b.wav", true), bad = dir.getChildFile ("bad.wav"),
@@ -647,6 +679,7 @@ int main ()
         stereoInputRegressions (dir);
         stereoImpulseResponseRegression (dir);
         compactCutProcessorOracle (dir);
+        compactRegressions (dir);
         std::atomic<bool> done{false}, finite{true};
         std::thread audio (
             [&]

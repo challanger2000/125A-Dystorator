@@ -1,0 +1,17 @@
+PASS bypass bus setup
+BYPASS 1->1 latency=5 dry_max=0.0556044 warm_wet_max=0.0453477 energy=0.170632
+FAIL host bypass is dry with reported latency and intended bus mapping
+FAIL host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 1->2 latency=5 dry_max=0.144561 warm_wet_max=0.0453477 energy=0.341265
+FAIL host bypass is dry with reported latency and intended bus mapping
+FAIL host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->1 latency=5 dry_max=0.148107 warm_wet_max=0.0389739 energy=0.0448728
+FAIL host bypass is dry with reported latency and intended bus mapping
+FAIL host bypass advances the complete wet path
+PASS bypass bus setup
+BYPASS 2->2 latency=5 dry_max=0.0556044 warm_wet_max=0.0620839 energy=0.243386
+FAIL host bypass is dry with reported latency and intended bus mapping
+FAIL host bypass advances the complete wet path
+12 checks, 8 failures

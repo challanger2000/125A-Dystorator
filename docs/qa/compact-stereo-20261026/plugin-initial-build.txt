@@ -1,0 +1,1182 @@
+[0/2] Re-checking globbed directories...
+[1/38] Building CXX object CMakeFiles/juce_vst3_helper.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/VST3/juce_VST3ManifestHelper.cpp.o
+[2/38] Building CXX object CMakeFiles/DjentyDonkey.dir/Source/PluginProcessor.cpp.o
+In file included from /workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Amp5150.h:2,
+                 from /workspace/125A-Dystorator/Source/dsp/AmpSim.h:4,
+                 from /workspace/125A-Dystorator/Source/PluginProcessor.h:4,
+                 from /workspace/125A-Dystorator/Source/PluginProcessor.cpp:1:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::setR(int, double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:46:39: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   46 |         if (resistors[(size_t) idx].g != g) { resistors[(size_t) idx].g = g; dirty = true; }
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::prepare(double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:128:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  128 |         bufA.assign ((size_t) N * N, 0.0);
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:129:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  129 |         bufInv.assign ((size_t) N * N, 0.0);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:130:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  130 |         bufAinvNi.assign ((size_t) N * m, 0.0);
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:131:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  131 |         bufV.assign ((size_t) N * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:132:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  132 |         K.assign ((size_t) m * m, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:133:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  133 |         P.assign ((size_t) m * nz, 0.0); // over all of z, zero in the port-current columns
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:134:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  134 |         M.assign ((size_t) numS * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::matVec(const double*, int, int, int, const double*, double*)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:231:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  231 |             const double* a0 = A + (size_t) r * stride;
+      |                                                 ^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:245:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  245 |             const double* a = A + (size_t) r * stride;
+      |                                                ^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::stamp(std::vector<double>&, int, int, int, double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:255:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  255 |         if (a >= 0) A[(size_t) a * n + a] += g;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:255:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  255 |         if (a >= 0) A[(size_t) a * n + a] += g;
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:256:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  256 |         if (b >= 0) A[(size_t) b * n + b] += g;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:256:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  256 |         if (b >= 0) A[(size_t) b * n + b] += g;
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:76: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:80: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::rebuild()’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:264:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  264 |         A.assign ((size_t) N * N, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:268:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  268 |         for (auto& s : sources)   A[(size_t) s.node * N + s.node] += s.g;
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:268:61: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  268 |         for (auto& s : sources)   A[(size_t) s.node * N + s.node] += s.g;
+      |                                                           ~~^~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                        ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:84: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:91: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                                                        ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                        ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:84: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:91: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                                                        ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:280:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  280 |                 A[(size_t) iw * N + eIdx] -= wd.turns;    // v(a) - v(b) - n*e = 0
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:280:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  280 |                 A[(size_t) iw * N + eIdx] -= wd.turns;    // v(a) - v(b) - n*e = 0
+      |                                     ^~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:281:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  281 |                 A[(size_t) eIdx * N + iw] += wd.turns;    // sum n*i = 0
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:281:39: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  281 |                 A[(size_t) eIdx * N + iw] += wd.turns;    // sum n*i = 0
+      |                                       ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:291:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  291 |         AinvNi.assign ((size_t) N * m, 0.0);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:297:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  297 |                 if (pt.a >= 0) s -= Ainv[(size_t) r * N + pt.a];
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:297:62: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  297 |                 if (pt.a >= 0) s -= Ainv[(size_t) r * N + pt.a];
+      |                                                           ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:298:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  298 |                 if (pt.b >= 0) s += Ainv[(size_t) r * N + pt.b];
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:298:62: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  298 |                 if (pt.b >= 0) s += Ainv[(size_t) r * N + pt.b];
+      |                                                           ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:299:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  299 |                 AinvNi[(size_t) r * m + k] = s;
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:299:41: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  299 |                 AinvNi[(size_t) r * m + k] = s;
+      |                                         ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:302:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  302 |         K.assign ((size_t) m * m, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:309:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  309 |                 if (pt.a >= 0) s += AinvNi[(size_t) pt.a * m + j];
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:309:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  309 |                 if (pt.a >= 0) s += AinvNi[(size_t) pt.a * m + j];
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:310:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  310 |                 if (pt.b >= 0) s -= AinvNi[(size_t) pt.b * m + j];
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:310:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  310 |                 if (pt.b >= 0) s -= AinvNi[(size_t) pt.b * m + j];
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:311:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  311 |                 K[(size_t) k * m + j] = s;
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:311:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  311 |                 K[(size_t) k * m + j] = s;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:320:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  320 |         V.assign ((size_t) N * nz, 0.0);
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:323:43: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  323 |             double* row = &V[(size_t) r * nz];
+      |                                           ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:324:50: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  324 |             const double* a = &Ainv[(size_t) r * N];
+      |                                                  ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:341:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  341 |                 row[k++] = AinvNi[(size_t) r * m + j];
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:341:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  341 |                 row[k++] = AinvNi[(size_t) r * m + j];
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:346:81: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  346 |         auto nodeRow = [&] (int n, int j) { return n < 0 ? 0.0 : V[(size_t) n * nz + j]; };
+      |                                                                                 ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:346:86: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  346 |         auto nodeRow = [&] (int n, int j) { return n < 0 ? 0.0 : V[(size_t) n * nz + j]; };
+      |                                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::rebuild()’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:350:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  350 |         P.assign ((size_t) m * nz, 0.0);
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:354:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  354 |                     P[(size_t) k * nz + j] = nodeRow (ports[(size_t) k].a, j) - nodeRow (ports[(size_t) k].b, j);
+      |                                    ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:354:41: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  354 |                     P[(size_t) k * nz + j] = nodeRow (ports[(size_t) k].a, j) - nodeRow (ports[(size_t) k].b, j);
+      |                                         ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:357:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  357 |         M.assign ((size_t) numS * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:362:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  362 |                 M[(size_t) k * nz + j] = 2.0 * c.gc * (nodeRow (c.a, j) - nodeRow (c.b, j));
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:362:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  362 |                 M[(size_t) k * nz + j] = 2.0 * c.gc * (nodeRow (c.a, j) - nodeRow (c.b, j));
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:363:28: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |             M[(size_t) k * nz + k] -= 1.0;
+      |                            ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:363:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |             M[(size_t) k * nz + k] -= 1.0;
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:369:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  369 |                 M[(size_t) k * nz + j] = 2.0 * l.gl * (nodeRow (l.a, j) - nodeRow (l.b, j));
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:369:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  369 |                 M[(size_t) k * nz + j] = 2.0 * l.gl * (nodeRow (l.a, j) - nodeRow (l.b, j));
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:370:28: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  370 |             M[(size_t) k * nz + k] += 1.0;
+      |                            ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:370:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  370 |             M[(size_t) k * nz + k] += 1.0;
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:377:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  377 |                 O[o * (size_t) nz + j] = nodeRow (outputs[o], j);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:383:22: warning: declaration of ‘k’ shadows a previous local [-Wshadow]
+  383 |             for (int k = 0; k < numSrc; ++k)
+      |                      ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:358:13: note: shadowed declaration is here
+  358 |         int k = 0;
+      |             ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::invert(std::vector<double>&, std::vector<double>&, int)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:396:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  396 |         I.assign ((size_t) n * n, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:397:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  397 |         for (int i = 0; i < n; ++i) I[(size_t) i * n + i] = 1.0;
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:397:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  397 |         for (int i = 0; i < n; ++i) I[(size_t) i * n + i] = 1.0;
+      |                                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:46: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:50: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                  ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:85: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:89: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                                                         ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:74: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:78: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:74: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:78: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:410:47: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  410 |             const double d = A[(size_t) col * n + col];
+      |                                               ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:410:51: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  410 |             const double d = A[(size_t) col * n + col];
+      |                                                   ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:90: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:94: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:415:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  415 |                 const double f = A[(size_t) r * n + col];
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:415:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  415 |                 const double f = A[(size_t) r * n + col];
+      |                                                     ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:416:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  416 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:67: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:71: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:67: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:71: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                                                       ^
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:419:80: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                 for (int k = 0; k < kPorts; ++k) Ki += K[(size_t) r * kPorts + k] * i[k];
+      |                                                                                ^
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In static member function ‘static bool vamp::PowerAmp5150::solve(double (&)[10][11], double (&)[10])’:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:652:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  652 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/Preamp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Amp5150.h:3:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: At global scope:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:90:48: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   90 |     void stamp (std::array<std::array<double, N>, N>& G, int a, int b, double g)
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:90:52: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   90 |     void stamp (std::array<std::array<double, N>, N>& G, int a, int b, double g)
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:177:25: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  177 |     std::array<double, N> srcCoef {};
+      |                         ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:179:51: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  179 |     std::array<std::array<double, kMaxCaps + 1>, N> rows {};
+      |                                                   ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In member function ‘void vamp::LinearNetwork<N>::build()’:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:105:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  105 |         std::array<std::array<double, N>, N> G {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:105:44: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  105 |         std::array<std::array<double, N>, N> G {};
+      |                                            ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:112:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  112 |         std::array<std::array<double, N>, N> I {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:112:44: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  112 |         std::array<std::array<double, N>, N> I {};
+      |                                            ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:131:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  131 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Preamp5150.h:5:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: At global scope:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:28:17: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   28 |     Tube tube[NT];
+      |                 ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:55:39: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   55 |     void initDC (const double (&vk)[NT], const double (&vp)[NT], double sampleRate)
+      |                                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:55:63: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   55 |     void initDC (const double (&vk)[NT], const double (&vp)[NT], double sampleRate)
+      |                                                               ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:284:67: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  284 |     double residual (const P0& p0, const KM& K, const double (&i)[M]) const
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:304:35: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  304 |     void evalDevices (double (&i)[M], double (&d)[M][2]) const
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:304:51: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  304 |     void evalDevices (double (&i)[M], double (&d)[M][2]) const
+      |                                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:47: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                             ~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:42: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                          ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:65: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                                                 ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:363:26: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |     KorenTriode triode[NT]; // one per tube: their variations (setTubeVariation) differ
+      |                          ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:364:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  364 |     TubeNoise tubeNoise[NT];
+      |                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:365:20: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  365 |     double vn[NT] {};           // this sample's tube noise (V at the grid)
+      |                    ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:14: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |              ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:59: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                                                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In member function ‘bool vamp::TriodeNetwork<NT>::solve(double*)’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:99:18: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   99 |         double i[M], d[M][2];
+      |                  ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:99:24: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   99 |         double i[M], d[M][2];
+      |                        ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:106:23: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  106 |           double pOld[M], lastMaxF = 1e300;
+      |                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:113:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  113 |             double J[M][M + 1], maxF = 0.0;
+      |                         ~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:113:22: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  113 |             double J[M][M + 1], maxF = 0.0;
+      |                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:144:23: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  144 |             double dp[M];
+      |                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In static member function ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M])’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:320:25: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  320 |         double invPivot[M];
+      |                         ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/AmpSim.h:6:
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h: In member function ‘void vamp::OpAmpDrive::setControls(double, double, double, double)’:
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:16: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |             ~~~^~~~~
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:28: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |                         ~~~^~~~~
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:39: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |                                     ~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h: In member function ‘void vamp::AmpSim::process(float*, int, const Settings&)’:
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:152:30: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  152 |                 if (modelMix != modelTarget)
+      |                     ~~~~~~~~~^~~~~~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h: In member function ‘void vamp::AmpSim::stepKnobs(bool, double)’:
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:186:19: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  186 |             if (d == 0.0) continue;
+      |                 ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:193:94: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  193 |         for (int k : kHeavy) heavyPending = heavyPending || heavyApplied[k == 0 ? 0 : k - 4] != knob[k];
+      |                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+In file included from /workspace/125A-Dystorator/Source/PluginProcessor.h:5:
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h: In member function ‘void vamp::GuitarCuts::setCutoffs(double, double)’:
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h:43:15: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   43 |         if (a != lowHz) { lowHz = a; lowTarget = toG (lowHz); }
+      |             ~~^~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h:44:15: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   44 |         if (b != highHz) { highHz = b; highTarget = toG (highHz); }
+      |             ~~^~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In instantiation of ‘double vamp::PowerAmp5150::residual(const P0&, const KM&, const double (&)[10]) const [with P0 = std::vector<double>; KM = std::vector<double>]’:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:509:42:   required from here
+  509 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:587:76: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  587 |             for (int k = 0; k < kPorts; ++k) Ki += K[(size_t) r * kPorts + k] * i[k];
+      |                                                                            ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:117:70: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  117 |                 for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:140:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  140 |                     J[r][c0] = (r == c0 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][0];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:111: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                                                               ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:117:70: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  117 |                 for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:140:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  140 |                     J[r][c0] = (r == c0 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][0];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:111: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                                                               ^~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In instantiation of ‘void vamp::LinearNetwork<N>::setR(int, double) [with int N = 8]’:
+/workspace/125A-Dystorator/Source/dsp/Preamp5150.h:142:24:   required from here
+  142 |         toneStack.setR (tsSrc, sourceR (path));
+      |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:34:41: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   34 |         if (resistors[(size_t) index].g != g)
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M]) [with int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:145:31:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’
+  145 |             if (! solveLinear (J, dp)) return converged;
+      |                   ~~~~~~~~~~~~^~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘double vamp::TriodeNetwork<NT>::residual(const P0&, const KM&, const double (&)[M]) const [with P0 = std::vector<double>; KM = std::vector<double>; int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:200:42:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’
+  200 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:290:66: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  290 |             for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                  ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M]) [with int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:145:31:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’
+  145 |             if (! solveLinear (J, dp)) return converged;
+      |                   ~~~~~~~~~~~~^~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘double vamp::TriodeNetwork<NT>::residual(const P0&, const KM&, const double (&)[M]) const [with P0 = std::vector<double>; KM = std::vector<double>; int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:200:42:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’
+  200 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:290:66: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  290 |             for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                  ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In instantiation of ‘void vamp::LinearNetwork<N>::build() [with int N = 8]’:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:62:13:   required from ‘double vamp::LinearNetwork<N>::process(double, int) [with int N = 8]’
+   62 |             build();
+      |             ^~~~~
+/workspace/125A-Dystorator/Source/dsp/Preamp5150.h:224:67:   required from here
+  224 |     double processToneStack (double x) { return toneStack.process (x, 1); }
+      |                                                 ~~~~~~~~~~~~~~~~~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:131:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  131 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+[3/38] Building CXX object CMakeFiles/DjentyDonkey.dir/Source/PluginEditor.cpp.o
+In file included from /workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Amp5150.h:2,
+                 from /workspace/125A-Dystorator/Source/dsp/AmpSim.h:4,
+                 from /workspace/125A-Dystorator/Source/PluginProcessor.h:4,
+                 from /workspace/125A-Dystorator/Source/PluginEditor.h:2,
+                 from /workspace/125A-Dystorator/Source/PluginEditor.cpp:1:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::setR(int, double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:46:39: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   46 |         if (resistors[(size_t) idx].g != g) { resistors[(size_t) idx].g = g; dirty = true; }
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::prepare(double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:128:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  128 |         bufA.assign ((size_t) N * N, 0.0);
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:129:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  129 |         bufInv.assign ((size_t) N * N, 0.0);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:130:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  130 |         bufAinvNi.assign ((size_t) N * m, 0.0);
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:131:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  131 |         bufV.assign ((size_t) N * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:132:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  132 |         K.assign ((size_t) m * m, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:133:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  133 |         P.assign ((size_t) m * nz, 0.0); // over all of z, zero in the port-current columns
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:134:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  134 |         M.assign ((size_t) numS * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::matVec(const double*, int, int, int, const double*, double*)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:231:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  231 |             const double* a0 = A + (size_t) r * stride;
+      |                                                 ^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:245:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  245 |             const double* a = A + (size_t) r * stride;
+      |                                                ^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::stamp(std::vector<double>&, int, int, int, double)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:255:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  255 |         if (a >= 0) A[(size_t) a * n + a] += g;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:255:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  255 |         if (a >= 0) A[(size_t) a * n + a] += g;
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:256:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  256 |         if (b >= 0) A[(size_t) b * n + b] += g;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:256:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  256 |         if (b >= 0) A[(size_t) b * n + b] += g;
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:76: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:257:80: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  257 |         if (a >= 0 && b >= 0) { A[(size_t) a * n + b] -= g; A[(size_t) b * n + a] -= g; }
+      |                                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::rebuild()’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:264:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  264 |         A.assign ((size_t) N * N, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:268:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  268 |         for (auto& s : sources)   A[(size_t) s.node * N + s.node] += s.g;
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:268:61: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  268 |         for (auto& s : sources)   A[(size_t) s.node * N + s.node] += s.g;
+      |                                                           ~~^~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                        ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:84: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:278:91: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  278 |                 if (wd.a >= 0) { A[(size_t) wd.a * N + iw] += 1.0; A[(size_t) iw * N + wd.a] += 1.0; }
+      |                                                                                        ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                        ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:84: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:279:91: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  279 |                 if (wd.b >= 0) { A[(size_t) wd.b * N + iw] -= 1.0; A[(size_t) iw * N + wd.b] -= 1.0; }
+      |                                                                                        ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:280:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  280 |                 A[(size_t) iw * N + eIdx] -= wd.turns;    // v(a) - v(b) - n*e = 0
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:280:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  280 |                 A[(size_t) iw * N + eIdx] -= wd.turns;    // v(a) - v(b) - n*e = 0
+      |                                     ^~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:281:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  281 |                 A[(size_t) eIdx * N + iw] += wd.turns;    // sum n*i = 0
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:281:39: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  281 |                 A[(size_t) eIdx * N + iw] += wd.turns;    // sum n*i = 0
+      |                                       ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:291:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  291 |         AinvNi.assign ((size_t) N * m, 0.0);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:297:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  297 |                 if (pt.a >= 0) s -= Ainv[(size_t) r * N + pt.a];
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:297:62: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  297 |                 if (pt.a >= 0) s -= Ainv[(size_t) r * N + pt.a];
+      |                                                           ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:298:55: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  298 |                 if (pt.b >= 0) s += Ainv[(size_t) r * N + pt.b];
+      |                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:298:62: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  298 |                 if (pt.b >= 0) s += Ainv[(size_t) r * N + pt.b];
+      |                                                           ~~~^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:299:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  299 |                 AinvNi[(size_t) r * m + k] = s;
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:299:41: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  299 |                 AinvNi[(size_t) r * m + k] = s;
+      |                                         ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:302:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  302 |         K.assign ((size_t) m * m, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:309:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  309 |                 if (pt.a >= 0) s += AinvNi[(size_t) pt.a * m + j];
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:309:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  309 |                 if (pt.a >= 0) s += AinvNi[(size_t) pt.a * m + j];
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:310:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  310 |                 if (pt.b >= 0) s -= AinvNi[(size_t) pt.b * m + j];
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:310:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  310 |                 if (pt.b >= 0) s -= AinvNi[(size_t) pt.b * m + j];
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:311:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  311 |                 K[(size_t) k * m + j] = s;
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:311:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  311 |                 K[(size_t) k * m + j] = s;
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:320:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  320 |         V.assign ((size_t) N * nz, 0.0);
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:323:43: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  323 |             double* row = &V[(size_t) r * nz];
+      |                                           ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:324:50: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  324 |             const double* a = &Ainv[(size_t) r * N];
+      |                                                  ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:341:48: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  341 |                 row[k++] = AinvNi[(size_t) r * m + j];
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:341:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  341 |                 row[k++] = AinvNi[(size_t) r * m + j];
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:346:81: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  346 |         auto nodeRow = [&] (int n, int j) { return n < 0 ? 0.0 : V[(size_t) n * nz + j]; };
+      |                                                                                 ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:346:86: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  346 |         auto nodeRow = [&] (int n, int j) { return n < 0 ? 0.0 : V[(size_t) n * nz + j]; };
+      |                                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In member function ‘void vamp::DKCircuit::rebuild()’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:350:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  350 |         P.assign ((size_t) m * nz, 0.0);
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:354:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  354 |                     P[(size_t) k * nz + j] = nodeRow (ports[(size_t) k].a, j) - nodeRow (ports[(size_t) k].b, j);
+      |                                    ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:354:41: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  354 |                     P[(size_t) k * nz + j] = nodeRow (ports[(size_t) k].a, j) - nodeRow (ports[(size_t) k].b, j);
+      |                                         ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:357:35: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  357 |         M.assign ((size_t) numS * nz, 0.0);
+      |                                   ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:362:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  362 |                 M[(size_t) k * nz + j] = 2.0 * c.gc * (nodeRow (c.a, j) - nodeRow (c.b, j));
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:362:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  362 |                 M[(size_t) k * nz + j] = 2.0 * c.gc * (nodeRow (c.a, j) - nodeRow (c.b, j));
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:363:28: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |             M[(size_t) k * nz + k] -= 1.0;
+      |                            ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:363:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |             M[(size_t) k * nz + k] -= 1.0;
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:369:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  369 |                 M[(size_t) k * nz + j] = 2.0 * l.gl * (nodeRow (l.a, j) - nodeRow (l.b, j));
+      |                                ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:369:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  369 |                 M[(size_t) k * nz + j] = 2.0 * l.gl * (nodeRow (l.a, j) - nodeRow (l.b, j));
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:370:28: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  370 |             M[(size_t) k * nz + k] += 1.0;
+      |                            ^~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:370:33: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  370 |             M[(size_t) k * nz + k] += 1.0;
+      |                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:377:37: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  377 |                 O[o * (size_t) nz + j] = nodeRow (outputs[o], j);
+      |                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:383:22: warning: declaration of ‘k’ shadows a previous local [-Wshadow]
+  383 |             for (int k = 0; k < numSrc; ++k)
+      |                      ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:358:13: note: shadowed declaration is here
+  358 |         int k = 0;
+      |             ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h: In static member function ‘static void vamp::DKCircuit::invert(std::vector<double>&, std::vector<double>&, int)’:
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:396:32: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  396 |         I.assign ((size_t) n * n, 0.0);
+      |                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:397:52: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  397 |         for (int i = 0; i < n; ++i) I[(size_t) i * n + i] = 1.0;
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:397:56: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  397 |         for (int i = 0; i < n; ++i) I[(size_t) i * n + i] = 1.0;
+      |                                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:46: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:50: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                  ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:85: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:403:89: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  403 |                 if (std::abs (A[(size_t) r * n + col]) > std::abs (A[(size_t) piv * n + col])) piv = r;
+      |                                                                                         ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:74: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:407:78: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  407 |                     std::swap (A[(size_t) col * n + j], A[(size_t) piv * n + j]);
+      |                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                     ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:74: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:408:78: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  408 |                     std::swap (I[(size_t) col * n + j], I[(size_t) piv * n + j]);
+      |                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:410:47: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  410 |             const double d = A[(size_t) col * n + col];
+      |                                               ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:410:51: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  410 |             const double d = A[(size_t) col * n + col];
+      |                                                   ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:60: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                            ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:64: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:90: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                                          ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:411:94: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  411 |             for (int j = 0; j < n; ++j) { A[(size_t) col * n + j] /= d; I[(size_t) col * n + j] /= d; }
+      |                                                                                              ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:415:49: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  415 |                 const double f = A[(size_t) r * n + col];
+      |                                                 ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:415:53: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  415 |                 const double f = A[(size_t) r * n + col];
+      |                                                     ^~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:416:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  416 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:67: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:419:71: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                     A[(size_t) r * n + j] -= f * A[(size_t) col * n + j];
+      |                                                                       ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:36: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                    ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:40: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:67: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/DKCircuit.h:420:71: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  420 |                     I[(size_t) r * n + j] -= f * I[(size_t) col * n + j];
+      |                                                                       ^
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:419:80: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  419 |                 for (int k = 0; k < kPorts; ++k) Ki += K[(size_t) r * kPorts + k] * i[k];
+      |                                                                                ^
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In static member function ‘static bool vamp::PowerAmp5150::solve(double (&)[10][11], double (&)[10])’:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:652:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  652 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/Preamp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Amp5150.h:3:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: At global scope:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:90:48: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   90 |     void stamp (std::array<std::array<double, N>, N>& G, int a, int b, double g)
+      |                                                ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:90:52: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   90 |     void stamp (std::array<std::array<double, N>, N>& G, int a, int b, double g)
+      |                                                    ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:177:25: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  177 |     std::array<double, N> srcCoef {};
+      |                         ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:179:51: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  179 |     std::array<std::array<double, kMaxCaps + 1>, N> rows {};
+      |                                                   ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In member function ‘void vamp::LinearNetwork<N>::build()’:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:105:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  105 |         std::array<std::array<double, N>, N> G {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:105:44: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  105 |         std::array<std::array<double, N>, N> G {};
+      |                                            ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:112:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  112 |         std::array<std::array<double, N>, N> I {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:112:44: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  112 |         std::array<std::array<double, N>, N> I {};
+      |                                            ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:131:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  131 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:4,
+                 from /workspace/125A-Dystorator/Source/dsp/Preamp5150.h:5:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: At global scope:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:28:17: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   28 |     Tube tube[NT];
+      |                 ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:55:39: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   55 |     void initDC (const double (&vk)[NT], const double (&vp)[NT], double sampleRate)
+      |                                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:55:63: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   55 |     void initDC (const double (&vk)[NT], const double (&vp)[NT], double sampleRate)
+      |                                                               ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:284:67: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  284 |     double residual (const P0& p0, const KM& K, const double (&i)[M]) const
+      |                                                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:304:35: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  304 |     void evalDevices (double (&i)[M], double (&d)[M][2]) const
+      |                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:304:51: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  304 |     void evalDevices (double (&i)[M], double (&d)[M][2]) const
+      |                                                   ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:47: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                             ~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:42: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                          ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:318:65: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  318 |     static bool solveLinear (double (&m)[M][M + 1], double (&x)[M])
+      |                                                                 ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:363:26: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  363 |     KorenTriode triode[NT]; // one per tube: their variations (setTubeVariation) differ
+      |                          ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:364:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  364 |     TubeNoise tubeNoise[NT];
+      |                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:365:20: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  365 |     double vn[NT] {};           // this sample's tube noise (V at the grid)
+      |                    ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:14: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |              ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:40: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                                        ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:368:59: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  368 |     double p[M] {}, pPrev[M] {}, pIdle[M] {}, plateI[NT] {};
+      |                                                           ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In member function ‘bool vamp::TriodeNetwork<NT>::solve(double*)’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:99:18: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   99 |         double i[M], d[M][2];
+      |                  ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:99:24: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   99 |         double i[M], d[M][2];
+      |                        ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In lambda function:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:106:23: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  106 |           double pOld[M], lastMaxF = 1e300;
+      |                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:113:27: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  113 |             double J[M][M + 1], maxF = 0.0;
+      |                         ~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:113:22: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  113 |             double J[M][M + 1], maxF = 0.0;
+      |                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:144:23: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  144 |             double dp[M];
+      |                       ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In static member function ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M])’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:320:25: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  320 |         double invPivot[M];
+      |                         ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+In file included from /workspace/125A-Dystorator/Source/dsp/AmpSim.h:6:
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h: In member function ‘void vamp::OpAmpDrive::setControls(double, double, double, double)’:
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:16: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |             ~~~^~~~~
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:28: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |                         ~~~^~~~~
+/workspace/125A-Dystorator/Source/dsp/PrecisionDrive.h:84:39: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   84 |         if (rf != Rf || ca != Ca || a != tonePos)
+      |                                     ~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h: In member function ‘void vamp::AmpSim::process(float*, int, const Settings&)’:
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:152:30: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  152 |                 if (modelMix != modelTarget)
+      |                     ~~~~~~~~~^~~~~~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h: In member function ‘void vamp::AmpSim::stepKnobs(bool, double)’:
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:186:19: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  186 |             if (d == 0.0) continue;
+      |                 ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/AmpSim.h:193:94: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  193 |         for (int k : kHeavy) heavyPending = heavyPending || heavyApplied[k == 0 ? 0 : k - 4] != knob[k];
+      |                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+In file included from /workspace/125A-Dystorator/Source/PluginProcessor.h:5:
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h: In member function ‘void vamp::GuitarCuts::setCutoffs(double, double)’:
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h:43:15: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   43 |         if (a != lowHz) { lowHz = a; lowTarget = toG (lowHz); }
+      |             ~~^~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/GuitarCuts.h:44:15: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   44 |         if (b != highHz) { highHz = b; highTarget = toG (highHz); }
+      |             ~~^~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h: In instantiation of ‘double vamp::PowerAmp5150::residual(const P0&, const KM&, const double (&)[10]) const [with P0 = std::vector<double>; KM = std::vector<double>]’:
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:509:42:   required from here
+  509 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/PowerAmp5150.h:587:76: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  587 |             for (int k = 0; k < kPorts; ++k) Ki += K[(size_t) r * kPorts + k] * i[k];
+      |                                                                            ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:117:70: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  117 |                 for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:140:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  140 |                     J[r][c0] = (r == c0 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][0];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:111: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                                                               ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:117:70: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  117 |                 for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                      ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:140:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  140 |                     J[r][c0] = (r == c0 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][0];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:75: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                           ^~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:141:111: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  141 |                     J[r][c1] = (r == c1 ? 1.0 : 0.0) - K[(size_t) r * M + c0] * d[c0][1] - K[(size_t) r * M + c1] * d[c1][1];
+      |                                                                                                               ^~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In instantiation of ‘void vamp::LinearNetwork<N>::setR(int, double) [with int N = 8]’:
+/workspace/125A-Dystorator/Source/dsp/Preamp5150.h:142:24:   required from here
+  142 |         toneStack.setR (tsSrc, sourceR (path));
+      |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:34:41: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+   34 |         if (resistors[(size_t) index].g != g)
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M]) [with int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:145:31:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’
+  145 |             if (! solveLinear (J, dp)) return converged;
+      |                   ~~~~~~~~~~~~^~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘double vamp::TriodeNetwork<NT>::residual(const P0&, const KM&, const double (&)[M]) const [with P0 = std::vector<double>; KM = std::vector<double>; int NT = 6]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:200:42:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 6]’
+  200 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:262:23:   required from here
+  262 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:290:66: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  290 |             for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                  ^
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘static bool vamp::TriodeNetwork<NT>::solveLinear(double (&)[M][(M + 1)], double (&)[M]) [with int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:145:31:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’
+  145 |             if (! solveLinear (J, dp)) return converged;
+      |                   ~~~~~~~~~~~~^~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:333:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  333 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h: In instantiation of ‘double vamp::TriodeNetwork<NT>::residual(const P0&, const KM&, const double (&)[M]) const [with P0 = std::vector<double>; KM = std::vector<double>; int NT = 2]’:
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:200:42:   required from ‘bool vamp::TriodeNetwork<NT>::solve(double*) [with int NT = 2]’
+  200 |             return ! conv && ! (residual (p0, K, i) <= kAcceptResidual && plausible());
+      |                                 ~~~~~~~~~^~~~~~~~~~
+/workspace/125A-Dystorator/Source/dsp/FullPreamp5150.h:389:23:   required from here
+  389 |         if (net.solve (u))
+      |             ~~~~~~~~~~^~~
+/workspace/125A-Dystorator/Source/dsp/TriodeNetwork.h:290:66: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+  290 |             for (int k = 0; k < M; ++k) Ki += K[(size_t) r * M + k] * i[k];
+      |                                                                  ^
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h: In instantiation of ‘void vamp::LinearNetwork<N>::build() [with int N = 8]’:
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:62:13:   required from ‘double vamp::LinearNetwork<N>::process(double, int) [with int N = 8]’
+   62 |             build();
+      |             ^~~~~
+/workspace/125A-Dystorator/Source/dsp/Preamp5150.h:224:67:   required from here
+  224 |     double processToneStack (double x) { return toneStack.process (x, 1); }
+      |                                                 ~~~~~~~~~~~~~~~~~~^~~~~~
+/workspace/125A-Dystorator/Source/dsp/LinearNetwork.h:131:23: warning: comparing floating-point with ‘==’ or ‘!=’ is unsafe [-Wfloat-equal]
+  131 |                 if (f == 0.0) continue;
+      |                     ~~^~~~~~
+[4/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors_ara.cpp.o
+[5/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors_lv2_libs.cpp.o
+[6/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_processors/juce_audio_processors.cpp.o
+[7/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_gui_extra/juce_gui_extra.cpp.o
+[8/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics.cpp.o
+[9/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_gui_basics/juce_gui_basics.cpp.o
+[10/38] Building C object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Sheenbidi.c.o
+[11/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_events/juce_events.cpp.o
+[12/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_graphics/juce_graphics_Harfbuzz.cpp.o
+[13/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_core/juce_core_CompilationTime.cpp.o
+[14/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_data_structures/juce_data_structures.cpp.o
+[15/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_core/juce_core.cpp.o
+[16/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_basics/juce_audio_basics.cpp.o
+[17/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_utils/juce_audio_utils.cpp.o
+[18/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_formats/juce_audio_formats.cpp.o
+[19/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_audio_devices/juce_audio_devices.cpp.o
+In file included from /workspace/sysroot/usr/include/alsa/asoundlib.h:58,
+                 from /workspace/juce-8.0.4/modules/juce_audio_devices/juce_audio_devices.cpp:174:
+/workspace/sysroot/usr/include/alsa/pcm.h:648:26: warning: ISO C++ forbids zero-size array ‘pos’ [-Wpedantic]
+  648 |         unsigned int pos[0];    /**< channel position array */
+      |                          ^
+/workspace/sysroot/usr/include/alsa/pcm.h:654:25: warning: invalid use of ‘struct snd_pcm_chmap’ with a zero-size array in ‘struct snd_pcm_chmap_query’ [-Wpedantic]
+  654 |         snd_pcm_chmap_t map;            /**< available channel map */
+      |                         ^~~
+/workspace/sysroot/usr/include/alsa/pcm.h:648:22: note: array member ‘unsigned int snd_pcm_chmap::pos [0]’ declared here
+  648 |         unsigned int pos[0];    /**< channel position array */
+      |                      ^~~
+In file included from /workspace/sysroot/usr/include/alsa/asoundlib.h:60:
+/workspace/sysroot/usr/include/alsa/ump.h:110:72: warning: ‘int snd_ump_endpoint_info(snd_ump_t*, snd_ump_endpoint_info_t*)’ hides constructor for ‘struct snd_ump_endpoint_info’ [-Wshadow]
+  110 | int snd_ump_endpoint_info(snd_ump_t *ump, snd_ump_endpoint_info_t *info);
+      |                                                                        ^
+/workspace/sysroot/usr/include/alsa/ump.h:168:66: warning: ‘int snd_ump_block_info(snd_ump_t*, snd_ump_block_info_t*)’ hides constructor for ‘struct snd_ump_block_info’ [-Wshadow]
+  168 | int snd_ump_block_info(snd_ump_t *ump, snd_ump_block_info_t *info);
+      |                                                                  ^
+In file included from /workspace/sysroot/usr/include/alsa/asoundlib.h:65:
+/workspace/sysroot/usr/include/alsa/ump_msg.h: In function ‘uint8_t snd_ump_get_byte(const uint32_t*, unsigned int)’:
+/workspace/sysroot/usr/include/alsa/ump_msg.h:1123:49: warning: unsigned conversion from ‘int’ to ‘unsigned int’ changes value from ‘-4’ to ‘4294967292’ [-Wsign-conversion]
+ 1123 |         return ((const uint8_t *)ump)[(offset & ~3) | (3 - (offset & 3))];
+      |                                                 ^~
+[20/38] Linking CXX executable juce_vst3_helper
+[21/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_AAX.cpp.o
+[22/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_AAX_utils.cpp.o
+[23/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_ARA.cpp.o
+[24/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_LV2.cpp.o
+[25/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_Standalone.cpp.o
+[26/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_Unity.cpp.o
+[27/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_VST2.cpp.o
+[28/38] Building CXX object CMakeFiles/DjentyDonkey.dir/workspace/juce-8.0.4/modules/juce_dsp/juce_dsp.cpp.o
+[29/38] Linking CXX static library "DjentyDonkey_artefacts/Release/libDjenty Donkey_SharedCode.a"
+[30/38] Building CXX object CMakeFiles/guitar_cuts_test.dir/tests/guitar_cuts_test.cpp.o
+[31/38] Building CXX object CMakeFiles/DjentyDonkey_VST3.dir/workspace/juce-8.0.4/modules/juce_audio_plugin_client/juce_audio_plugin_client_VST3.cpp.o
+[32/38] Building CXX object CMakeFiles/dsp_test.dir/tests/dsp_test.cpp.o
+[33/38] Building CXX object CMakeFiles/tone_regress.dir/tests/tone_regress.cpp.o
+[34/38] Linking CXX executable guitar_cuts_test
+[35/38] Linking CXX executable dsp_test
+[36/38] Linking CXX executable tone_regress
+[37/38] Linking CXX shared module "DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3/Contents/x86_64-linux/Djenty Donkey.so"
+lto-wrapper: warning: using serial compilation of 87 LTRANS jobs
+lto-wrapper: note: see the ‘-flto’ option documentation for more information
+removing moduleinfo.json
+creating /workspace/125A-Dystorator/build/compact-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3/Contents/Resources/moduleinfo.json

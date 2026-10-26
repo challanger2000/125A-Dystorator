@@ -1,0 +1,18 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Checking for modules 'webkit2gtk-4.0;gtk+-x11-3.0'
+--   Package 'webkit2gtk-4.0', required by 'virtual:world', not found
+--   Package 'gtk+-x11-3.0', required by 'virtual:world', not found
+-- Configuring juceaide
+-- Building juceaide
+-- Exporting juceaide
+-- Testing juceaide
+-- Finished setting up juceaide
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/125A-Dystorator/build/compact-tsan
+[0/4] Re-checking globbed directories...
+[1/7] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/125A-Dystorator/Source/PluginProcessor.cpp.o
+[2/7] Building CXX object CMakeFiles/ir_presets_test.dir/ir_presets_test.cpp.o
+[3/7] Building CXX object CMakeFiles/ir_presets_test.dir/workspace/125A-Dystorator/Source/PluginEditor.cpp.o
+[4/7] Linking CXX executable ir_presets_test_artefacts/Release/ir_presets_test

@@ -1,0 +1,77 @@
+SETUP ampGain=5 expected=5
+SETUP master=3 expected=3
+SETUP channel=2 expected=2
+SETUP cabOn=1 expected=1
+SETUP lowCutOn=1 expected=1
+SETUP highCutOn=1 expected=1
+SETUP ampVolume=0 expected=0
+SETUP inGain=0 expected=0
+SETUP outGain=0 expected=0
+VST3_CPU fs=44100 lanes=1 frames=32 mode=offline mean_us=984.821 p95_us=1145.12 p99_us=1303.38 max_us=1321.04 deadline_us=725.624 utilization_percent=135.721 overruns=160 schedule_misses=0 energy=9.61691 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=32 mode=paced mean_us=1038.4 p95_us=1362.27 p99_us=1847.88 max_us=2135.81 deadline_us=725.624 utilization_percent=143.104 overruns=160 schedule_misses=160 energy=11.3156 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=64 mode=offline mean_us=2222 p95_us=2986.1 p99_us=4760.92 max_us=12635.7 deadline_us=1451.25 utilization_percent=153.109 overruns=160 schedule_misses=0 energy=22.3264 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=64 mode=paced mean_us=2007.95 p95_us=2341.1 p99_us=2618.2 max_us=2891.72 deadline_us=1451.25 utilization_percent=138.36 overruns=160 schedule_misses=160 energy=22.1251 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=128 mode=offline mean_us=4069.98 p95_us=4484.15 p99_us=4870.82 max_us=5015.37 deadline_us=2902.49 utilization_percent=140.224 overruns=160 schedule_misses=0 energy=43.8856 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=128 mode=paced mean_us=4678.68 p95_us=7871.32 p99_us=15229.6 max_us=15801.1 deadline_us=2902.49 utilization_percent=161.195 overruns=160 schedule_misses=160 energy=43.5947 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=256 mode=offline mean_us=8675.99 p95_us=9881.55 p99_us=16308.7 max_us=18006.5 deadline_us=5804.99 utilization_percent=149.457 overruns=160 schedule_misses=0 energy=86.6986 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=256 mode=paced mean_us=8341.24 p95_us=9207.55 p99_us=11623 max_us=12484.4 deadline_us=5804.99 utilization_percent=143.691 overruns=160 schedule_misses=160 energy=86.5137 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=512 mode=offline mean_us=16969.5 p95_us=18008.4 p99_us=44711.2 max_us=46050.7 deadline_us=11610 utilization_percent=146.163 overruns=160 schedule_misses=0 energy=172.951 status=FAIL
+VST3_CPU fs=44100 lanes=1 frames=512 mode=paced mean_us=17164.3 p95_us=19140.2 p99_us=23416.3 max_us=27060.8 deadline_us=11610 utilization_percent=147.841 overruns=160 schedule_misses=160 energy=172.927 status=FAIL
+SETUP ampGain=5 expected=5
+SETUP master=3 expected=3
+SETUP channel=2 expected=2
+SETUP cabOn=1 expected=1
+SETUP lowCutOn=1 expected=1
+SETUP highCutOn=1 expected=1
+SETUP ampVolume=0 expected=0
+SETUP inGain=0 expected=0
+SETUP outGain=0 expected=0
+VST3_CPU fs=44100 lanes=2 frames=32 mode=offline mean_us=2089.77 p95_us=2794.11 p99_us=3420.88 max_us=5289.23 deadline_us=725.624 utilization_percent=287.997 overruns=160 schedule_misses=0 energy=6.54793 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=32 mode=paced mean_us=2103.67 p95_us=3041.66 p99_us=5410.3 max_us=5612.39 deadline_us=725.624 utilization_percent=289.913 overruns=160 schedule_misses=160 energy=7.66869 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=64 mode=offline mean_us=4181.89 p95_us=5179.98 p99_us=7050.46 max_us=7609.69 deadline_us=1451.25 utilization_percent=288.158 overruns=160 schedule_misses=0 energy=15.1109 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=64 mode=paced mean_us=4487.32 p95_us=4828.32 p99_us=9303.74 max_us=73696.8 deadline_us=1451.25 utilization_percent=309.205 overruns=160 schedule_misses=160 energy=14.9611 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=128 mode=offline mean_us=8108.82 p95_us=9866.09 p99_us=13578.8 max_us=16698.7 deadline_us=2902.49 utilization_percent=279.374 overruns=160 schedule_misses=0 energy=29.6534 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=128 mode=paced mean_us=7863.7 p95_us=8812.81 p99_us=10295 max_us=10985.4 deadline_us=2902.49 utilization_percent=270.929 overruns=160 schedule_misses=160 energy=29.4465 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=256 mode=offline mean_us=16832.1 p95_us=21369.3 p99_us=22601 max_us=33122.3 deadline_us=5804.99 utilization_percent=289.96 overruns=160 schedule_misses=0 energy=58.5675 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=256 mode=paced mean_us=17460.2 p95_us=21666.8 p99_us=24265 max_us=27090.2 deadline_us=5804.99 utilization_percent=300.779 overruns=160 schedule_misses=160 energy=58.434 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=512 mode=offline mean_us=31783 p95_us=34588.3 p99_us=37111.6 max_us=38804.9 deadline_us=11610 utilization_percent=273.756 overruns=160 schedule_misses=0 energy=116.786 status=FAIL
+VST3_CPU fs=44100 lanes=2 frames=512 mode=paced mean_us=31996.5 p95_us=35649.3 p99_us=38100.7 max_us=38591.3 deadline_us=11610 utilization_percent=275.595 overruns=160 schedule_misses=160 energy=116.768 status=FAIL
+SETUP ampGain=5 expected=5
+SETUP master=3 expected=3
+SETUP channel=2 expected=2
+SETUP cabOn=1 expected=1
+SETUP lowCutOn=1 expected=1
+SETUP highCutOn=1 expected=1
+SETUP ampVolume=0 expected=0
+SETUP inGain=0 expected=0
+SETUP outGain=0 expected=0
+VST3_CPU fs=48000 lanes=1 frames=32 mode=offline mean_us=1089.98 p95_us=1372.51 p99_us=1772.32 max_us=2365.18 deadline_us=666.667 utilization_percent=163.497 overruns=160 schedule_misses=0 energy=9.26919 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=32 mode=paced mean_us=1014.04 p95_us=1199.49 p99_us=1466.4 max_us=1555.57 deadline_us=666.667 utilization_percent=152.106 overruns=160 schedule_misses=160 energy=11.2626 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=64 mode=offline mean_us=1971.14 p95_us=2195.36 p99_us=2333.86 max_us=2502.4 deadline_us=1333.33 utilization_percent=147.836 overruns=160 schedule_misses=0 energy=22.3841 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=64 mode=paced mean_us=2041.89 p95_us=2398.01 p99_us=3525.83 max_us=4983.05 deadline_us=1333.33 utilization_percent=153.142 overruns=160 schedule_misses=160 energy=22.1633 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=128 mode=offline mean_us=4016.41 p95_us=4480.44 p99_us=4788.02 max_us=5056.68 deadline_us=2666.67 utilization_percent=150.615 overruns=160 schedule_misses=0 energy=43.9127 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=128 mode=paced mean_us=4014.69 p95_us=4446.48 p99_us=4548.17 max_us=4554.13 deadline_us=2666.67 utilization_percent=150.551 overruns=160 schedule_misses=160 energy=43.6159 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=256 mode=offline mean_us=8701.89 p95_us=9674.22 p99_us=12781.1 max_us=19012.8 deadline_us=5333.33 utilization_percent=163.16 overruns=160 schedule_misses=0 energy=86.7946 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=256 mode=paced mean_us=8493.8 p95_us=9584.23 p99_us=10983.9 max_us=11296.8 deadline_us=5333.33 utilization_percent=159.259 overruns=160 schedule_misses=160 energy=86.5659 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=512 mode=offline mean_us=16801.6 p95_us=18438.4 p99_us=21912.9 max_us=22433.8 deadline_us=10666.7 utilization_percent=157.515 overruns=160 schedule_misses=0 energy=172.937 status=FAIL
+VST3_CPU fs=48000 lanes=1 frames=512 mode=paced mean_us=16997.6 p95_us=21991 p99_us=25150.3 max_us=25339.8 deadline_us=10666.7 utilization_percent=159.353 overruns=160 schedule_misses=160 energy=172.895 status=FAIL
+SETUP ampGain=5 expected=5
+SETUP master=3 expected=3
+SETUP channel=2 expected=2
+SETUP cabOn=1 expected=1
+SETUP lowCutOn=1 expected=1
+SETUP highCutOn=1 expected=1
+SETUP ampVolume=0 expected=0
+SETUP inGain=0 expected=0
+SETUP outGain=0 expected=0
+VST3_CPU fs=48000 lanes=2 frames=32 mode=offline mean_us=2253.67 p95_us=3401.4 p99_us=5109.15 max_us=5797.98 deadline_us=666.667 utilization_percent=338.051 overruns=160 schedule_misses=0 energy=6.30811 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=32 mode=paced mean_us=2039.33 p95_us=2650.26 p99_us=5373.07 max_us=5713.69 deadline_us=666.667 utilization_percent=305.9 overruns=160 schedule_misses=160 energy=7.62479 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=64 mode=offline mean_us=4115.79 p95_us=4867.41 p99_us=6172.92 max_us=6994.35 deadline_us=1333.33 utilization_percent=308.684 overruns=160 schedule_misses=0 energy=15.1598 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=64 mode=paced mean_us=4259.43 p95_us=5366.48 p99_us=7474.43 max_us=10187.4 deadline_us=1333.33 utilization_percent=319.457 overruns=160 schedule_misses=160 energy=15.0002 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=128 mode=offline mean_us=8310.54 p95_us=10676.6 p99_us=13715.3 max_us=14705.2 deadline_us=2666.67 utilization_percent=311.645 overruns=160 schedule_misses=0 energy=29.6965 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=128 mode=paced mean_us=8288.14 p95_us=10710.3 p99_us=13740.2 max_us=14730.3 deadline_us=2666.67 utilization_percent=310.805 overruns=160 schedule_misses=160 energy=29.4833 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=256 mode=offline mean_us=18097.3 p95_us=21853.3 p99_us=25696.7 max_us=26753 deadline_us=5333.33 utilization_percent=339.324 overruns=160 schedule_misses=0 energy=58.6288 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=256 mode=paced mean_us=17763.3 p95_us=21007.4 p99_us=23658.3 max_us=25746.2 deadline_us=5333.33 utilization_percent=333.063 overruns=160 schedule_misses=160 energy=58.4661 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=512 mode=offline mean_us=33026.9 p95_us=35807.5 p99_us=55794.5 max_us=64326.9 deadline_us=10666.7 utilization_percent=309.627 overruns=160 schedule_misses=0 energy=116.815 status=FAIL
+VST3_CPU fs=48000 lanes=2 frames=512 mode=paced mean_us=34384.4 p95_us=40204 p99_us=47324.7 max_us=50468.9 deadline_us=10666.7 utilization_percent=322.354 overruns=160 schedule_misses=160 energy=116.785 status=FAIL
+VST3 CPU: 40 cases, 40 deadline/audio failures

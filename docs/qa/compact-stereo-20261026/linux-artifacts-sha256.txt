@@ -1,0 +1,2 @@
+d980039c39cfece2b4692d102ed5cf9713b028739d254df4161a1c409ee18533  build/compact-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3/Contents/x86_64-linux/Djenty Donkey.so
+dea8a850919b15f19dfd3354e4f039b841d7a328a4e636ead78824c40231880c  build/compact-plugin/DjentyDonkey_artefacts/Release/Standalone/Djenty Donkey

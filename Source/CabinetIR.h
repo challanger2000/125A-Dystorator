@@ -61,16 +61,35 @@ public:
             if (! input.openedOk() || input.readIntoMemoryBlock (bytes, (size_t) maxFileBytes + 1) <= 0
                 || bytes.getSize() > (size_t) maxFileBytes)
                 return fail ("Cannot read IR file");
-            // Some readers pad a truncated container with zeros; reject a
-            // WAV/AIFF whose declared container extends beyond our snapshot.
+            // JUCE's WAV/AIFF readers may zero-pad short reads and still return
+            // success. Check BOTH the outer container and every inner chunk
+            // against the immutable snapshot before asking the reader to decode.
             if (bytes.getSize() >= 12)
             {
                 const auto* raw = static_cast<const unsigned char*> (bytes.getData());
                 const bool riff = std::memcmp (raw, "RIFF", 4) == 0;
                 const bool form = std::memcmp (raw, "FORM", 4) == 0;
-                if ((riff || form) && (juce::uint64) (riff ? juce::ByteOrder::littleEndianInt (raw + 4)
-                                                                          : juce::ByteOrder::bigEndianInt (raw + 4)) + 8 > bytes.getSize())
-                    return fail ("Truncated IR container");
+                if (riff || form)
+                {
+                    const auto readLength = [riff] (const unsigned char* p) -> juce::uint64
+                    {
+                        return riff ? juce::ByteOrder::littleEndianInt (p)
+                                    : juce::ByteOrder::bigEndianInt (p);
+                    };
+                    const auto end = readLength (raw + 4) + 8;
+                    if (end < 12 || end > bytes.getSize())
+                        return fail ("Truncated IR container");
+                    for (juce::uint64 position = 12; position < end;)
+                    {
+                        if (end - position < 8)
+                            return fail ("Truncated IR chunk header");
+                        const auto length = readLength (raw + position + 4);
+                        const auto padded = length + (length & 1u);
+                        if (padded > end - position - 8)
+                            return fail ("Truncated IR chunk data");
+                        position += 8 + padded;
+                    }
+                }
             }
             juce::AudioFormatManager formats;
             formats.registerBasicFormats();
