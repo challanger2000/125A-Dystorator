@@ -1,12 +1,15 @@
 #include "HostedCPUBenchmark.h"
+#include "Step3HostedQA.h"
 #include <cmath>
 #include <iostream>
 #include <juce_audio_utils/juce_audio_utils.h>
 
 int main (int argc, char **argv)
 {
+    const bool step3 = argc == 3 && juce::String (argv[2]) == "step3";
+    step3Heap::Installation allocationHooks (step3);
     juce::ScopedJuceInitialiser_GUI init;
-    if (argc != 2 && argc != 3)
+    if (argc != 2 && argc != 3 && argc != 4)
     {
         std::cerr << "Usage: compact_vst3_host /absolute/plugin.vst3 [cpu]\n";
         return 2;
@@ -19,7 +22,12 @@ int main (int argc, char **argv)
         std::cerr << "FAIL expected one discovered VST3 effect\n";
         return 1;
     }
-    if (argc == 3)
+    if (argc == 4)
+    {
+        if (juce::String (argv[2]) != "step3-cpu") return 2;
+        return step3Hosted::cpu (format, *descriptions[0], argv[3]);
+    }
+    if (argc == 3 && !step3)
     {
         if (juce::String (argv[2]) != "cpu")
             return 2;
@@ -225,5 +233,6 @@ int main (int argc, char **argv)
     }
     for (auto *p : {active.get (), silent.get (), restored.get ()})
         p->releaseResources ();
+    if (step3) pass = step3Hosted::run (format, *descriptions[0]) && pass;
     return pass ? 0 : 1;
 }

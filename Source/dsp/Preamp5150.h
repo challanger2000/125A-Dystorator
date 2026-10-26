@@ -126,6 +126,7 @@ public:
     void prepare (double sampleRate)
     {
         fs = sampleRate;
+        railNow1 = vb1; railNow2 = vb2;
         toneStack.prepare (fs);
         setBright (bright);
         lead.configure (vb1, vb2, fs);
@@ -315,10 +316,9 @@ public:
     // Supply rails V1+ / V2+ for the next sample (from PowerAmp5150's supply chain)
     void setRails (double v1, double v2)
     {
-        lead.setRails (v1, v2);
-        blue.setRails (v1, v2);
-        clean.setRails (v1);
-        blueOff.setRails (v1, v2);
+        // Source inputs only: apply the exact current sample's rails immediately
+        // before each running circuit. Inactive circuits do not consume inputs.
+        railNow1 = v1; railNow2 = v2;
     }
 
     // current drawn from V1+ / V2+ at the last sample, by the channel's active stages (the bypassed ones idle);
@@ -372,7 +372,13 @@ private:
     const FullPreamp5150& full (int p) const { return p == PRed ? lead : p == PBlue ? blue : blueOff; }
 
     // one sample of a circuit up to the tone stack input
-    double runPath (int p, double vin) { return p == PClean ? clean.process (vin) : full (p).process (vin); }
+    double runPath (int p, double vin)
+    {
+        if (p == PClean) { clean.setRails (railNow1); return clean.process (vin); }
+        auto& circuit = full (p);
+        circuit.setRails (railNow1, railNow2);
+        return circuit.process (vin);
+    }
 
     // a circuit back to its idle point
     void resetPath (int p)
@@ -420,6 +426,7 @@ private:
     // mu Rp / (rp + Rp + (mu+1) Rk) ~ 26, feedback fraction ~ 0.35). Small next to R89, so not critical.
     static constexpr double kRoutV5Afb = kRoutV5A / (1.0 + 26.0 * 0.346);
 
+    double railNow1 = 305.7, railNow2 = 322.1;
     double fs = 192000.0;
     int mode = Red;               // the channel
     bool crunch = true;           // the CRUNCH switch (BLUE)

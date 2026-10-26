@@ -121,7 +121,12 @@ public:
             ts9.setControls (knob[7], knob[8], knob[9]);
         }
         modelTarget = s.boostModel == 1 ? 1.0 : 0.0;
-        if (firstModel) { modelMix = modelTarget; firstModel = false; }
+        if (firstModel)
+        {
+            modelMix = modelTarget;
+            modelWeight = 0.5 - 0.5 * std::cos (kPi * modelMix);
+            firstModel = false;
+        }
         lastBoostOn = s.boostOn;
         boostAttack = s.boostAttack;
         const double target[kKnobs] = { s.gain, s.bass, s.mid, s.treble, s.master, s.presence, s.resonance,
@@ -158,8 +163,11 @@ public:
             if (s.boostOn) // both pedals run, so switching between them is a crossfade, not a restart
             {
                 if (modelMix != modelTarget)
+                {
                     modelMix = modelTarget > modelMix ? std::min (modelTarget, modelMix + modelStep) : std::max (modelTarget, modelMix - modelStep);
-                const double w = 0.5 - 0.5 * std::cos (kPi * modelMix);
+                    modelWeight = 0.5 - 0.5 * std::cos (kPi * modelMix);
+                }
+                const double w = modelWeight; // same cosine; reuse only while its argument is unchanged
                 v = (1.0 - w) * drive.process (v) + w * ts9.process (v);
             }
 
@@ -221,7 +229,7 @@ private:
     int heavyPhase = 0;
     bool knobsSet = false, lastBoostOn = false, firstBlock = true, firstModel = true;
     int tubeSetApplied = 0;
-    double modelMix = 0.0, modelTarget = 0.0, modelStep = 1e-4; // drive model crossfade, 0 = Precision Drive
+    double modelMix = 0.0, modelTarget = 0.0, modelStep = 1e-4, modelWeight = 0.0; // drive model crossfade, 0 = Precision Drive
     int controlPhase = 0, boostAttack = 3;
 
     static constexpr double kMinOsRate = 352800.0; // 8 x 44.1 kHz

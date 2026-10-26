@@ -1,0 +1,7 @@
+Command: ['/workspace/profile-tools/usr/bin/perf', 'record', '-e', 'cpu-clock:u', '-F', '499', '--call-graph', 'dwarf,16384', '--delay', '-1', '--control', 'fd:3,6', '-o', 'build/step3-before-perf.data', '--', '/workspace/125A-Dystorator/build/step3-before-bench', 'profile', '4', '5']
+Events disabled
+Events enabled
+Events disabled
+PROFILE_CALLBACK count=2048 mean_us=12700.4 p95_us=15019.9 p99_us=18486.7 max_us=23724.3
+[ perf record: Woken up 826 times to write data ]
+[ perf record: Captured and wrote 206.084 MB build/step3-before-perf.data (12985 samples) ]

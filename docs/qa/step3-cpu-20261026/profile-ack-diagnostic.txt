@@ -1,0 +1,14 @@
+Command: ['/workspace/profile-tools/usr/bin/perf', 'record', '-e', 'cpu-clock:u', '-F', '499', '--call-graph', 'dwarf,16384', '--delay', '-1', '--control', 'fd:3,6', '-o', 'build/step3-before-perf.data', '--', '/workspace/125A-Dystorator/build/step3-before-bench', 'profile', '4', '5']
+Events disabled
+Events enabled
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  perf control/ack failed
+Events disabled
+[ perf record: Woken up 776 times to write data ]
+[ perf record: Captured and wrote 193.785 MB build/step3-before-perf.data (12210 samples) ]
+Traceback (most recent call last):
+  File "/workspace/125A-Dystorator/tests/step3/record_perf.py", line 20, in <module>
+    subprocess.run(command, pass_fds=(control_read, control_write, ack_read, ack_write), check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/workspace/profile-tools/usr/bin/perf', 'record', '-e', 'cpu-clock:u', '-F', '499', '--call-graph', 'dwarf,16384', '--delay', '-1', '--control', 'fd:3,6', '-o', 'build/step3-before-perf.data', '--', '/workspace/125A-Dystorator/build/step3-before-bench', 'profile', '4', '5']' died with <Signals.SIGABRT: 6>.

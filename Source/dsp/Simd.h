@@ -9,8 +9,10 @@
  #if defined(_MSC_VER) && ! defined(__clang__)
   #include <intrin.h>
  #define VAMP_AVX_FN __declspec(noinline) // isolate AVX from the baseline SSE2 entry point
+ #define VAMP_AVX_HELPER __forceinline // only called inside that isolated AVX entry
  #else
   #define VAMP_AVX_FN __attribute__ ((target ("avx")))
+  #define VAMP_AVX_HELPER inline __attribute__ ((target ("avx")))
  #endif
 namespace vamp
 {

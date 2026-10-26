@@ -44,6 +44,12 @@ elseif(IR_TEST_MAIN STREQUAL "mono_reference.cpp")
     add_test(NAME mono_right_input_oracle COMMAND ir_presets_test)
 elseif(IR_TEST_MAIN STREQUAL "stereo_quality_reference.cpp")
     add_test(NAME stereo_quality_pcm_oracle COMMAND ir_presets_test)
+elseif(IR_TEST_MAIN STREQUAL "step3_alias.cpp")
+    add_test(NAME step3_alias_measurements COMMAND ir_presets_test)
+elseif(IR_TEST_MAIN STREQUAL "step3_pcm.cpp")
+    add_test(NAME step3_frozen_pcm COMMAND ir_presets_test)
+elseif(IR_TEST_MAIN STREQUAL "step3_bench.cpp")
+    add_test(NAME step3_cpu_deadlines COMMAND ir_presets_test candidate)
 elseif(IR_TEST_MAIN STREQUAL "quality_bench.cpp")
     # Machine-dependent deadline gate; intentionally separate from functional QA.
     add_test(NAME quality_cpu_deadlines COMMAND ir_presets_test)
@@ -84,4 +90,23 @@ if(IR_BUILD_VST3_HOST)
     target_sources(compact_vst3_host PRIVATE compact_vst3_host.cpp)
     target_compile_definitions(compact_vst3_host PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_PLUGINHOST_VST3=1 JUCE_MODAL_LOOPS_PERMITTED=1)
     target_link_libraries(compact_vst3_host PRIVATE juce::juce_audio_utils)
+endif()
+
+# Windows-only allocation observation in the actual test host, never in the product.
+set(STEP3_DETOURS_DIR "" CACHE PATH "Pinned Microsoft Detours v4.0.1 checkout")
+if(WIN32 AND IR_BUILD_VST3_HOST AND STEP3_DETOURS_DIR)
+    add_library(step3_detours STATIC
+        "${STEP3_DETOURS_DIR}/src/detours.cpp"
+        "${STEP3_DETOURS_DIR}/src/modules.cpp"
+        "${STEP3_DETOURS_DIR}/src/disasm.cpp"
+        "${STEP3_DETOURS_DIR}/src/image.cpp"
+        "${STEP3_DETOURS_DIR}/src/creatwth.cpp"
+        "${STEP3_DETOURS_DIR}/src/disolx86.cpp"
+        "${STEP3_DETOURS_DIR}/src/disolx64.cpp"
+        "${STEP3_DETOURS_DIR}/src/disolia64.cpp"
+        "${STEP3_DETOURS_DIR}/src/disolarm.cpp"
+        "${STEP3_DETOURS_DIR}/src/disolarm64.cpp")
+    target_include_directories(step3_detours PUBLIC "${STEP3_DETOURS_DIR}/src")
+    target_link_libraries(compact_vst3_host PRIVATE step3_detours)
+    target_compile_definitions(compact_vst3_host PRIVATE STEP3_DETOURS_AVAILABLE=1)
 endif()

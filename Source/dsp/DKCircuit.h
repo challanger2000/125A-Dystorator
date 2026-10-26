@@ -332,9 +332,11 @@ public:
         _mm256_zeroupper(); // back to SSE code without the transition penalty
     }
 
+private:
+    // Only the target-isolated AVX entry may inline this helper.
     // 4 Q rows of matVecTAvx, all columns
     template <int Q>
-    VAMP_AVX_FN static inline void tileAvx (const double* At, int ld, int cols, const double* v, double* out)
+    VAMP_AVX_HELPER static void tileAvx (const double* At, int ld, int cols, const double* v, double* out)
     {
         __m256d s[Q];
         for (int k = 0; k < Q; ++k) s[k] = _mm256_setzero_pd();
@@ -345,6 +347,7 @@ public:
         }
         for (int k = 0; k < Q; ++k) _mm256_storeu_pd (out + 4 * k, s[k]);
     }
+public:
 #endif
 
     // 2 P rows of matVecT, all columns

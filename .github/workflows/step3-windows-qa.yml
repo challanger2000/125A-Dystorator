@@ -1,0 +1,79 @@
+name: Dystorator Step 3 Windows x64 QA
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev/compact-stereo-on-ir-fix-20261026]
+    paths:
+      - 'Source/**'
+      - 'tests/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/step3-windows-qa.yml'
+permissions:
+  contents: write
+concurrency:
+  group: dystorator-step3-windows
+  cancel-in-progress: false
+jobs:
+  release-and-qa:
+    runs-on: windows-2022
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          ref: dev/compact-stereo-on-ir-fix-20261026
+      - name: Pin actual source commit
+        shell: pwsh
+        run: |
+          $sha = (git rev-parse HEAD).Trim()
+          if ($sha -ne '${{ github.sha }}') { throw 'Branch moved before checkout; refusing to test a different candidate' }
+          "QA_SOURCE_SHA=$sha" >> $env:GITHUB_ENV
+          "QA_EVIDENCE=docs/qa/step3-windows-$sha" >> $env:GITHUB_ENV
+      - name: Checkout pinned common Windows dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          git clone --depth 1 --branch 8.0.4 https://github.com/juce-framework/JUCE.git build/tools/JUCE
+          if ($LASTEXITCODE) { throw 'JUCE checkout failed' }
+          git clone --depth 1 --branch v3.8.1_build_84 --recurse-submodules --shallow-submodules https://github.com/steinbergmedia/vst3sdk.git build/tools/vst3sdk
+          if ($LASTEXITCODE) { throw 'SDK checkout failed' }
+          git clone --depth 1 --branch v4.0.1 https://github.com/microsoft/Detours.git build/tools/Detours
+          if ($LASTEXITCODE) { throw 'Detours checkout failed' }
+          git clone --no-checkout https://github.com/challanger2000/125A-Plugin-Tester-Final.git build/tools/tester
+          if ($LASTEXITCODE) { throw '125A tester checkout failed' }
+          git -C build/tools/tester checkout --detach 3dcf3fe607008e520dcf20d1f793d9c534a9b9e1
+          if ($LASTEXITCODE) { throw '125A tester pin missing' }
+      - name: Build Release, measure and run QA (retain FAIL)
+        shell: pwsh
+        run: |
+          & "$pwd/tests/step3/run_windows_qa.ps1" -JuceDir "$pwd/build/tools/JUCE" -SdkDir "$pwd/build/tools/vst3sdk" -TesterDir "$pwd/build/tools/tester" -DetoursDir "$pwd/build/tools/Detours" -EvidenceDir "$env:QA_EVIDENCE"
+      - name: Preserve Windows evidence and candidate VST3
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: step3-windows-${{ github.sha }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            docs/qa/step3-windows-*/**
+            build/win-plugin/DjentyDonkey_artefacts/Release/VST3/**
+      - name: Commit exact Windows evidence to development branch
+        if: always() && github.ref == 'refs/heads/dev/compact-stereo-on-ir-fix-20261026'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = 'docs/qa/step3-windows-${{ github.sha }}'
+          New-Item -ItemType Directory -Force $evidence | Out-Null
+          @{sourceCommit='${{ github.sha }}';runId='${{ github.run_id }}';runAttempt='${{ github.run_attempt }}';runUrl='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}';jobStatus='${{ job.status }}';release='NO FINAL'} | ConvertTo-Json | Set-Content "$evidence/run.json" -Encoding utf8
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f -- $evidence
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) { exit 0 }
+          git commit -m 'Record Step 3 Windows QA evidence [skip ci]'
+          if ($LASTEXITCODE) { throw 'Evidence commit failed' }
+          git fetch origin dev/compact-stereo-on-ir-fix-20261026
+          git rebase origin/dev/compact-stereo-on-ir-fix-20261026
+          if ($LASTEXITCODE) { throw 'Evidence publication conflict; artifact retains all results' }
+          git push origin HEAD:refs/heads/dev/compact-stereo-on-ir-fix-20261026
+          if ($LASTEXITCODE) { throw 'Evidence push failed; artifact retains all results' }
