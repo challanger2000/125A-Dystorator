@@ -75,7 +75,7 @@ try {
     $plugin = "$root/build/win-plugin/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
     $beforePlugin = "$root/build/win-plugin-before/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
     $null = Check-Native 'ir-preset-ownership-regressions' $integrationExe @()
-    foreach ($qaMain in @('quality_audio.cpp','step3_pcm.cpp','mono_reference.cpp','stereo_quality_reference.cpp','step3_alias.cpp')) {
+    foreach ($qaMain in @('quality_audio.cpp','step3_pcm.cpp','mono_reference.cpp','stereo_quality_reference.cpp','step3_alias.cpp','large_ir_heap.cpp')) {
         Configure-Integration $qaMain
         if ($qaMain -eq 'quality_audio.cpp') {
             foreach ($case in @('modes','pcm','stress')) { $null = Check-Native ('quality-' + $case) $integrationExe @($case) }
@@ -126,7 +126,7 @@ try {
     $infraFailure | Set-Content (Join-Path $EvidenceDir 'infrastructure-failure.txt') -Encoding utf8
     Write-Error $infraFailure -ErrorAction Continue
  } finally {
-    $required = @('build-before-plugin','build-plugin','native-ctest','tone-regression','fault-regression','ir-preset-ownership-regressions','quality-modes','quality-pcm','quality-stress','step3_pcm','mono_reference','stereo_quality_reference','step3_alias','packaged-vst3-host','cpu-before','cpu-after','tester-job-object-selftest','steinberg-validator-selftest','125a-tester-product')
+    $required = @('build-before-plugin','build-plugin','native-ctest','tone-regression','fault-regression','ir-preset-ownership-regressions','quality-modes','quality-pcm','quality-stress','step3_pcm','mono_reference','stereo_quality_reference','step3_alias','large_ir_heap','packaged-vst3-host','cpu-before','cpu-after','tester-job-object-selftest','steinberg-validator-selftest','125a-tester-product')
     foreach ($name in $required) {
         if (-not @($checks | Where-Object { $_.name -eq $name }).Count) {
             $checks.Add([ordered]@{name=$name;status='NOT RUN';detail='Not reached after infrastructure/build failure';exitCode=$null})

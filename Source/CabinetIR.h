@@ -255,10 +255,20 @@ private:
         }
     }
     struct Source { juce::AudioBuffer<float> data; double rate = 44100; juce::String path; };
-    struct Engine { std::unique_ptr<juce::dsp::Convolution> convolution; };
+    // JUCE 8.0.4's fallback real FFT heap-allocates scratch at FFT size >=32768.
+    // Limit only the convolver's quantum, never the amp/control host block.
+    static constexpr juce::uint32 maxConvolutionBlock = 8192;
+    struct Engine
+    {
+        std::unique_ptr<juce::dsp::Convolution> convolution;
+        juce::uint32 processBlock = 1;
+    };
     static std::unique_ptr<Engine> makeEngine (const Source* src, const juce::dsp::ProcessSpec& s)
     {
         auto result = std::make_unique<Engine>();
+        auto convolutionSpec = s;
+        convolutionSpec.maximumBlockSize = juce::jlimit ((juce::uint32) 1, maxConvolutionBlock, s.maximumBlockSize);
+        result->processBlock = convolutionSpec.maximumBlockSize;
         if (src)
         {
             if ((double) src->data.getNumSamples() * s.sampleRate / src->rate > maxSamples)
@@ -273,17 +283,29 @@ private:
                                     juce::dsp::Convolution::Trim::yes, juce::dsp::Convolution::Normalise::yes);
             // JUCE 8.0.4 documents prepare() as synchronous completion of the
             // latest IR load. load/prepare here never overlap this instance's process.
-            c->prepare (s);
+            c->prepare (convolutionSpec);
         }
         return result;
+    }
+    static void renderConvolution (Engine& engine, juce::dsp::AudioBlock<float> block) noexcept
+    {
+        // Zero-latency LTI convolution, split only for large host blocks. Scene
+        // adoption and the common fade remain once per original process call.
+        for (size_t offset = 0; offset < block.getNumSamples();)
+        {
+            const auto count = juce::jmin ((size_t) engine.processBlock, block.getNumSamples() - offset);
+            auto part = block.getSubBlock (offset, count);
+            juce::dsp::ProcessContextReplacing<float> ctx (part);
+            engine.convolution->process (ctx);
+            offset += count;
+        }
     }
     template <typename Builtin>
     static void render (Engine* e, juce::dsp::AudioBlock<float> block, Builtin& builtin) noexcept
     {
         if (e && e->convolution)
         {
-            juce::dsp::ProcessContextReplacing<float> ctx (block);
-            e->convolution->process (ctx);
+            renderConvolution (*e, block);
         }
         else
             builtin (block.getChannelPointer (0), (int) block.getNumSamples());
@@ -294,8 +316,7 @@ private:
     {
         if (e && e->convolution)
         {
-            juce::dsp::ProcessContextReplacing<float> ctx (block);
-            e->convolution->process (ctx);
+            renderConvolution (*e, block);
         }
         else
             for (int channel = 0; channel < (int) block.getNumChannels(); ++channel)

@@ -8,7 +8,7 @@ Dieser Bericht wird nach dem gebündelten Windows-Lauf mit dessen tatsächlichen
 
 Pflichteinstieg und relevante Engineering-/QA-Vorgaben wurden erneut geprüft: `125A-Engineering/START-HERE.md`, unveränderter Stand `b6df84b0a04d01e240cff745ccebf60d67750486`; README, relevante Guardrails/Standards, Release-/Realtime-/Audio-Fixture-QA, Oversampling-Research und Roadmap. „verstanden“ bestätigt. Kein genehmigtes Windows-FULL-Paket dieses Entwicklungsforks erfunden. Benutzerdefinierte Arbeitsbasis ist der oben genannte Commit.
 
-Keine Änderung an GUI, Parametern/IDs, IR-/Preset-Verträgen, Cabinet, Qualitätsstufen, Oversampling-Faktoren, Röhrenkennlinien, Solver-Iterationen oder Solver-Toleranzen. `main` und der ursprüngliche IR-Reparaturbranch bleiben unverändert.
+Keine Änderung an GUI, Parametern/IDs, IR-/Preset-Verträgen, Qualitätsstufen, Oversampling-Faktoren, Röhrenkennlinien, Solver-Iterationen oder Solver-Toleranzen. `main` und der ursprüngliche IR-Reparaturbranch bleiben unverändert.
 
 ## Reales HIGH-Stereo-Profil
 
@@ -83,6 +83,18 @@ Schon die neuen Messungen zeigen erhebliche Pegel-/Frequenzabhängigkeit. ECO is
 - FAIL (Testinfrastruktur): Windows-Makro `max` aus dem neu eingebundenen Win32-Header expandiert bei `std::max` im echten VST3-Testhost (MSVC C2589/C2059). Der IR-Test selbst war gelinkt; der gemeinsame Build stoppt am Host.
 - NOT RUN: nachgelagerte Integration, Callback-Heap, tatsächliche Host-/IR-/Transport-Matrix, CPU, 125A Tester und Validator. Keine dieser Prüfungen wurde aus dem grünen Produktbuild abgeleitet.
 - Korrektur ausschließlich am Testhost: `NOMINMAX` vor Win32-Header und als Targetdefinition, keine DSP-/Grenzwertänderung. Ein gezielter gebündelter Folgelauf ist notwendig. [Vollständige erste Windows-Befunde](qa/step3-windows-4efb20e5d6df4282ff33bdf744335131d6278dd3/results.json).
+
+## Zusätzlicher bestätigter RT-Fehler: großer IR-Block benutzt C-Heap
+
+Die bisherige C++-new/delete-Prüfung erfasst direkte C-Allokationen nicht. Quellpfad JUCE8.0.4 `juce_FFT.cpp:134–172`: der Fallback-Real-FFT nimmt ab 256KiB Scratch einen `HeapBlock<char>`. Bei Convolution-Maxblock >8192 wird die FFT auf mindestens32768 gerundet; `16 + FFTSize * sizeof(complex<float>)` überschreitet die Stack-Grenze. Der Processor akzeptiert solche Blockgrößen.
+
+**Reproduziert vor Reparatur:** derselbe echte Cabinet-/JUCE-Code, 6 Aufrufe, `malloc/calloc/realloc/free` am Linker beobachtet: bei16384 **24 mallocs +24 frees**, sowohl Mono- als auch Stereo-IR.128/256/8192 sind ohne Heap-Aufruf. Exit1, 2 von8 Fällen FAIL; PCM zur unmodifizierten JUCE-Convolution dabei Delta0. [Vorher](qa/step3-cpu-20261026/large-ir-before.txt).
+
+**Korrektur:** Nur das interne Convolution-Quantum wird in `CabinetIR::makeEngine` auf8192 begrenzt; große AudioBlocks werden als nichtownende Views in `renderConvolution` verarbeitet. Amp-Hostblock, Regler-Rampen, Quality/OS, Decoder/Normalisierung, IR-Publikation und gemeinsame Szenenblende bleiben unverändert. Ein IR-Wechsel wird weiterhin nur einmal pro ursprünglichem Aufruf angenommen. Keine neue Latenz: Convolution bleibt zero-latency. Alle Prepare-/Allokationsarbeiten bleiben auf dem Control-Pfad.
+
+**PASS nach Reparatur:** 10 Fälle (Mono/Stereo ×128/256/8192/**8193**/16384), null beobachtete C-Heap-Aufrufe. Vergleich gegen unmodifizierte große JUCE-Convolution über sämtliche PCM-Samples: maximal8,84756e−9, unveränderte Grenze1e−6; bis8192 Delta0. Zusätzlich gebautes echtes Linux-VST3 mit IR/Host-Reprepare16384: Delta0 zur äquivalenten Referenz, nichtstumm; alle132 bestehenden IR-/Preset-/Routing-/Ownership-Checks erneut PASS. [Nachher](qa/step3-cpu-20261026/large-ir-after.txt), [reales VST3](qa/step3-cpu-20261026/large-ir-host.txt).
+
+Die vorherige „bytegleiches Cabinet“-Hashliste bezieht sich ausdrücklich auf den CPU-Kandidaten4efb20e. Dieser spätere, belegte Grenzfall erweitert die Implementierung, ohne die IR-Reparaturverträge aufzugeben. Die CPU-Matrix4efb20e verwendet Built-in-Cab und128/256; sie wird nicht als Messung einer langen IR ausgegeben. Der abschließende Windows-Lauf muss den neuen Quellstand und den Prozessheap auch bei16384 verifizieren. **Windows-Nachweis dieses Zusatzes bis dahin NOT RUN.**
 
 ## Windows-Verfahren und Reproduktion
 

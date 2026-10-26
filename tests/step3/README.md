@@ -50,3 +50,9 @@ Windows-only: configure `STEP3_DETOURS_DIR` to pinned Microsoft Detours v4.0.1. 
 Windows PowerShell driver: `run_windows_qa.ps1`; see workflow arguments. It writes each native exit/log plus JSON statuses. CPU failures remain FAIL. Tests not reached after build failure become NOT RUN. SDK/Tester self-validation failures make product interpretation inconclusive. Job evidence is committed back only to the development branch, names the tested source SHA and run URL, and cannot trigger another code build. Product bundle/logs are also a short-lived Actions artifact.
 
 Windows CI hardware is not the owner's i9-11900K. Actual ASIO/DAW dropout capture, real guitar DI and matched listening remain separate NOT RUN gates. No FINAL approval.
+
+## Large-IR real FFT heap boundary
+
+`IR_TEST_MAIN=large_ir_heap.cpp` tests mono/stereo IRs at128/256/8192/8193/16384. Linux links `--wrap=malloc/calloc/realloc/free` for actual C allocations in the linked JUCE code; Windows uses the self-validated process-heap detours. Native real-FFT fallback originally made24 malloc/free pairs over6 calls at16384, despite zero C++new/delete in the older tests. Product only caps its convolver quantum at8192 and subdivides views; the amp host block/ramp and scene fade are unchanged. The oracle remains the unmodified JUCE large-block convolution, sample tolerance1e−6. Windows packaged host additionally exercises16384 with the cross-DLL hooks enabled. No DSP precision/iteration reduction.
+
+The workflow checks out the exact triggering SHA, then attaches that local checkout to the development branch. This also works when a preceding queued job publishes a documentation-only evidence commit before checkout; it never silently tests a different source HEAD.

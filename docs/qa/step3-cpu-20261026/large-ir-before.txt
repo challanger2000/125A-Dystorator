@@ -1,0 +1,8 @@
+PASS IR_HEAP channels=1 block=128 allocations=0 frees=0 pcm_max=0 reference_energy=0.0651798
+PASS IR_HEAP channels=1 block=256 allocations=0 frees=0 pcm_max=0 reference_energy=0.12753
+PASS IR_HEAP channels=1 block=8192 allocations=0 frees=0 pcm_max=0 reference_energy=4.11534
+FAIL IR_HEAP channels=1 block=16384 allocations=24 frees=24 pcm_max=0 reference_energy=8.23287
+PASS IR_HEAP channels=2 block=128 allocations=0 frees=0 pcm_max=0 reference_energy=0.0705522
+PASS IR_HEAP channels=2 block=256 allocations=0 frees=0 pcm_max=0 reference_energy=0.13796
+PASS IR_HEAP channels=2 block=8192 allocations=0 frees=0 pcm_max=0 reference_energy=4.44208
+FAIL IR_HEAP channels=2 block=16384 allocations=24 frees=24 pcm_max=0 reference_energy=8.88585

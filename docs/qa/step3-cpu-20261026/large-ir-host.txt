@@ -1,0 +1,15 @@
+PASS actual VST3 non-default component state survives save/restore before prepare
+PASS Linux packaged VST3 discover/instantiate/stereo R-only/no-crosstalk/state/audio audible=0.334309 bleed=0 recall_max=0 latency=5 parameters=72
+PASS VST3 host bypass parameter -> actual delayed dry/warm wet dry_max=0 warm_max=0
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=0 stereo_difference=0 energy=0.165894
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=1 stereo_difference=0 energy=0.16552
+PASS VST3 live MONO/R-only/quality/state/fixed latency quality=2 stereo_difference=0 energy=0.165301
+NOT RUN Windows cross-DLL heap observation (non-Windows host)
+PASS actual VST3 rapid mode/quality/bypass with stop/play/cycle preserves continuous reference PCM and latency
+HOST_TRANSPORT max_delta=0 energy=69.4716
+PASS actual VST3 stereo IR host save/destroy/disk reload/fresh instance restores nondefault audible PCM
+HOST_IR_RECALL max_delta=0 energy=0.260256
+PASS actual VST3 missing IR recall rolls back both IR selection and changed gain
+PASS actual VST3 reprepare/IR at 16384 samples remains finite and matches fresh equivalent stream
+HOST_LARGE_IR max_delta=0 energy=0.757784
+PASS actual VST3 clear IR commits built-in selection and audibly changes from continuing IR reference

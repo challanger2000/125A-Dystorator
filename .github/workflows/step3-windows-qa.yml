@@ -21,10 +21,12 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
-          ref: dev/compact-stereo-on-ir-fix-20261026
+          ref: ${{ github.sha }}
       - name: Pin actual source commit
         shell: pwsh
         run: |
+          git checkout -B dev/compact-stereo-on-ir-fix-20261026 '${{ github.sha }}'
+          if ($LASTEXITCODE) { throw 'Cannot attach the pinned candidate to its development branch' }
           $sha = (git rev-parse HEAD).Trim()
           if ($sha -ne '${{ github.sha }}') { throw 'Branch moved before checkout; refusing to test a different candidate' }
           "QA_SOURCE_SHA=$sha" >> $env:GITHUB_ENV

@@ -106,7 +106,7 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     juce::AudioBuffer<float> x (2, 128), y (2, 128);
     juce::MidiBuffer midi;
     std::uint64_t allocations = 0, releases = 0;
-    void* firstAllocationCaller = nullptr;
+    void *firstAllocationCaller = nullptr;
     double difference = 0, energy = 0;
     const int latency = a->getLatencySamples ();
     auto input = [&] (int k)
@@ -222,6 +222,36 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     actual = hostedComponentState (*a);
     check (actual && actual->toString () == accepted,
            "actual VST3 missing IR recall rolls back both IR selection and changed gain");
+    // Different host and FFT boundary: the default fallback FFT used to malloc
+    // scratch here despite the smaller-block new/delete tests being green.
+    a->releaseResources ();
+    b->releaseResources ();
+    a->prepareToPlay (48000, 16384);
+    b->prepareToPlay (48000, 16384);
+    juce::AudioBuffer<float> large (2, 16384), largeReference (2, 16384);
+    double largeDelta = 0, largeEnergy = 0;
+    for (int k = 0; k < 3; ++k)
+    {
+        for (int c = 0; c < 2; ++c)
+            for (int i = 0; i < 16384; ++i)
+                large.setSample (c, i, (float)(.1 * std::sin ((k * 16384 + i) * (c ? .037 : .019))));
+        largeReference.makeCopyOf (large, true);
+        process (*a, large);
+        process (*b, largeReference);
+        for (int c = 0; c < 2; ++c)
+            for (int i = 0; i < 16384; ++i)
+            {
+                const double actualSample = large.getSample (c, i),
+                             expectedSample = largeReference.getSample (c, i);
+                if (!std::isfinite (actualSample) || !std::isfinite (expectedSample))
+                    passed = false;
+                largeDelta = std::max (largeDelta, std::abs (actualSample - expectedSample));
+                largeEnergy += actualSample * actualSample;
+            }
+    }
+    check (largeDelta < 1e-6 && largeEnergy > 1e-8,
+           "actual VST3 reprepare/IR at 16384 samples remains finite and matches fresh equivalent stream");
+    std::cout << "HOST_LARGE_IR max_delta=" << largeDelta << " energy=" << largeEnergy << std::endl;
     auto clear = sceneWithIR (*a, {});
     a->setStateInformation (clear.getData (), (int)clear.getSize ());
     double changed = 0;
@@ -251,9 +281,10 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     if (firstAllocationCaller != nullptr)
     {
         HMODULE module = nullptr;
-        wchar_t filename[MAX_PATH] {};
-        if (GetModuleHandleExW (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                               reinterpret_cast<LPCWSTR> (firstAllocationCaller), &module))
+        wchar_t filename[MAX_PATH]{};
+        if (GetModuleHandleExW (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                                    GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                                reinterpret_cast<LPCWSTR> (firstAllocationCaller), &module))
             GetModuleFileNameW (module, filename, MAX_PATH);
         std::cout << "WINDOWS_FIRST_HEAP_CALLER module=" << juce::String (filename)
                   << " address=" << firstAllocationCaller << std::endl;
@@ -268,84 +299,140 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
 
 namespace step3Hosted
 {
-inline int cpu (juce::VST3PluginFormat& format, const juce::PluginDescription& description, const char* version)
+inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &description,
+                const char *version)
 {
-    int failures=0,cases=0;
-    for (double fs : {44100.,48000.}) for (int lanes : {1,2})
-    {
-        juce::String error;
-        auto p=format.createInstanceFromDescription(description,fs,512,error);
-        if(!p) throw std::runtime_error(error.toStdString());
-        auto layout=p->getBusesLayout();layout.inputBuses.set(0,juce::AudioChannelSet::stereo());
-        layout.outputBuses.set(0,juce::AudioChannelSet::stereo());
-        if(!p->setBusesLayout(layout)) return 2;
-        for(auto setting : std::vector<std::pair<const char*,float>> {
-            {"Amp Noise",0},{"Input Gate On",0},{"Channel",1},{"Gain",.9f},{"Master",.3f},
-            {"Boost On",1},{"Boost Drive",.8f},{"Boost Level",.7f},{"Cab On",1},
-            {"Low Cut On",1},{"High Cut On",1},{"AMP MODE",lanes==1?0.f:1.f},{"QUALITY",1}})
-            parameter(*p,setting.first,setting.second);
-        p->prepareToPlay(fs,512);
-        const int latency=p->getLatencySamples();
-        for(int quality : {2,1,0})
+    int failures = 0, cases = 0;
+    for (double fs : {44100., 48000.})
+        for (int lanes : {1, 2})
         {
-            parameter(*p,"QUALITY",quality*.5f);
-            for(int frames : {128,256}) for(bool paced : {false,true})
+            juce::String error;
+            auto p = format.createInstanceFromDescription (description, fs, 512, error);
+            if (!p)
+                throw std::runtime_error (error.toStdString ());
+            auto layout = p->getBusesLayout ();
+            layout.inputBuses.set (0, juce::AudioChannelSet::stereo ());
+            layout.outputBuses.set (0, juce::AudioChannelSet::stereo ());
+            if (!p->setBusesLayout (layout))
+                return 2;
+            for (auto setting :
+                 std::vector<std::pair<const char *, float>>{{"Amp Noise", 0},
+                                                             {"Input Gate On", 0},
+                                                             {"Channel", 1},
+                                                             {"Gain", .9f},
+                                                             {"Master", .3f},
+                                                             {"Boost On", 1},
+                                                             {"Boost Drive", .8f},
+                                                             {"Boost Level", .7f},
+                                                             {"Cab On", 1},
+                                                             {"Low Cut On", 1},
+                                                             {"High Cut On", 1},
+                                                             {"AMP MODE", lanes == 1 ? 0.f : 1.f},
+                                                             {"QUALITY", 1}})
+                parameter (*p, setting.first, setting.second);
+            p->prepareToPlay (fs, 512);
+            const int latency = p->getLatencySamples ();
+            for (int quality : {2, 1, 0})
             {
-                juce::AudioBuffer<float> audio(2,frames);juce::MidiBuffer midi;
-                std::vector<double> times;times.reserve(160);
-                const int warm=(int)std::ceil(.2*fs/frames);const double deadline=1e6*frames/fs;
-                int over=0,late=0;double energy[2]{};bool finite=true;
-                auto next=std::chrono::steady_clock::now();
-                for(int k=0;k<warm+160;++k)
-                {
-                    for(int i=0;i<frames;++i)
+                parameter (*p, "QUALITY", quality * .5f);
+                for (int frames : {128, 256})
+                    for (bool paced : {false, true})
                     {
-                        const double t=(k*frames+i)/fs;
-                        float l=(float)(.12*std::sin(2*juce::MathConstants<double>::pi*110*t+.3)+.025*std::sin(2*juce::MathConstants<double>::pi*3731*t));
-                        float r=(float)(.12*std::sin(2*juce::MathConstants<double>::pi*277*t+.3)+.025*std::sin(2*juce::MathConstants<double>::pi*1723*t));
-                        if(lanes==1) l=r=.5f*(l+r);
-                        audio.setSample(0,i,l);audio.setSample(1,i,r);
+                        juce::AudioBuffer<float> audio (2, frames);
+                        juce::MidiBuffer midi;
+                        std::vector<double> times;
+                        times.reserve (160);
+                        const int warm = (int)std::ceil (.2 * fs / frames);
+                        const double deadline = 1e6 * frames / fs;
+                        int over = 0, late = 0;
+                        double energy[2]{};
+                        bool finite = true;
+                        auto next = std::chrono::steady_clock::now ();
+                        for (int k = 0; k < warm + 160; ++k)
+                        {
+                            for (int i = 0; i < frames; ++i)
+                            {
+                                const double t = (k * frames + i) / fs;
+                                float l =
+                                    (float)(.12 * std::sin (2 * juce::MathConstants<double>::pi * 110 * t +
+                                                            .3) +
+                                            .025 * std::sin (2 * juce::MathConstants<double>::pi * 3731 * t));
+                                float r =
+                                    (float)(.12 * std::sin (2 * juce::MathConstants<double>::pi * 277 * t +
+                                                            .3) +
+                                            .025 * std::sin (2 * juce::MathConstants<double>::pi * 1723 * t));
+                                if (lanes == 1)
+                                    l = r = .5f * (l + r);
+                                audio.setSample (0, i, l);
+                                audio.setSample (1, i, r);
+                            }
+                            if (paced && k >= warm)
+                                std::this_thread::sleep_until (next);
+                            const auto begin = std::chrono::steady_clock::now ();
+                            p->processBlock (audio, midi);
+                            const auto end = std::chrono::steady_clock::now ();
+                            if (k >= warm)
+                            {
+                                const double us =
+                                    std::chrono::duration<double, std::micro> (end - begin).count ();
+                                times.push_back (us);
+                                over += us > deadline;
+                                if (paced)
+                                    late += end > next + std::chrono::duration<double> (frames / fs);
+                                for (int c = 0; c < 2; ++c)
+                                    for (int i = 0; i < frames; ++i)
+                                    {
+                                        const float value = audio.getSample (c, i);
+                                        finite = finite && std::isfinite (value);
+                                        energy[c] += (double)value * value;
+                                    }
+                            }
+                            if (k < warm)
+                                next = end;
+                            else
+                                next += std::chrono::duration_cast<std::chrono::steady_clock::duration> (
+                                    std::chrono::duration<double> (frames / fs));
+                        }
+                        bool stateCorrect = false;
+                        if (auto scene = hostedComponentState (*p))
+                        {
+                            bool mode = false, q = false, gain = false, drive = false;
+                            for (auto *child : scene->getChildWithTagNameIterator ("PARAM"))
+                            {
+                                const auto id = child->getStringAttribute ("id");
+                                const double value = child->getDoubleAttribute ("value");
+                                if (id == "ampMode")
+                                    mode = value == (lanes == 1 ? 0 : 1);
+                                if (id == "quality")
+                                    q = value == quality;
+                                if (id == "ampGain")
+                                    gain = std::abs (value - 9.) < 1e-5;
+                                if (id == "boostOn")
+                                    drive = value == 1.;
+                            }
+                            stateCorrect = mode && q && gain && drive;
+                        }
+                        std::sort (times.begin (), times.end ());
+                        const bool pass = finite && energy[0] > 1e-8 && energy[1] > 1e-8 && stateCorrect &&
+                                          p->getLatencySamples () == latency && over == 0 &&
+                                          (!paced || late == 0);
+                        failures += !pass;
+                        ++cases;
+                        std::cout << "VST3_CPU version=" << version << " fs=" << fs << " lanes=" << lanes
+                                  << " quality=" << quality << " frames=" << frames
+                                  << " mode=" << (paced ? "paced" : "offline") << " mean_us="
+                                  << std::accumulate (times.begin (), times.end (), 0.) / times.size ()
+                                  << " p95_us=" << times[151] << " p99_us=" << times[158]
+                                  << " max_us=" << times.back () << " deadline_us=" << deadline
+                                  << " overruns=" << over << " schedule_misses=" << late
+                                  << " left_energy=" << energy[0] << " right_energy=" << energy[1]
+                                  << " component_state=" << (stateCorrect ? "PASS" : "FAIL")
+                                  << " status=" << (pass ? "PASS" : "FAIL") << std::endl;
                     }
-                    if(paced&&k>=warm) std::this_thread::sleep_until(next);
-                    const auto begin=std::chrono::steady_clock::now();p->processBlock(audio,midi);
-                    const auto end=std::chrono::steady_clock::now();
-                    if(k>=warm)
-                    {
-                        const double us=std::chrono::duration<double,std::micro>(end-begin).count();
-                        times.push_back(us);over+=us>deadline;
-                        if(paced) late+=end>next+std::chrono::duration<double>(frames/fs);
-                        for(int c=0;c<2;++c) for(int i=0;i<frames;++i)
-                        { const float value=audio.getSample(c,i);finite=finite&&std::isfinite(value);energy[c]+=(double)value*value; }
-                    }
-                    if(k<warm) next=end;else next+=std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(frames/fs));
-                }
-                bool stateCorrect=false;
-                if(auto scene=hostedComponentState(*p))
-                {
-                    bool mode=false,q=false,gain=false,drive=false;
-                    for(auto* child : scene->getChildWithTagNameIterator("PARAM"))
-                    {
-                        const auto id=child->getStringAttribute("id");const double value=child->getDoubleAttribute("value");
-                        if(id=="ampMode") mode=value==(lanes==1?0:1);
-                        if(id=="quality") q=value==quality;
-                        if(id=="ampGain") gain=std::abs(value-9.)<1e-5;
-                        if(id=="boostOn") drive=value==1.;
-                    }
-                    stateCorrect=mode&&q&&gain&&drive;
-                }
-                std::sort(times.begin(),times.end());
-                const bool pass=finite&&energy[0]>1e-8&&energy[1]>1e-8&&stateCorrect&&p->getLatencySamples()==latency&&over==0&&(!paced||late==0);
-                failures+=!pass;++cases;
-                std::cout<<"VST3_CPU version="<<version<<" fs="<<fs<<" lanes="<<lanes<<" quality="<<quality<<" frames="<<frames
-                         <<" mode="<<(paced?"paced":"offline")<<" mean_us="<<std::accumulate(times.begin(),times.end(),0.)/times.size()
-                         <<" p95_us="<<times[151]<<" p99_us="<<times[158]<<" max_us="<<times.back()<<" deadline_us="<<deadline
-                         <<" overruns="<<over<<" schedule_misses="<<late<<" left_energy="<<energy[0]<<" right_energy="<<energy[1]
-                         <<" component_state="<<(stateCorrect?"PASS":"FAIL")<<" status="<<(pass?"PASS":"FAIL")<<std::endl;
             }
+            p->releaseResources ();
         }
-        p->releaseResources();
-    }
-    std::cout<<cases<<" VST3 CPU cases, "<<failures<<" deadline failures"<<std::endl;
-    return failures?1:0;
+    std::cout << cases << " VST3 CPU cases, " << failures << " deadline failures" << std::endl;
+    return failures ? 1 : 0;
 }
-}
+} // namespace step3Hosted
