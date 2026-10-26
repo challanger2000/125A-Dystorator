@@ -12,7 +12,7 @@ class VibeAmpProcessor : public juce::AudioProcessor,
                          private juce::AsyncUpdater
 {
 public:
-    VibeAmpProcessor();
+    explicit VibeAmpProcessor (juce::File presetFolder = {});
     ~VibeAmpProcessor() override = default;
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;

@@ -51,8 +51,10 @@ public:
 
     PresetManager (juce::AudioProcessorValueTreeState& state,
                    std::function<void (const juce::File&)> loadIRFn,
-                   std::function<juce::String()> getIRPathFn)
-        : apvts (state), loadIR (std::move (loadIRFn)), getIRPath (std::move (getIRPathFn))
+                   std::function<juce::String()> getIRPathFn,
+                   juce::File folderOverride = {})
+        : apvts (state), loadIR (std::move (loadIRFn)), getIRPath (std::move (getIRPathFn)),
+          userFolder (folderOverride == juce::File() ? getUserFolder() : folderOverride)
     {
         refresh();
     }
@@ -67,7 +69,7 @@ public:
 
     void refresh()
     {
-        userFiles = getUserFolder().findChildFiles (juce::File::findFiles, false, "*.xml");
+        userFiles = userFolder.findChildFiles (juce::File::findFiles, false, "*.xml");
         userFiles.sort();
     }
 
@@ -132,7 +134,7 @@ public:
         xml->setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
         xml->setAttribute ("irPath", getIRPath());
 
-        const bool ok = xml->writeTo (getUserFolder().getChildFile (name + ".xml"));
+        const bool ok = xml->writeTo (userFolder.getChildFile (name + ".xml"));
         refresh();
         if (ok) currentName = name;
         return ok;
@@ -211,6 +213,7 @@ private:
     juce::AudioProcessorValueTreeState& apvts;
     std::function<void (const juce::File&)> loadIR;
     std::function<juce::String()> getIRPath;
+    juce::File userFolder;
     juce::Array<juce::File> userFiles;
     juce::String currentName { "Default" };
 };

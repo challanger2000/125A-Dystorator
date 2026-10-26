@@ -2,12 +2,12 @@
 #include "PluginEditor.h"
 #include "Parameters.h"
 
-VibeAmpProcessor::VibeAmpProcessor()
+VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     : AudioProcessor (BusesProperties()
                           .withInput ("Input", juce::AudioChannelSet::mono(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
       apvts (*this, nullptr, "PARAMS", vamp::createParameterLayout()),
-      presets (apvts, [this] (const juce::File& f) { loadIR (f); }, [this] { return getIRPath(); })
+      presets (apvts, [this] (const juce::File& f) { loadIR (f); }, [this] { return getIRPath(); }, presetFolder)
 {
     auto get = [this] (const juce::String& id)
     {
