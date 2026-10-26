@@ -543,6 +543,51 @@ static void stereoImpulseResponseRegression (const juce::File& dir)
            "stereo IR preserves opposite-sign L/R impulses");
 }
 
+
+static void compactCutProcessorOracle (const juce::File& dir)
+{
+    // Reference the exact live signal just before the cabinet, without
+    // comparing independently simulated nonlinear amplifiers.
+    VibeAmpProcessor p (dir);
+    p.prepareToPlay (48000.0, 64);
+    param (p, ids::cabOn, 0);
+    param (p, ids::inGateOn, 0);
+    param (p, ids::ampNoise, 0);
+    param (p, ids::lowCutOn, 1);
+    param (p, ids::lowCutHz, 100);
+    param (p, ids::highCutOn, 1);
+    param (p, ids::highCutHz, 5000);
+    vamp::GuitarCuts reference;
+    reference.prepare (48000.0);
+    reference.setCutoffs (100.0, 5000.0);
+    reference.setEnabled (true, true);
+    juce::AudioBuffer<float> captured (1, 64), audio (2, 64);
+    juce::MidiBuffer midi;
+    double maxError = 0.0, actualEffect = 0.0, referenceEnergy = 0.0;
+    for (int k = 0; k < 160; ++k)
+    {
+        audio.clear();
+        for (int i = 0; i < 64; ++i)
+            audio.setSample (0, i, .12f * std::sin (.018 * (k * 64 + i)));
+        cabinetInputCapture = captured.getWritePointer (0);
+        p.processBlock (audio, midi);
+        cabinetInputCapture = nullptr;
+        for (int i = 0; i < 64; ++i)
+        {
+            float l = captured.getSample (0, i), r = l;
+            reference.processStereo (l, r);
+            for (int channel = 0; channel < 2; ++channel)
+                maxError = std::max (maxError, std::abs ((double)audio.getSample (channel, i)
+                                                          - (channel == 0 ? l : r)));
+            actualEffect += std::abs ((double)l - captured.getSample (0, i));
+            referenceEnergy += (double)l * l;
+        }
+    }
+    check (maxError < 1e-6 && actualEffect > 1e-2 && referenceEnergy > 1e-6,
+           "actual post-cab LOW/HIGH CUT matches independent frame-based stereo DSP reference");
+}
+
+
 int main ()
 {
     juce::ScopedJuceInitialiser_GUI init;
@@ -601,6 +646,7 @@ int main ()
         realtimeHandoff (a, b);
         stereoInputRegressions (dir);
         stereoImpulseResponseRegression (dir);
+        compactCutProcessorOracle (dir);
         std::atomic<bool> done{false}, finite{true};
         std::thread audio (
             [&]
