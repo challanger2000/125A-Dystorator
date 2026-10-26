@@ -1,6 +1,7 @@
 #include "../step3/WindowsHeapProbe.h"
 #include "../step3/WindowsCrashDiagnostics.h"
 #include "CabinetIR.h"
+#include "matched_ir_oracle.h"
 #include <iostream>
 #include <juce_audio_utils/juce_audio_utils.h>
 #if defined(STEP3_WRAP_C_HEAP)
@@ -81,10 +82,7 @@ int main ()
             const juce::dsp::ProcessSpec spec{48000., (juce::uint32)frames, 2};
             cab.prepare (spec);
             juce::dsp::Convolution reference;
-            reference.loadImpulseResponse (
-                file,
-                channels == 1 ? juce::dsp::Convolution::Stereo::no : juce::dsp::Convolution::Stereo::yes,
-                juce::dsp::Convolution::Trim::yes, 0, juce::dsp::Convolution::Normalise::yes);
+            loadMatchedReference (reference, file, 2);
             reference.prepare (spec);
             juce::AudioBuffer<float> audio (2, frames), expected (2, frames);
             double error = 0, energy = 0;
