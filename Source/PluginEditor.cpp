@@ -217,27 +217,6 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     inGateSec->add<Knob> (s, ids::inGateThresh, "Thresh", colours::teal);
     inGateSec->add<Knob> (s, ids::inGateRelease, "Release", colours::teal);
 
-    gateSec = std::make_unique<Section> ("3-BAND GATE (LOOP)", colours::teal, &s, ids::gateOn);
-    gateSec->add<Knob> (s, ids::gateThresh, "Thresh", colours::teal);
-    gateSec->add<Knob> (s, ids::gateRelease, "Release", colours::teal);
-    gateSec->add<Knob> (s, ids::gateLow, "Low", colours::teal);
-    gateSec->add<Knob> (s, ids::gateMid, "Mid", colours::teal);
-    gateSec->add<Knob> (s, ids::gateHigh, "High", colours::teal);
-    gateSec->add<GateBandMeter> ([this] (int b) { return proc.getGateBandGain (b); });
-
-    pitchSec = std::make_unique<Section> ("TRANSPOSE", colours::purple);
-    pitchSec->add<Knob> (s, ids::transpose, "Semitones", colours::purple);
-    pitchSec->add<ChoiceButtons> (s, ids::transposeMode, "Mode", juce::StringArray { "LIVE", "HQ" }, colours::purple)
-        ->setTooltip ("LIVE: ~6-15 ms latency, for playing.  HQ: ~43 ms latency (compensated in DAWs), "
-                      "smoothest chords, for recording.");
-
-    compSec = std::make_unique<Section> ("COMPRESSOR", colours::yellow, &s, ids::compOn);
-    compSec->add<Knob> (s, ids::compThresh, "Thresh", colours::yellow);
-    compSec->add<Knob> (s, ids::compRatio, "Ratio", colours::yellow);
-    compSec->add<Knob> (s, ids::compAttack, "Attack", colours::yellow);
-    compSec->add<Knob> (s, ids::compRelease, "Release", colours::yellow);
-    compSec->add<Knob> (s, ids::compMakeup, "Makeup", colours::yellow);
-
     boostSec = std::make_unique<Section> ("PRECISION DRIVE", colours::clean, &s, ids::boostOn);
     auto* boostModelSel = boostSec->add<ChoiceButtons> (s, ids::boostModel, "Model", juce::StringArray { "PRECISION", "TS9" }, colours::clean);
     boostModelSel->setTooltip ("PRECISION: Horizon Devices Precision Drive (tight, Attack sets the low end).  "
@@ -257,7 +236,7 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     });
 
     // ---- row 2: amp ----
-    ampSec = std::make_unique<Section> ("DONKEY HEAD  //  515 HIGH GAIN", colours::red);
+    ampSec = std::make_unique<Section> ("AMP / HIGH GAIN", colours::red);
     ampSec->add<ChannelSelector> (s, ids::channel, [this] (int ch) { setAmpChannelColour (ch); });
     ampSec->add<ToggleStack> (s, std::vector<ToggleStack::Item> {
         { ids::ampBright, "BRIGHT", "The rhythm channel's BRIGHT switch (C10 across R21, as on the amp): CLEAN and BLUE." },
@@ -278,46 +257,37 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     ampSec->add<Knob> (s, ids::ampVolume, "Volume", colours::red);
     setAmpChannelColour (juce::roundToInt (s.getRawParameterValue (ids::channel)->load()));
 
-    // ---- row 3: cab + EQ ----
+    // Only controls that actually reach the compact processor audio path are visible.
+    // Legacy APVTS parameter IDs remain in Parameters.h for old-state compatibility.
     cabSec = std::make_unique<Section> ("CABINET IR", colours::orange, &s, ids::cabOn);
     cabSec->add<IRPanel> (proc);
 
-    eqSec = std::make_unique<Section> ("10-BAND EQ", colours::orange, &s, ids::eqOn);
-    for (int i = 0; i < 10; ++i)
-        eqSec->add<VSlider> (s, ids::eqBand (i), ids::eqLabels[i], colours::orange);
+    cutsSec = std::make_unique<Section> ("POST-CAB CUTS", colours::orange);
+    cutsSec->add<Toggle> (s, ids::lowCutOn, "LOW ON", colours::orange);
+    cutsSec->add<Knob> (s, ids::lowCutHz, "Low Hz", colours::orange);
+    cutsSec->add<Toggle> (s, ids::highCutOn, "HIGH ON", colours::orange);
+    cutsSec->add<Knob> (s, ids::highCutHz, "High Hz", colours::orange);
 
-    // ---- row 4: post fx ----
-    phaserSec = std::make_unique<Section> ("PHASER", colours::purple, &s, ids::phaserOn);
-    phaserSec->add<Knob> (s, ids::phRate, "Rate", colours::purple);
-    phaserSec->add<Knob> (s, ids::phDepth, "Depth", colours::purple);
-    phaserSec->add<Knob> (s, ids::phFeedback, "Feedback", colours::purple);
-    phaserSec->add<Knob> (s, ids::phMix, "Mix", colours::purple);
-
-    delaySec = std::make_unique<Section> ("DELAY", colours::blue, &s, ids::delayOn);
-    delaySec->add<Knob> (s, ids::dlTime, "Time", colours::blue);
-    delaySec->add<Knob> (s, ids::dlFeedback, "Feedback", colours::blue);
-    delaySec->add<Knob> (s, ids::dlMix, "Mix", colours::blue);
-    delaySec->add<Toggle> (s, ids::dlPingPong, "PING-PONG", colours::blue);
-
-    reverbSec = std::make_unique<Section> ("REVERB", colours::teal, &s, ids::reverbOn);
-    reverbSec->add<Knob> (s, ids::rvSize, "Size", colours::teal);
-    reverbSec->add<Knob> (s, ids::rvDamping, "Damping", colours::teal);
-    reverbSec->add<Knob> (s, ids::rvWidth, "Width", colours::teal);
-    reverbSec->add<Knob> (s, ids::rvMix, "Mix", colours::teal);
+    modeSec = std::make_unique<Section> ("AMP MODE / QUALITY", colours::blue);
+    modeSec->add<ChoiceButtons> (s, ids::ampMode, "Input path",
+                                juce::StringArray { "MONO", "STEREO" }, colours::blue);
+    modeSec->add<ChoiceButtons> (s, ids::quality, "Quality",
+                                juce::StringArray { "ECO", "STANDARD", "HIGH" }, colours::blue)
+        ->setTooltip ("ECO is intended for realtime tracking. Select HIGH before offline bounce. "
+                      "HIGH selection is not automatic.");
 
     outSec = std::make_unique<Section> ("OUTPUT", colours::text);
     outSec->add<Knob> (s, ids::outGain, "Level", colours::text);
     outSec->add<LevelMeter> ([this] { return proc.popOutputPeak(); }, false);
 
     addAndMakeVisible (presetBar);
-
-    for (auto* sec : { inSec.get(), inGateSec.get(), gateSec.get(), pitchSec.get(), compSec.get(), boostSec.get(), ampSec.get(),
-                       cabSec.get(), eqSec.get(), phaserSec.get(), delaySec.get(), reverbSec.get(), outSec.get() })
+    for (auto* sec : { inSec.get(), inGateSec.get(), boostSec.get(), outSec.get(),
+                       ampSec.get(), cabSec.get(), cutsSec.get(), modeSec.get() })
         addAndMakeVisible (sec);
 
     setResizable (true, true);
-    setResizeLimits (1200, 700, 2400, 1500);
-    setSize (1480, 840);
+    setResizeLimits (1120, 640, 2400, 1500);
+    setSize (1380, 730);
 }
 
 VibeAmpEditor::~VibeAmpEditor()
@@ -340,7 +310,7 @@ void VibeAmpEditor::paint (juce::Graphics& g)
     auto header = getLocalBounds().reduced (16, 8).removeFromTop (40);
     g.setColour (juce::Colours::white);
     g.setFont (font (26.0f, true));
-    g.drawText ("DJENTY DONKEY", header, juce::Justification::centredLeft);
+    g.drawText ("125A DYSTORATOR", header, juce::Justification::centredLeft);
 
     g.setColour (colours::text.withAlpha (0.5f));
     g.setFont (font (12.0f));
@@ -374,16 +344,16 @@ void VibeAmpEditor::resized()
     presetBar.setBounds (b.removeFromTop (50).removeFromRight (640).reduced (0, 6));
 
     constexpr int gap = 8;
-    const int h = b.getHeight() - gap * 3;
-    auto row1 = b.removeFromTop (juce::roundToInt (h * 0.23f)); b.removeFromTop (gap);
-    auto row2 = b.removeFromTop (juce::roundToInt (h * 0.27f)); b.removeFromTop (gap);
-    auto row3 = b.removeFromTop (juce::roundToInt (h * 0.27f)); b.removeFromTop (gap);
-    auto row4 = b;
+    const int available = b.getHeight() - gap * 2;
+    auto row1 = b.removeFromTop (juce::roundToInt (available * 0.22f));
+    b.removeFromTop (gap);
+    auto row2 = b.removeFromTop (juce::roundToInt (available * 0.42f));
+    b.removeFromTop (gap);
+    auto row3 = b;
 
-    layoutRow (row1, { { inSec.get(), 2.0f }, { inGateSec.get(), 2.0f }, { gateSec.get(), 6.0f },
-                       { pitchSec.get(), 2.2f }, { compSec.get(), 5.0f } });
-    layoutRow (row2, { { boostSec.get(), 5.0f }, { ampSec.get(), 8.5f } });
-    layoutRow (row3, { { cabSec.get(), 3.0f }, { eqSec.get(), 7.0f } });
-    layoutRow (row4, { { phaserSec.get(), 4.0f }, { delaySec.get(), 4.0f },
-                       { reverbSec.get(), 4.0f }, { outSec.get(), 2.0f } });
+    layoutRow (row1, { { inSec.get(), 2.0f }, { inGateSec.get(), 2.5f },
+                        { boostSec.get(), 6.2f }, { outSec.get(), 2.0f } });
+    ampSec->setBounds (row2);
+    layoutRow (row3, { { cabSec.get(), 4.2f }, { cutsSec.get(), 4.1f },
+                        { modeSec.get(), 3.7f } });
 }
