@@ -108,6 +108,7 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     std::uint64_t allocations = 0, releases = 0;
     void *firstAllocationCaller = nullptr;
     double difference = 0, energy = 0;
+    bool finite = true;
     const int latency = a->getLatencySamples ();
     auto input = [&] (int k)
     {
@@ -151,11 +152,11 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 difference =
                     std::max (difference, (double)std::abs (x.getSample (c, i) - y.getSample (c, i)));
                 energy += (double)x.getSample (c, i) * x.getSample (c, i);
-                if (!std::isfinite (x.getSample (c, i)))
-                    passed = false;
+                finite = finite && std::isfinite (x.getSample (c, i)) &&
+                         std::isfinite (y.getSample (c, i));
             }
     }
-    check (difference < 1e-6 && energy > 1e-8 && a->getLatencySamples () == latency,
+    check (finite && difference < 1e-6 && energy > 1e-8 && a->getLatencySamples () == latency,
            "actual VST3 rapid mode/quality/bypass with stop/play/cycle preserves continuous reference PCM "
            "and latency");
     std::cout << "HOST_TRANSPORT max_delta=" << difference << " energy=" << energy << std::endl;
@@ -197,6 +198,7 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     a = make (&saved);
     b = make (&scene);
     difference = energy = 0;
+    finite = true;
     for (int k = 0; k < 120; ++k)
     {
         input (k);
@@ -208,11 +210,13 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 difference =
                     std::max (difference, (double)std::abs (x.getSample (c, i) - y.getSample (c, i)));
                 energy += (double)x.getSample (c, i) * x.getSample (c, i);
+                finite = finite && std::isfinite (x.getSample (c, i)) &&
+                         std::isfinite (y.getSample (c, i));
             }
     }
     auto actual = hostedComponentState (*a);
     check (
-        actual && actual->getStringAttribute ("irPath") == ir.getFullPathName () && difference < 1e-6 &&
+        finite && actual && actual->getStringAttribute ("irPath") == ir.getFullPathName () && difference < 1e-6 &&
             energy > 1e-8,
         "actual VST3 stereo IR host save/destroy/disk reload/fresh instance restores nondefault audible PCM");
     std::cout << "HOST_IR_RECALL max_delta=" << difference << " energy=" << energy << std::endl;
@@ -230,6 +234,7 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
     b->prepareToPlay (48000, 16384);
     juce::AudioBuffer<float> large (2, 16384), largeReference (2, 16384);
     double largeDelta = 0, largeEnergy = 0;
+    finite = true;
     for (int k = 0; k < 3; ++k)
     {
         for (int c = 0; c < 2; ++c)
@@ -244,17 +249,18 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 const double actualSample = large.getSample (c, i),
                              expectedSample = largeReference.getSample (c, i);
                 if (!std::isfinite (actualSample) || !std::isfinite (expectedSample))
-                    passed = false;
+                    finite = false;
                 largeDelta = std::max (largeDelta, std::abs (actualSample - expectedSample));
                 largeEnergy += actualSample * actualSample;
             }
     }
-    check (largeDelta < 1e-6 && largeEnergy > 1e-8,
+    check (finite && largeDelta < 1e-6 && largeEnergy > 1e-8,
            "actual VST3 reprepare/IR at 16384 samples remains finite and matches fresh equivalent stream");
     std::cout << "HOST_LARGE_IR max_delta=" << largeDelta << " energy=" << largeEnergy << std::endl;
     auto clear = sceneWithIR (*a, {});
     a->setStateInformation (clear.getData (), (int)clear.getSize ());
     double changed = 0;
+    finite = true;
     for (int k = 120; k < 240; ++k)
     {
         input (k);
@@ -266,11 +272,12 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 {
                     const double delta = x.getSample (c, i) - y.getSample (c, i);
                     changed += delta * delta;
+                    finite = finite && std::isfinite (delta);
                 }
     }
     actual = hostedComponentState (*a);
     check (
-        actual && actual->getStringAttribute ("irPath").isEmpty () && changed > 1e-8,
+        finite && actual && actual->getStringAttribute ("irPath").isEmpty () && changed > 1e-8,
         "actual VST3 clear IR commits built-in selection and audibly changes from continuing IR reference");
     a->releaseResources ();
     b->releaseResources ();

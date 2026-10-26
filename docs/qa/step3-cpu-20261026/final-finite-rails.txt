@@ -1,0 +1,1 @@
+PASS per-sample rail source scheduling matches frozen 398204e, channel/crunch fades/custom initial rails max=0 energy=264.055

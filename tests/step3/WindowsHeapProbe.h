@@ -1,11 +1,32 @@
 #pragma once
 #include <cstdint>
 #include <stdexcept>
+#if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
+#include <windows.h>
+#endif
 
 // Test host only. Intercept the process heap underneath both /MT plugin CRT
 // and /MD host CRT; global operator new in the host cannot observe DLL heaps.
 namespace step3Heap
 {
+#if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
+// Rtl heap functions also run while the Windows loader initializes a thread,
+// before that thread's C++ static TLS is necessarily usable. A reserved TEB
+// TLS slot gates observation before any C++ TLS variable is touched by hooks.
+inline DWORD captureSlot = TLS_OUT_OF_INDEXES;
+inline bool capturing () noexcept
+{
+    if (captureSlot == TLS_OUT_OF_INDEXES)
+        return false;
+    const auto savedError = GetLastError ();
+    const bool result = TlsGetValue (captureSlot) != nullptr;
+    SetLastError (savedError);
+    return result;
+}
+#endif
 inline thread_local bool enabled = false;
 inline thread_local std::uint64_t allocations = 0, releases = 0;
 inline thread_local void* firstCaller = nullptr;
@@ -16,8 +37,18 @@ struct Scope
         allocations = releases = 0;
         firstCaller = nullptr;
         enabled = true;
+#if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
+        if (!TlsSetValue (captureSlot, reinterpret_cast<void *> (1)))
+            throw std::runtime_error ("Cannot arm heap observation; NOT VERIFIED");
+#endif
     }
-    ~Scope () { enabled = false; }
+    ~Scope ()
+    {
+#if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
+        TlsSetValue (captureSlot, nullptr);
+#endif
+        enabled = false;
+    }
 };
 } // namespace step3Heap
 #if defined(_WIN32) && defined(STEP3_DETOURS_AVAILABLE)
@@ -39,7 +70,7 @@ inline Reallocate realReallocate = nullptr;
 inline Release realRelease = nullptr;
 inline PVOID NTAPI trackedAllocate (PVOID heap, ULONG flags, SIZE_T bytes)
 {
-    if (enabled)
+    if (capturing ())
     {
         if (allocations == 0) firstCaller = _ReturnAddress();
         ++allocations;
@@ -48,7 +79,7 @@ inline PVOID NTAPI trackedAllocate (PVOID heap, ULONG flags, SIZE_T bytes)
 }
 inline PVOID NTAPI trackedReallocate (PVOID heap, ULONG flags, PVOID old, SIZE_T bytes)
 {
-    if (enabled)
+    if (capturing ())
     {
         if (allocations == 0) firstCaller = _ReturnAddress();
         ++allocations;
@@ -57,7 +88,7 @@ inline PVOID NTAPI trackedReallocate (PVOID heap, ULONG flags, PVOID old, SIZE_T
 }
 inline BOOLEAN NTAPI trackedRelease (PVOID heap, ULONG flags, PVOID memory)
 {
-    if (enabled && memory != nullptr)
+    if (capturing () && memory != nullptr)
         ++releases;
     return realRelease (heap, flags, memory);
 }
@@ -72,14 +103,34 @@ class Installation
         realAllocate = reinterpret_cast<Allocate> (GetProcAddress (ntdll, "RtlAllocateHeap"));
         realReallocate = reinterpret_cast<Reallocate> (GetProcAddress (ntdll, "RtlReAllocateHeap"));
         realRelease = reinterpret_cast<Release> (GetProcAddress (ntdll, "RtlFreeHeap"));
+        captureSlot = TlsAlloc ();
+        // Use the fixed TEB slots, never the separately allocated expansion array.
+        if (captureSlot == TLS_OUT_OF_INDEXES || captureSlot >= TLS_MINIMUM_AVAILABLE)
+        {
+            if (captureSlot != TLS_OUT_OF_INDEXES) TlsFree (captureSlot);
+            captureSlot = TLS_OUT_OF_INDEXES;
+            throw std::runtime_error ("No fixed TEB slot for heap observation; NOT VERIFIED");
+        }
+        // Initialize all C++ observation counters before any detour is installed.
+        allocations = releases = 0;
+        firstCaller = nullptr;
+        enabled = false;
         if (!realAllocate || !realReallocate || !realRelease || !transaction (true))
+        {
+            TlsFree (captureSlot);
+            captureSlot = TLS_OUT_OF_INDEXES;
             throw std::runtime_error ("Cannot install Windows heap observation; NOT VERIFIED");
+        }
     }
     ~Installation ()
     {
         enabled = false;
         if (installed)
-            transaction (false);
+        {
+            if (!transaction (false)) std::terminate ();
+            TlsFree (captureSlot);
+            captureSlot = TLS_OUT_OF_INDEXES;
+        }
     }
     static bool selfTest ()
     {
