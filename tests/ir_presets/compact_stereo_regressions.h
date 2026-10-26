@@ -213,9 +213,7 @@ static void compactCabinetMatrix (const juce::File &dir)
             check (tested.load (file), "mono/stereo IR accepted before activation");
             tested.prepare ({fs, 512, 2});
             juce::dsp::Convolution reference;
-            reference.loadImpulseResponse (file, juce::dsp::Convolution::Stereo::yes,
-                                           juce::dsp::Convolution::Trim::yes, 0,
-                                           juce::dsp::Convolution::Normalise::yes);
+            loadMatchedReference (reference, file, 2);
             reference.prepare ({fs, 512, 2});
             double error = 0, energy = 0;
             int pos = 0;
@@ -241,7 +239,7 @@ static void compactCabinetMatrix (const juce::File &dir)
             std::cout << "IR channels=" << irChannels << " fs=" << fs << " max_delta=" << error
                       << " energy=" << energy << '\n';
             check (error < 1e-6 && energy > 1e-8,
-                   "both IR channels/resampling match original JUCE file oracle at variable blocks");
+                   "both IR channels/resampling match gain-matched JUCE PCM at variable blocks");
             const auto accepted = tested.getPath ();
             const auto invalid = stereoWav (dir, 3);
             check (!tested.load (invalid) && tested.getPath () == accepted,
