@@ -48,7 +48,12 @@ jobs:
       - name: Build Release, measure and run QA (retain FAIL)
         shell: pwsh
         run: |
-          & "$pwd/tests/step3/run_windows_qa.ps1" -JuceDir "$pwd/build/tools/JUCE" -SdkDir "$pwd/build/tools/vst3sdk" -TesterDir "$pwd/build/tools/tester" -DetoursDir "$pwd/build/tools/Detours" -EvidenceDir "$env:QA_EVIDENCE"
+          $scope = 'full'
+          # Only repeat CPU for an unchanged product that has complete Windows
+          # functional evidence. Driver independently verifies every prior gate.
+          git diff --quiet 8a442d9d2a3ad10ba331b7cc849136db78ca08ac HEAD '--' 'Source' 'CMakeLists.txt'
+          if ($LASTEXITCODE -eq 0) { $scope = 'cpu' }
+          & "$pwd/tests/step3/run_windows_qa.ps1" -JuceDir "$pwd/build/tools/JUCE" -SdkDir "$pwd/build/tools/vst3sdk" -TesterDir "$pwd/build/tools/tester" -DetoursDir "$pwd/build/tools/Detours" -EvidenceDir "$env:QA_EVIDENCE" -Scope $scope
       - name: Preserve Windows evidence and candidate VST3
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

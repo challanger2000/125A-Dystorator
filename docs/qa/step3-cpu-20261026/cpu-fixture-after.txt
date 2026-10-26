@@ -1,0 +1,13 @@
+HOST_STAGE enter argc=3
+HOST_STAGE install heap=0
+HOST_STAGE initialize JUCE
+HOST_STAGE discover
+HOST_STAGE discovered=1
+PASS VST3_CPU_SETUP fs=44100 lanes=1 drive_level=3.1
+PASS VST3_CPU_SETUP fs=44100 lanes=1 drive_level=7
+PASS VST3_CPU_SETUP fs=44100 lanes=2 drive_level=3.1
+PASS VST3_CPU_SETUP fs=44100 lanes=2 drive_level=7
+PASS VST3_CPU_SETUP fs=48000 lanes=1 drive_level=3.1
+PASS VST3_CPU_SETUP fs=48000 lanes=1 drive_level=7
+PASS VST3_CPU_SETUP fs=48000 lanes=2 drive_level=3.1
+PASS VST3_CPU_SETUP fs=48000 lanes=2 drive_level=7

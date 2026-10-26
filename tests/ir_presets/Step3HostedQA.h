@@ -152,8 +152,7 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 difference =
                     std::max (difference, (double)std::abs (x.getSample (c, i) - y.getSample (c, i)));
                 energy += (double)x.getSample (c, i) * x.getSample (c, i);
-                finite = finite && std::isfinite (x.getSample (c, i)) &&
-                         std::isfinite (y.getSample (c, i));
+                finite = finite && std::isfinite (x.getSample (c, i)) && std::isfinite (y.getSample (c, i));
             }
     }
     check (finite && difference < 1e-6 && energy > 1e-8 && a->getLatencySamples () == latency,
@@ -210,14 +209,13 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                 difference =
                     std::max (difference, (double)std::abs (x.getSample (c, i) - y.getSample (c, i)));
                 energy += (double)x.getSample (c, i) * x.getSample (c, i);
-                finite = finite && std::isfinite (x.getSample (c, i)) &&
-                         std::isfinite (y.getSample (c, i));
+                finite = finite && std::isfinite (x.getSample (c, i)) && std::isfinite (y.getSample (c, i));
             }
     }
     auto actual = hostedComponentState (*a);
     check (
-        finite && actual && actual->getStringAttribute ("irPath") == ir.getFullPathName () && difference < 1e-6 &&
-            energy > 1e-8,
+        finite && actual && actual->getStringAttribute ("irPath") == ir.getFullPathName () &&
+            difference < 1e-6 && energy > 1e-8,
         "actual VST3 stereo IR host save/destroy/disk reload/fresh instance restores nondefault audible PCM");
     std::cout << "HOST_IR_RECALL max_delta=" << difference << " energy=" << energy << std::endl;
     const auto accepted = actual->toString ();
@@ -306,6 +304,85 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
 
 namespace step3Hosted
 {
+inline void cpuParameters (juce::AudioProcessor &p, int lanes)
+{
+    for (auto setting : std::vector<std::pair<const char *, float>>{{"Amp Noise", 0},
+                                                                    {"Input Gate On", 0},
+                                                                    {"Channel", 1},
+                                                                    {"Gain", .9f},
+                                                                    {"Master", .3f},
+                                                                    {"Boost On", 1},
+                                                                    {"Boost Drive", .8f},
+                                                                    {"Drive Volume", .7f},
+                                                                    {"Cab On", 1},
+                                                                    {"Low Cut On", 1},
+                                                                    {"High Cut On", 1},
+                                                                    {"AMP MODE", lanes == 1 ? 0.f : 1.f},
+                                                                    {"QUALITY", 1}})
+        parameter (p, setting.first, setting.second);
+}
+inline int cpuSetup (juce::VST3PluginFormat &format, const juce::PluginDescription &description)
+{
+    int failures = 0;
+    for (double fs : {44100., 48000.})
+        for (int lanes : {1, 2})
+        {
+            juce::String error;
+            auto p = format.createInstanceFromDescription (description, fs, 512, error);
+            if (!p)
+                throw std::runtime_error (error.toStdString ());
+            auto layout = p->getBusesLayout ();
+            layout.inputBuses.set (0, juce::AudioChannelSet::stereo ());
+            layout.outputBuses.set (0, juce::AudioChannelSet::stereo ());
+            if (!p->setBusesLayout (layout))
+                return 2;
+            cpuParameters (*p, lanes);
+            p->prepareToPlay (fs, 512);
+            for (float driveLevel : {.31f, .7f})
+            {
+                parameter (*p, "Drive Volume", driveLevel);
+                juce::AudioBuffer<float> audio (2, 512);
+                for (int c = 0; c < 2; ++c)
+                    for (int i = 0; i < 512; ++i)
+                        audio.setSample (c, i, (float)(.1 * std::sin (i * (c ? .037 : .019))));
+                juce::MidiBuffer midi;
+                p->processBlock (audio, midi);
+                auto state = hostedComponentState (*p);
+                bool pass = state != nullptr;
+                for (auto expected :
+                     std::vector<std::pair<const char *, double>>{{"ampNoise", 0},
+                                                                  {"inGateOn", 0},
+                                                                  {"channel", 2},
+                                                                  {"ampGain", 9},
+                                                                  {"master", 3},
+                                                                  {"boostOn", 1},
+                                                                  {"boostDrive", 8},
+                                                                  {"boostLevel", driveLevel * 10.},
+                                                                  {"cabOn", 1},
+                                                                  {"lowCutOn", 1},
+                                                                  {"highCutOn", 1},
+                                                                  {"ampMode", lanes == 1 ? 0. : 1.},
+                                                                  {"quality", 2}})
+                {
+                    bool found = false;
+                    if (state)
+                        for (auto *child : state->getChildWithTagNameIterator ("PARAM"))
+                            if (child->getStringAttribute ("id") == expected.first)
+                                found =
+                                    std::abs (child->getDoubleAttribute ("value") - expected.second) < 1e-5;
+                    pass = pass && found;
+                }
+                for (int c = 0; c < 2; ++c)
+                    for (int i = 0; i < 512; ++i)
+                        pass = pass && std::isfinite (audio.getSample (c, i));
+                std::cout << (pass ? "PASS" : "FAIL") << " VST3_CPU_SETUP fs=" << fs << " lanes=" << lanes
+                          << " drive_level=" << driveLevel * 10. << std::endl;
+                failures += !pass;
+            }
+            p->releaseResources ();
+        }
+    return failures ? 1 : 0;
+}
 inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &description,
                 const char *version)
 {
@@ -323,21 +400,7 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
             layout.outputBuses.set (0, juce::AudioChannelSet::stereo ());
             if (!p->setBusesLayout (layout))
                 return 2;
-            for (auto setting :
-                 std::vector<std::pair<const char *, float>>{{"Amp Noise", 0},
-                                                             {"Input Gate On", 0},
-                                                             {"Channel", 1},
-                                                             {"Gain", .9f},
-                                                             {"Master", .3f},
-                                                             {"Boost On", 1},
-                                                             {"Boost Drive", .8f},
-                                                             {"Boost Level", .7f},
-                                                             {"Cab On", 1},
-                                                             {"Low Cut On", 1},
-                                                             {"High Cut On", 1},
-                                                             {"AMP MODE", lanes == 1 ? 0.f : 1.f},
-                                                             {"QUALITY", 1}})
-                parameter (*p, setting.first, setting.second);
+            cpuParameters (*p, lanes);
             std::cout << "HOST_STAGE cpu prepare fs=" << fs << " lanes=" << lanes << std::endl;
             p->prepareToPlay (fs, 512);
             std::cout << "HOST_STAGE cpu prepared" << std::endl;
@@ -406,7 +469,7 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
                         bool stateCorrect = false;
                         if (auto scene = hostedComponentState (*p))
                         {
-                            bool mode = false, q = false, gain = false, drive = false;
+                            bool mode = false, q = false, gain = false, drive = false, driveLevel = false;
                             for (auto *child : scene->getChildWithTagNameIterator ("PARAM"))
                             {
                                 const auto id = child->getStringAttribute ("id");
@@ -419,8 +482,10 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
                                     gain = std::abs (value - 9.) < 1e-5;
                                 if (id == "boostOn")
                                     drive = value == 1.;
+                                if (id == "boostLevel")
+                                    driveLevel = std::abs (value - 7.) < 1e-5;
                             }
-                            stateCorrect = mode && q && gain && drive;
+                            stateCorrect = mode && q && gain && drive && driveLevel;
                         }
                         std::sort (times.begin (), times.end ());
                         const bool pass = finite && energy[0] > 1e-8 && energy[1] > 1e-8 && stateCorrect &&

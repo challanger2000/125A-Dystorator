@@ -1,0 +1,6 @@
+HOST_STAGE enter argc=3
+HOST_STAGE install heap=0
+HOST_STAGE initialize JUCE
+HOST_STAGE discover
+HOST_STAGE discovered=1
+FAIL test host exception: Missing hosted parameter: Boost Level

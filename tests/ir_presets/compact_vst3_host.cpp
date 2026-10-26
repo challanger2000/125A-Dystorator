@@ -5,9 +5,8 @@
 #include <iostream>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-int main (int argc, char **argv)
+static int runHost (int argc, char **argv)
 {
-    step3Crash::install ();
     std::cout << "HOST_STAGE enter argc=" << argc << std::endl;
     const bool heapOnly = argc == 2 && juce::String (argv[1]) == "step3-heap-selftest";
     const bool step3 = argc == 3 && juce::String (argv[2]) == "step3";
@@ -50,6 +49,8 @@ int main (int argc, char **argv)
             return 2;
         return step3Hosted::cpu (format, *descriptions[0], argv[3]);
     }
+    if (argc == 3 && juce::String (argv[2]) == "step3-cpu-setup")
+        return step3Hosted::cpuSetup (format, *descriptions[0]);
     if (argc == 3 && !step3)
     {
         if (juce::String (argv[2]) != "cpu")
@@ -260,4 +261,22 @@ int main (int argc, char **argv)
     if (step3)
         pass = step3Hosted::run (format, *descriptions[0]) && pass;
     return pass ? 0 : 1;
+}
+
+int main (int argc, char **argv)
+{
+    step3Crash::install ();
+    try
+    {
+        return runHost (argc, argv);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "FAIL test host exception: " << e.what () << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "FAIL unknown test host exception" << std::endl;
+    }
+    return 2;
 }
