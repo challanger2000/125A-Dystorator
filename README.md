@@ -17,10 +17,16 @@ amp circuit (CLEAN / BLUE / RED; stereo paths when selected) →
 builtin five-filter cabinet or loaded mono/stereo impulse response →
 low-cut and high-cut → output gain.
 
-The processor retains certain legacy host parameter IDs for state integrity,
-but **does not process** the original transpose, compressor, 3-band loop gate,
-10-band EQ, phaser, delay or reverb. Those dead controls are intentionally
-absent from the compact editor.
+The editor and VST3 host parameter list contain only live controls.
+Unused transpose, compressor, loop gate, 10-band EQ, phaser, delay and reverb
+parameters have been removed from this **new, unreleased VST3 identity**.
+Earlier pre-release 125A state/preset XML may still be loaded: recognized
+obsolete control entries are discarded, while all currently supported
+parameters, cabinet IR and knob-curve upgrades remain intact.
+
+Built-in 125A factory presets are Default, Tight Rhythm, Modern Rhythm,
+Lead Drive, Classic Crunch and Open Clean. None promise inactive effects,
+such as pitch shifting, delay or reverb.
 
 ## Quality and CPU
 
