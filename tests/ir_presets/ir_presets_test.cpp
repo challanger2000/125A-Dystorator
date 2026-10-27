@@ -93,6 +93,11 @@ static juce::Button* findEditorButton (juce::Component& parent, const juce::Stri
 static void compactEditorBindings (const juce::File& dir)
 {
     VibeAmpProcessor processor (dir);
+    check (processor.getMainBusNumInputChannels() == 2 && processor.getMainBusNumOutputChannels() == 2,
+           "default host bus layout is genuinely stereo input and stereo output");
+    check (processor.isBusesLayoutSupported (juce::AudioProcessor::BusesLayout {
+               { juce::AudioChannelSet::mono() }, { juce::AudioChannelSet::stereo() } }),
+           "mono input remains explicitly supported");
     std::unique_ptr<juce::AudioProcessorEditor> editor (processor.createEditor());
     check (editor != nullptr, "compact editor can be constructed");
     if (! editor) return;
