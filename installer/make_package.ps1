@@ -1,21 +1,21 @@
-﻿# Builds the distributable package for Djenty Donkey.
+﻿# Builds the distributable package for 125A Dystorator.
 # Run from the project root after build.bat:  powershell -ExecutionPolicy Bypass -File installer\make_package.ps1
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$version  = "0.5.6-beta"
+$version  = "0.1.0"
 $root     = Split-Path -Parent $PSScriptRoot
-$build    = Join-Path $env:USERPROFILE "vab-build\DjentyDonkey_artefacts\Release"
+$build    = Join-Path $env:USERPROFILE "vab-build\Dystorator_artefacts\Release"
 $dist     = Join-Path $root "dist"
-$stageDir = Join-Path $dist "DjentyDonkey-$version-Windows"
+$stageDir = Join-Path $dist "125A-Dystorator-$version-Windows"
 $iscc     = @("$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe", "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe") |
             Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $iscc) { throw "Inno Setup (ISCC.exe) not found" }
 
-# Inno Setup needs UTF-8 *with BOM* for the Chinese strings
+# Ensure UTF-8 with BOM for Inno Setup text parsing
 $utf8Bom = New-Object System.Text.UTF8Encoding($true)
-foreach ($f in "DjentyDonkey.iss", "README_CN.txt") {
+foreach ($f in "125A-Dystorator.iss", "README.txt") {
     $p = Join-Path $PSScriptRoot $f
     [IO.File]::WriteAllText($p, [IO.File]::ReadAllText($p), $utf8Bom)
 }
@@ -37,20 +37,21 @@ if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
 New-Item -ItemType Directory -Force $stageDir, "$stageDir\Portable", "$stageDir\source" | Out-Null
 
 # 1) installer
-& $iscc /Qp (Join-Path $PSScriptRoot "DjentyDonkey.iss")
+& $iscc /Qp (Join-Path $PSScriptRoot "125A-Dystorator.iss")
 if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
-Copy-Item (Join-Path $dist "DjentyDonkey-Setup-$version.exe") $stageDir
+Copy-Item (Join-Path $dist "125A-Dystorator-Setup-$version.exe") $stageDir
 
 # 2) portable
-Copy-Item (Join-Path $build "Standalone\Djenty Donkey.exe") "$stageDir\Portable"
-Copy-Item (Join-Path $build "VST3\Djenty Donkey.vst3") "$stageDir\Portable" -Recurse
+Copy-Item (Join-Path $build "Standalone\125A Dystorator.exe") "$stageDir\Portable"
+Copy-Item (Join-Path $build "VST3\125A Dystorator.vst3") "$stageDir\Portable" -Recurse
 
 # 3) docs
-Copy-Item (Join-Path $PSScriptRoot "README_CN.txt") (Join-Path $stageDir "使用说明.txt")
+Copy-Item (Join-Path $PSScriptRoot "README.txt") (Join-Path $stageDir "README.txt")
 Copy-Item (Join-Path $PSScriptRoot "THIRD-PARTY-NOTICES.txt") $stageDir
+Copy-Item (Join-Path $root "LICENSE") $stageDir
 
 # 4) source code (required by the AGPL/GPL licenses of JUCE and the ASIO SDK)
-$srcStage = Join-Path $dist "src-stage\DjentyDonkey-source-$version"
+$srcStage = Join-Path $dist "src-stage\125A-Dystorator-source-$version"
 if (Test-Path (Split-Path $srcStage)) { Remove-Item (Split-Path $srcStage) -Recurse -Force }
 New-Item -ItemType Directory -Force $srcStage | Out-Null
 foreach ($item in "CMakeLists.txt", "build.bat", "README.md", "Source", "tests", "docs", "spice", "installer") {
@@ -58,11 +59,11 @@ foreach ($item in "CMakeLists.txt", "build.bat", "README.md", "Source", "tests",
 }
 # LTspice runs leave waveform / database files next to the netlists (can be GBs); ship the netlists only
 Get-ChildItem (Join-Path $srcStage "spice") -Include *.raw, *.db -Recurse | Remove-Item
-New-Zip $srcStage "$stageDir\source\DjentyDonkey-source-$version.zip" $true
+New-Zip $srcStage "$stageDir\source\125A-Dystorator-source-$version.zip" $true
 Remove-Item (Split-Path $srcStage) -Recurse -Force
 
 # 5) final zip
-$zip = Join-Path $dist "DjentyDonkey-$version-Windows.zip"
+$zip = Join-Path $dist "125A-Dystorator-$version-Windows.zip"
 New-Zip $stageDir $zip $true
 
-Get-Item $zip, (Join-Path $dist "DjentyDonkey-Setup-$version.exe") | ForEach-Object { "{0}  {1:N1} MB" -f $_.Name, ($_.Length / 1MB) }
+Get-Item $zip, (Join-Path $dist "125A-Dystorator-Setup-$version.exe") | ForEach-Object { "{0}  {1:N1} MB" -f $_.Name, ($_.Length / 1MB) }
