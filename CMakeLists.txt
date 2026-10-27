@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(DjentyDonkey VERSION 0.5.6)
+project(Dystorator VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,13 +23,13 @@ if(WIN32)
     FetchContent_MakeAvailable(asiosdk)
 endif()
 
-juce_add_plugin(DjentyDonkey
-    VERSION 0.5.6
-    COMPANY_NAME "Djenty Donkey"
-    PLUGIN_MANUFACTURER_CODE Djdk
-    PLUGIN_CODE Djdn
+juce_add_plugin(Dystorator
+    VERSION 0.1.0
+    COMPANY_NAME "125A Systems"
+    PLUGIN_MANUFACTURER_CODE A125
+    PLUGIN_CODE Dyst
     FORMATS VST3 Standalone
-    PRODUCT_NAME "Djenty Donkey"
+    PRODUCT_NAME "125A Dystorator"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
@@ -38,27 +38,27 @@ juce_add_plugin(DjentyDonkey
     VST3_CATEGORIES Fx Distortion
     COPY_PLUGIN_AFTER_BUILD FALSE)
 
-target_sources(DjentyDonkey PRIVATE
+target_sources(Dystorator PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp)
 
 # Custom standalone app shell (no "mute audio input" - an amp sim needs its input)
-target_sources(DjentyDonkey_Standalone PRIVATE Source/StandaloneApp.cpp)
+target_sources(Dystorator_Standalone PRIVATE Source/StandaloneApp.cpp)
 
-target_include_directories(DjentyDonkey PRIVATE Source)
+target_include_directories(Dystorator PRIVATE Source)
 
-target_compile_definitions(DjentyDonkey PUBLIC
+target_compile_definitions(Dystorator PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1)
 
 if(WIN32)
-    target_compile_definitions(DjentyDonkey PUBLIC JUCE_ASIO=1)
-    target_include_directories(DjentyDonkey PRIVATE "${asiosdk_SOURCE_DIR}/common")
+    target_compile_definitions(Dystorator PUBLIC JUCE_ASIO=1)
+    target_include_directories(Dystorator PRIVATE "${asiosdk_SOURCE_DIR}/common")
 endif()
 
-target_link_libraries(DjentyDonkey
+target_link_libraries(Dystorator
     PRIVATE
         juce::juce_audio_utils
         juce::juce_dsp
