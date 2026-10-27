@@ -32,7 +32,7 @@ endif()
 target_include_directories(ir_presets_test PRIVATE "${IR_PRODUCT_SOURCE_DIR}")
 # Observe the real processor input to the cabinet without duplicating the amp.
 set_property(SOURCE "${IR_PRODUCT_SOURCE_DIR}/PluginProcessor.cpp" APPEND PROPERTY COMPILE_DEFINITIONS VAMP_IR_TEST_CAPTURE=1)
-target_compile_definitions(ir_presets_test PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_MODAL_LOOPS_PERMITTED=1 JucePlugin_Name="Djenty\ Donkey" JucePlugin_VersionString="0.5.6")
+target_compile_definitions(ir_presets_test PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_MODAL_LOOPS_PERMITTED=1 JucePlugin_Name="125A\ Dystorator" JucePlugin_VersionString="0.1.0")
 target_link_libraries(ir_presets_test PRIVATE juce::juce_audio_utils juce::juce_dsp)
 if(WIN32)
     target_compile_definitions(ir_presets_test PRIVATE NOMINMAX=1 WIN32_LEAN_AND_MEAN=1)
