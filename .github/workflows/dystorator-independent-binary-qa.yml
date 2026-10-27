@@ -111,8 +111,8 @@ jobs:
           if ($body -notmatch '\[PASS\] Bus metadata - Audio Input #0, channels=2, defaultActive=yes') {
             throw 'Default stereo input was not exported by actual Windows VST3'
           }
-          if ($body -notmatch '\[INFO\] Factory class - 125A Dystorator \| category=Audio Module Class'
-              -or $body -match '\[INFO\] Factory class - Djenty Donkey') {
+          if (($body -notmatch '\[INFO\] Factory class - 125A Dystorator \| category=Audio Module Class') -or
+              ($body -match '\[INFO\] Factory class - Djenty Donkey')) {
             throw 'Old product brand appears in VST3 factory'
           }
           "independent=PASS;tester=40/40;steinberg=47/47;defaultStereo=PASS;pluginId=$($json.pluginId)" | Add-Content evidence/provenance.txt
@@ -129,10 +129,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Independent packaged host configure failed' }
           & cmake --build build/host --config Release --target compact_vst3_host --parallel 2
           if ($LASTEXITCODE -ne 0) { throw 'Independent packaged host build failed' }
-          $host="$root/build/host/compact_vst3_host_artefacts/Release/compact_vst3_host.exe"
-          if (!(Test-Path -LiteralPath $host)) { throw 'Independent host executable absent' }
+          $hostExe="$root/build/host/compact_vst3_host_artefacts/Release/compact_vst3_host.exe"
+          if (!(Test-Path -LiteralPath $hostExe)) { throw 'Independent host executable absent' }
           $bundle="$root/candidate/build/release/Dystorator_artefacts/Release/VST3/125A Dystorator.vst3"
-          & $host $bundle *>&1 | Tee-Object evidence/packaged-vst3-host.txt
+          & $hostExe $bundle *>&1 | Tee-Object evidence/packaged-vst3-host.txt
           if ($LASTEXITCODE -ne 0) { throw 'Packaged VST3 stereo PCM/host lifecycle failed' }
       - name: Archive exact SHA and binary QA evidence
         if: always()
