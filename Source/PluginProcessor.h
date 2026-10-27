@@ -5,9 +5,6 @@
 #include "dsp/AmpModes.h"
 #include "dsp/GuitarCuts.h"
 #include "dsp/Filters.h"
-#include "dsp/MultibandGate.h"
-#include "dsp/PitchShifter.h"
-#include "dsp/StereoDelay.h"
 #include "PresetManager.h"
 #include "CabinetIR.h"
 
@@ -62,9 +59,6 @@ public:
     float popInputPeak()  { return inputPeak.exchange (0.0f); }
     float popOutputPeak() { return outputPeak.exchange (0.0f); }
 
-    // Noise gate band gains (0..1: low, mid, high) for the UI
-    float getGateBandGain (int band) const { return gateBandGain[band].load(); }
-
     juce::AudioProcessorValueTreeState apvts;
     PresetManager presets;
 
@@ -73,30 +67,18 @@ private:
     void processChunk (juce::AudioBuffer<float>& buffer, int start, int len, int numIn, int numOut);
     void handleAsyncUpdate() override { setLatencySamples (targetLatency.load()); }
 
-    // cached parameter pointers
-    std::atomic<float>* pInGain {}; std::atomic<float>* pGateOn {}; std::atomic<float>* pGateThresh {};
-    std::atomic<float>* pGateRelease {}; std::atomic<float>* pTranspose {};
-    std::atomic<float>* pGateLow {}; std::atomic<float>* pGateMid {}; std::atomic<float>* pGateHigh {};
-    std::atomic<float>* pTransposeMode {};
-    std::atomic<float>* pInGateOn {}; std::atomic<float>* pInGateThresh {}; std::atomic<float>* pInGateRelease {};
+    // Every cached parameter has a live, audible compact signal path.
+    std::atomic<float>* pInGain {};
+    std::atomic<float>* pInGateOn {}, *pInGateThresh {}, *pInGateRelease {};
     std::atomic<float>* pAmpVolume {};
-    std::atomic<float>* pCompOn {}; std::atomic<float>* pCompThresh {}; std::atomic<float>* pCompRatio {};
-    std::atomic<float>* pCompAttack {}; std::atomic<float>* pCompRelease {}; std::atomic<float>* pCompMakeup {};
-    std::atomic<float>* pBoostOn {}; std::atomic<float>* pBoostDrive {}; std::atomic<float>* pBoostTone {};
-    std::atomic<float>* pBoostLevel {}; std::atomic<float>* pBoostAttack {}; std::atomic<float>* pBoostModel {};
-    std::atomic<float>* pChannel {}; std::atomic<float>* pAmpBright {}; std::atomic<float>* pAmpCrunch {}; std::atomic<float>* pAmpNoise {}; std::atomic<float>* pTubeSet {}; std::atomic<float>* pAmpGain {}; std::atomic<float>* pBass {};
-    std::atomic<float>* pMid {}; std::atomic<float>* pTreble {}; std::atomic<float>* pPresence {};
-    std::atomic<float>* pResonance {}; std::atomic<float>* pMaster {};
-    std::atomic<float>* pCabOn {}; std::atomic<float>* pLowCutOn {}; std::atomic<float>* pLowCutHz {};
-    std::atomic<float>* pHighCutOn {}; std::atomic<float>* pHighCutHz {}; std::atomic<float>* pEqOn {}; std::atomic<float>* pEq[10] {};
-    std::atomic<float>* pPhaserOn {}; std::atomic<float>* pPhRate {}; std::atomic<float>* pPhDepth {};
-    std::atomic<float>* pPhFeedback {}; std::atomic<float>* pPhMix {};
-    std::atomic<float>* pDelayOn {}; std::atomic<float>* pDlTime {}; std::atomic<float>* pDlFeedback {};
-    std::atomic<float>* pDlMix {}; std::atomic<float>* pDlPingPong {};
-    std::atomic<float>* pReverbOn {}; std::atomic<float>* pRvSize {}; std::atomic<float>* pRvDamping {};
-    std::atomic<float>* pRvWidth {}; std::atomic<float>* pRvMix {};
-    std::atomic<float>* pOutGain {};
-    std::atomic<float>* pAmpMode {}; std::atomic<float>* pQuality {};
+    std::atomic<float>* pBoostOn {}, *pBoostDrive {}, *pBoostTone {}, *pBoostLevel {};
+    std::atomic<float>* pBoostAttack {}, *pBoostModel {};
+    std::atomic<float>* pChannel {}, *pAmpBright {}, *pAmpCrunch {}, *pAmpNoise {};
+    std::atomic<float>* pTubeSet {}, *pAmpGain {}, *pBass {}, *pMid {}, *pTreble {};
+    std::atomic<float>* pPresence {}, *pResonance {}, *pMaster {};
+    std::atomic<float>* pCabOn {}, *pLowCutOn {}, *pLowCutHz {};
+    std::atomic<float>* pHighCutOn {}, *pHighCutHz {};
+    std::atomic<float>* pOutGain {}, *pAmpMode {}, *pQuality {};
 
     double sampleRateHz = 44100.0;
     int maxBlock = 512;
@@ -127,7 +109,6 @@ private:
 
     std::atomic<int> targetLatency { 0 };
     std::atomic<float> inputPeak { 0.0f }, outputPeak { 0.0f };
-    std::atomic<float> gateBandGain[3] { { 1.0f }, { 1.0f }, { 1.0f } };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibeAmpProcessor)
 };
