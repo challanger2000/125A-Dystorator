@@ -40,13 +40,23 @@ New `tests/ir_presets/matched_ir_oracle.h`; changes in `ir_presets_test.cpp`, `c
 | Contract | Evidence before candidate | New candidate status |
 |---|---|---|
 | 47/47 Steinberg, 40/40 125A Tester, VST3 host | Prior Windows source `8a442d9` (not this candidate) | **NOT RUN** |
-| Current editor bindings / removing dead panels | Source mismatch previously confirmed | **IMPLEMENTED; runtime test NOT RUN** |
+| Current editor bindings / removing dead panels | Source mismatch previously confirmed | **Windows native editor/control test PASS 2/2 including IR integration** |
 | IR loudness ≈ built-in cab, stereo ratio/polarity, anti-phase | Upstream v1 methodology; candidate code/tests | **IMPLEMENTED; listening and Windows integration NOT RUN** |
-| IR PCM across 44.1/48/96k, mono/stereo, variable blocks | Prior reference expected Normalise::yes | **ORACLE UPDATED; new candidate NOT RUN** |
-| IR invalid files / rollback / long-IR callback heap | Historical Windows PASS | **REGRESSION REQUIRED / NOT RUN** |
+| IR PCM across 44.1/48/96k, mono/stereo, variable blocks | Prior reference expected Normalise::yes | **Windows targeted native IR integration PASS** |
+| IR invalid files / rollback / long-IR callback heap | Historical Windows PASS | **Native integration PASS; long-IR callback heap PASS in run #40424003598** |
 | Project recall / automation / GUI open-close-reopen | Historical Windows functional PASS on previous source | **NEW CANDIDATE NOT RUN** |
 | ECO/STEREO in Studio One on owner's i9-11900K | Owner synthetic host has overruns | **ASIO NOT RUN – realtime NOT APPROVED** |
 | Branding / metadata / master logo | Work deliberately out of scope | **NOT DONE** |
+
+## Verifizierter Windows-QA-Status des Kandidaten
+
+**Die gezielte Windows-QA ist erfolgreich beendet.** Die beiden Windows-Actions-Läufe nutzen für `Source/`, `tests/` und `CMakeLists.txt` exakt denselben geprüften Quellstand; alle Zwischencommits danach änderten nur die GitHub-Workflow-Datei. Die Identitätsprüfung im zweiten und dritten Lauf war PASS.
+
+- **Native echte JUCE-Integration und Editorbindungen:** [Windows Run #40422575513](https://github.com/challanger2000/125A-Dystorator/actions/runs/40422575513), Code-Commit `b4856bdf6aab67d794284b39fd45ccfb5578df71`: **2/2 CTests PASS**. `ir_presets_integration` 189,58 s, `compact_editor_bindings` 0,21 s. Der Gesamtlauf war FAIL nur wegen einer nachgeschalteten CMake-Argument-Splittung des Großblock-Tests.
+- **Erster Reparaturlauf:** [#40423553877](https://github.com/challanger2000/125A-Dystorator/actions/runs/40423553877) CMake-Großblock-Konfiguration PASS, Compile **FAIL** (`detours.h` nicht gefunden); CMake hatte beim eingeschränkten Großblock-Test das `step3_detours` Ziel nicht erzeugt. **Keine ausführbare Heap-Messung**, kein Produktfehler nachgewiesen.
+- **Abschließender gezielter Lauf:** [#40424003598](https://github.com/challanger2000/125A-Dystorator/actions/runs/40424003598), Code unverändert, Workflow-Commit `c00d2618e7ade4a93e9ba1aca4e80f742841b611`: **SUCCESS**. Positiver Test für bisherige native Evidenz/Quellidentität PASS, **1/1 `large_ir_process_heap` PASS** (Windows x64 Release/Detours; einschließlich 128/256/8192/8193/16384 und Mono/Stereo in der Testmatrix), **Windows-x64-Release-VST3 erfolgreich gebaut** und SHA256 erfasst. Actions-Artefakt `dystorator-compact-ir-windows-c00d2618e7ade4a93e9ba1aca4e80f742841b611` (GitHub-Actions-Retention 14 Tage). Der korrekte Detours-Target-Pin `IR_BUILD_VST3_HOST=ON` ist nur eine Workflow-Konfigurationsänderung.
+
+Diese grünen gezielten Tests ersetzen **nicht** den vollständigen 125A/Steinberg Validator, die Prüfung jedes realen GUI-Bedienelements im Host, vollständige Preset-Migrationsabnahme, Eigentümer-i9-ASIO-ECO-Stereo, DI-Hörvergleich oder finale umbenannte/brandete VST3-ID. **PR #3 bleibt Draft, NO MERGE / NO FINAL.**
 
 ## Required next gate
 
