@@ -1,4 +1,4 @@
-// Standalone application shell for Djenty Donkey.
+// Standalone application shell for 125A Dystorator.
 // Same as JUCE's default StandaloneFilterApp, except the "Mute audio input"
 // feedback protection is disabled: a guitar amp sim with muted input is silent.
 #include <juce_audio_devices/juce_audio_devices.h>
@@ -8,10 +8,10 @@
 
 namespace
 {
-class DjentyStandaloneApp final : public juce::JUCEApplication
+class DystoratorStandaloneApp final : public juce::JUCEApplication
 {
 public:
-    DjentyStandaloneApp()
+    DystoratorStandaloneApp()
     {
         juce::PropertiesFile::Options options;
         options.applicationName = juce::CharPointer_UTF8 (JucePlugin_Name);
@@ -89,4 +89,4 @@ private:
 };
 } // namespace
 
-juce::JUCEApplicationBase* juce_CreateApplication() { return new DjentyStandaloneApp(); }
+juce::JUCEApplicationBase* juce_CreateApplication() { return new DystoratorStandaloneApp(); }

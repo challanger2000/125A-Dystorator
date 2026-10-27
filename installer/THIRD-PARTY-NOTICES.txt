@@ -1,5 +1,9 @@
-Djenty Donkey - third-party components
-======================================
+125A Dystorator - third-party components
+=========================================
+
+125A Systems produces this derivative under the original AGPLv3 license.
+The original project Djenty Donkey was developed by SteveAsAConstant;
+its authorship and notices remain acknowledged here and in the source.
 
 This program is built with:
 
