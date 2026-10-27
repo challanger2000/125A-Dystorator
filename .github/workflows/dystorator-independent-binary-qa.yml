@@ -1,0 +1,144 @@
+name: Dystorator independent exact-binary VST3 QA
+on:
+  push:
+    branches: [refactor/compact-dead-code-presets-20261027]
+    paths: ['.github/workflows/dystorator-independent-binary-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-binary:
+    runs-on: windows-2022
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Recover SHA-pinned VST3 from completed native QA, no product rebuild
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: dystorator-cleanup-143b4537b1e2756a55f08014695fbe4732df3415
+          run-id: 40433279656
+          repository: challanger2000/125A-Dystorator
+          github-token: ${{ github.token }}
+          path: candidate
+      - name: Fail closed on source, plugin SHA256, stereo identity and strict JSON
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force evidence | Out-Null
+          $pin='143b4537b1e2756a55f08014695fbe4732df3415'
+          & git merge-base --is-ancestor $pin HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Current QA branch does not descend from exact source commit' }
+          & git diff --quiet $pin HEAD -- Source tests CMakeLists.txt cmake installer
+          if ($LASTEXITCODE -ne 0) { throw 'Product source or test code changed since pinned VST3 build' }
+          if ((Get-Content -LiteralPath candidate/evidence/source-sha.txt -Raw).Trim() -ne $pin) {
+            throw 'Wrong source commit in artifact'
+          }
+          $bundle=Join-Path (Get-Location).Path 'candidate/build/release/Dystorator_artefacts/Release/VST3/125A Dystorator.vst3'
+          if (!(Test-Path -LiteralPath $bundle)) { throw 'Expected complete VST3 bundle is missing' }
+          $dll=@(Get-ChildItem -LiteralPath $bundle -File -Recurse | Where-Object { $_.Extension -ieq '.vst3' })
+          if ($dll.Count -ne 1) { throw 'Expected exactly one x64 Windows VST3 DLL' }
+          $hash=(Get-FileHash -LiteralPath $dll[0].FullName -Algorithm SHA256).Hash
+          if ($hash -ne (Get-Content candidate/evidence/vst3-sha256.txt -Raw).Trim()) {
+            throw 'Exact built VST3 SHA256 mismatch'
+          }
+          $manifest=Join-Path $bundle 'Contents/Resources/moduleinfo.json'
+          if (!(Test-Path -LiteralPath $manifest)) { throw 'No VST3 moduleinfo.json' }
+          & python -m json.tool $manifest > evidence/moduleinfo-strict.json
+          if ($LASTEXITCODE -ne 0) { throw 'Moduleinfo is not strict JSON' }
+          $json=Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json
+          if ($json.Name -ne '125A Dystorator' -or $json.'Factory Info'.Vendor -ne '125A Systems') {
+            throw 'Wrong product/vendor identity'
+          }
+          "source=$pin;binary=$hash;originalRun=40433279656" | Set-Content evidence/provenance.txt
+      - name: Pin, build and self-test independent Steinberg plus 125A tester
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force build/tools | Out-Null
+          & git clone --depth 1 --branch v3.8.1_build_84 --recurse-submodules --shallow-submodules https://github.com/steinbergmedia/vst3sdk.git build/tools/vst3sdk
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/vst3sdk rev-parse HEAD).Trim() -ne '3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96') {
+            throw 'Unpinned Steinberg SDK'
+          }
+          & git clone --no-checkout https://github.com/challanger2000/125A-Plugin-Tester-Final.git build/tools/tester
+          if ($LASTEXITCODE -ne 0) { throw '125A Tester clone failed' }
+          & git -C build/tools/tester checkout --detach 3dcf3fe607008e520dcf20d1f793d9c534a9b9e1
+          if ($LASTEXITCODE -ne 0) { throw '125A Tester pin unavailable' }
+          $root=(Get-Location).Path
+          & cmake -S build/tools/tester -B build/tester -G 'Visual Studio 17 2022' -A x64 "-DFETCHCONTENT_SOURCE_DIR_VST3SDK=$root/build/tools/vst3sdk" -DSMTG_CREATE_PLUGIN_LINK=OFF
+          if ($LASTEXITCODE -ne 0) { throw 'Tester configure failed' }
+          $targets=@('PluginTester125ADispatcher','PluginTester125ALauncher','PluginTester125AWorker','PluginTester125AReloadProbe','PluginTester125AStateProbe','PluginTester125AEditorLifecycleProbe','PluginTester125AIOEventProbe','PluginTester125AValidatorWrapper','PluginTester125AGuardSelfTest','validator','PluginTester125AQAGoodControl','PluginTester125AQABadLifecycle','PluginTester125AQABadNaN','PluginTester125AQABadState','PluginTester125AQABadIO','PluginTester125AQAGoodEditor','PluginTester125AQABadEditor')
+          & cmake --build build/tester --config Release --target $targets --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Tester compilation failed' }
+          'tester=3dcf3fe607008e520dcf20d1f793d9c534a9b9e1' | Add-Content evidence/provenance.txt
+      - name: Independent actual VST3 validation, 47 Steinberg and 40 125A gates
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          $tester="$root/build/tester/Release/125A_Plugin_Tester.exe"
+          $validator="$root/build/tester/Release/125A_Plugin_Tester_SteinbergValidator.exe"
+          $guard="$root/build/tester/Release/125A_Plugin_Tester_GuardSelfTest.exe"
+          foreach ($exe in @($tester,$validator,$guard)) {
+            if (!(Test-Path -LiteralPath $exe)) { throw "Missing QA executable: $exe" }
+          }
+          & $tester --guard-selftest $guard *>&1 | Out-File evidence/guard.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Guard selftest failed' }
+          & $validator -selftest *>&1 | Out-File evidence/validator-selftest.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Validator wrapper selftest failed' }
+          $bundle="$root/candidate/build/release/Dystorator_artefacts/Release/VST3/125A Dystorator.vst3"
+          $env:125A_PLUGIN_TESTER_REPORT_DIR="$root/evidence/product"
+          New-Item -ItemType Directory -Force $env:125A_PLUGIN_TESTER_REPORT_DIR | Out-Null
+          & $tester $bundle *>&1 | Out-File evidence/product-console.txt
+          if ($LASTEXITCODE -ne 0) { throw "125A Tester actual binary failed ($LASTEXITCODE)" }
+          $reports=@(Get-ChildItem -LiteralPath $env:125A_PLUGIN_TESTER_REPORT_DIR -File -Filter '*125A_QA_Report.txt')
+          $jsonReports=@(Get-ChildItem -LiteralPath $env:125A_PLUGIN_TESTER_REPORT_DIR -File -Filter '*125A_QA_Report.json')
+          $validatorReports=@(Get-ChildItem -LiteralPath $env:125A_PLUGIN_TESTER_REPORT_DIR -File -Filter '*125A_Steinberg_Validator.txt')
+          if ($reports.Count -ne 1 -or $jsonReports.Count -ne 1 -or $validatorReports.Count -ne 1) {
+            throw 'Missing or ambiguous independent machine/human reports'
+          }
+          $body=Get-Content -LiteralPath $reports[0].FullName -Raw
+          $json=Get-Content -LiteralPath $jsonReports[0].FullName -Raw | ConvertFrom-Json
+          $validatorText=Get-Content -LiteralPath $validatorReports[0].FullName -Raw
+          if ($json.status -ne 'PASS' -or $json.counts.pass -ne 40 -or $json.counts.warning -ne 0 -or $json.counts.fail -ne 0) {
+            throw 'Actual 125A Tester result is not 40/40 zero warning/fail'
+          }
+          if ($validatorText -notmatch 'Result:\s*47 tests passed,\s*0 tests failed') {
+            throw 'Actual Steinberg Validator result is not 47/47'
+          }
+          if ($body -notmatch '\[PASS\] Bus metadata - Audio Input #0, channels=2, defaultActive=yes') {
+            throw 'Default stereo input was not exported by actual Windows VST3'
+          }
+          if ($body -notmatch '\[INFO\] Factory class - 125A Dystorator \| category=Audio Module Class'
+              -or $body -match '\[INFO\] Factory class - Djenty Donkey') {
+            throw 'Old product brand appears in VST3 factory'
+          }
+          "independent=PASS;tester=40/40;steinberg=47/47;defaultStereo=PASS;pluginId=$($json.pluginId)" | Add-Content evidence/provenance.txt
+      - name: Verify actual packaged VST3 stereo PCM and host-state lifecycle
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          & git clone --depth 1 --branch 8.0.4 https://github.com/juce-framework/JUCE.git build/tools/JUCE
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/JUCE rev-parse HEAD).Trim() -ne '51d11a2be6d5c97ccf12b4e5e827006e19f0555a') {
+            throw 'JUCE pin mismatch'
+          }
+          & cmake -S tests/ir_presets -B build/host -G 'Visual Studio 17 2022' -A x64 "-DJUCE_SOURCE_DIR=$root/build/tools/JUCE" "-DIR_PRODUCT_SOURCE_DIR=$root/Source" -DIR_BUILD_VST3_HOST=ON -DIR_TRACE_CONVOLUTION=OFF
+          if ($LASTEXITCODE -ne 0) { throw 'Independent packaged host configure failed' }
+          & cmake --build build/host --config Release --target compact_vst3_host --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Independent packaged host build failed' }
+          $host="$root/build/host/compact_vst3_host_artefacts/Release/compact_vst3_host.exe"
+          if (!(Test-Path -LiteralPath $host)) { throw 'Independent host executable absent' }
+          $bundle="$root/candidate/build/release/Dystorator_artefacts/Release/VST3/125A Dystorator.vst3"
+          & $host $bundle *>&1 | Tee-Object evidence/packaged-vst3-host.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged VST3 stereo PCM/host lifecycle failed' }
+      - name: Archive exact SHA and binary QA evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dystorator-independent-binary-143b4537
+          retention-days: 14
+          if-no-files-found: warn
+          path: evidence/**
