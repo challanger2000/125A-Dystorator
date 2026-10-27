@@ -207,6 +207,62 @@ static void malformedScenes (VibeAmpProcessor &p, const juce::File &dir, const j
            "legacy Attack migration and built-in recall");
 }
 
+// Verify that built-in presets only depend on the working 125A signal path.
+static void compactFactoryPresets (const juce::File& dir)
+{
+    VibeAmpProcessor p (dir);
+    const juce::StringArray names { "Default", "Tight Rhythm", "Modern Rhythm",
+                                    "Lead Drive", "Classic Crunch", "Open Clean" };
+    check (p.presets.getNumFactory() == names.size(), "exactly six 125A factory presets");
+    p.prepareToPlay (48000, 64);
+    bool all = true;
+    for (int i = 0; i < names.size(); ++i)
+    {
+        all = all && p.presets.getName (i) == names[i];
+        all = all && p.presets.load (i) && p.presets.getCurrentName() == names[i];
+        check (p.getIRPath().isEmpty(), "factory preset uses built-in cabinet");
+        block (p);
+        const auto xml = p.apvts.copyState().toXmlString();
+        all = all && ! xml.contains ("transpose") && ! xml.contains ("reverb")
+            && ! xml.contains ("compThresh") && ! xml.contains ("delayOn")
+            && ! xml.contains ("gateLow") && ! xml.contains ("eq0");
+    }
+    check (all, "six renamed presets load without disconnected effect parameters");
+}
+
+// Former pre-release 125A state data must retain active controls but drop only
+// obsolete controls. Unknown IDs still cause an atomic reject.
+static void compactRetiredStateMigration (const juce::File& dir)
+{
+    VibeAmpProcessor p (dir);
+    p.prepareToPlay (48000, 64);
+    param (p, ids::ampGain, 3.4f);
+    auto state = hostState (p);
+    auto xml = juce::AudioProcessor::getXmlFromBinary (state.getData(), (int)state.getSize());
+    if (! xml) { check (false, "migration base XML is valid"); return; }
+    auto* dead = xml->createNewChildElement ("PARAM");
+    dead->setAttribute ("id", "reverbOn"); dead->setAttribute ("value", 1);
+    auto* eq = xml->createNewChildElement ("PARAM");
+    eq->setAttribute ("id", "eq7"); eq->setAttribute ("value", 12);
+    juce::MemoryBlock old;
+    juce::AudioProcessor::copyXmlToBinary (*xml, old);
+    param (p, ids::ampGain, 8.1f);
+    p.setStateInformation (old.getData(), (int)old.getSize());
+    const auto restored = p.apvts.copyState().toXmlString();
+    check (std::abs (p.apvts.getRawParameterValue (ids::ampGain)->load() - 3.4f) < 0.001f
+           && ! restored.contains ("reverbOn") && ! restored.contains ("eq7"),
+           "old project recalls live gain while discarded FX knobs do not reappear");
+    auto unknown = juce::AudioProcessor::getXmlFromBinary (state.getData(), (int)state.getSize());
+    auto* bad = unknown->createNewChildElement ("PARAM");
+    bad->setAttribute ("id", "unknown_malicious_parameter"); bad->setAttribute ("value", 2);
+    juce::MemoryBlock corrupt;
+    juce::AudioProcessor::copyXmlToBinary (*unknown, corrupt);
+    const auto before = p.apvts.copyState().toXmlString();
+    p.setStateInformation (corrupt.getData(), (int)corrupt.getSize());
+    check (p.apvts.copyState().toXmlString() == before,
+           "unknown project parameter remains a strict rollback, not a silent migration");
+}
+
 static void cabinetAudio (const juce::File &dir, const juce::File &a, const juce::File &b)
 {
     CabinetIR cabinet;
@@ -370,7 +426,6 @@ static void sceneAudio (const juce::File &dir, const juce::File &ir)
 {
     VibeAmpProcessor original (dir), recalled (dir), presetCopy (dir);
     param (original, ids::channel, 0);
-    param (original, ids::gateOn, 0);
     param (original, ids::ampGain, 3);
     original.loadIR (ir);
     original.prepareToPlay (48000, 64);
@@ -674,6 +729,7 @@ int main (int argc, char** argv)
     {
         const std::string mode = argv[1];
         if (mode == "gui") compactEditorBindings (dir);
+        else if (mode == "factory") { compactFactoryPresets (dir); compactRetiredStateMigration (dir); }
         else if (mode == "cuts") compactCutProcessorOracle (dir);
         else if (mode == "bypass") compactBypass (dir);
         else if (mode == "stereo") compactRegressions (dir);
@@ -706,7 +762,6 @@ int main (int argc, char** argv)
                "VST3 exported program zero has a non-empty name (Steinberg Scan Programs)");
         p.prepareToPlay (48000, 64);
         param (p, ids::channel, 0);
-        param (p, ids::gateOn, 0);
         p.loadIR (a);
         block (p);
         p.presets.load (0);
@@ -745,6 +800,8 @@ int main (int argc, char** argv)
         check (p.getIRPath () == a.getFullPathName (), "host state restores IR A");
         malformedScenes (p, dir, a);
         compactEditorBindings (dir);
+        compactFactoryPresets (dir);
+        compactRetiredStateMigration (dir);
         check (cabMatchGainInvariants(), "IR gain scales with input amplitude and preserves anti-phase stereo");
         cabinetAudio (dir, a, b);
         sceneAudio (dir, a);
