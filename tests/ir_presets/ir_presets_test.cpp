@@ -131,21 +131,21 @@ static void malformedScenes (VibeAmpProcessor &p, const juce::File &dir, const j
     auto original = hostState (p);
     const std::vector<std::pair<const char *, const char *>> invalid = {
         {"foreign", "<unrelated/>"},
-        {"empty", "<DjentyDonkeyPreset/>"},
-        {"truncated", "<DjentyDonkeyPreset><PARAM"},
+        {"empty", "<DystoratorPreset/>"},
+        {"truncated", "<DystoratorPreset><PARAM"},
         {"future",
-         "<DjentyDonkeyPreset knobCurves='99'><PARAM id='ampGain' value='3'/></DjentyDonkeyPreset>"},
+         "<DystoratorPreset knobCurves='99'><PARAM id='ampGain' value='3'/></DystoratorPreset>"},
         {"version",
-         "<DjentyDonkeyPreset version='1.0.0'><PARAM id='ampGain' value='3'/></DjentyDonkeyPreset>"},
-        {"nan", "<DjentyDonkeyPreset><PARAM id='ampGain' value='nan'/></DjentyDonkeyPreset>"},
-        {"range", "<DjentyDonkeyPreset><PARAM id='ampGain' value='300'/></DjentyDonkeyPreset>"},
-        {"junk", "<DjentyDonkeyPreset><PARAM id='ampGain' value='2oops'/></DjentyDonkeyPreset>"},
-        {"unknown", "<DjentyDonkeyPreset><PARAM id='unknown' value='2'/></DjentyDonkeyPreset>"},
-        {"duplicate", "<DjentyDonkeyPreset><PARAM id='ampGain' value='2'/><PARAM id='ampGain' "
-                      "value='3'/></DjentyDonkeyPreset>"},
-        {"fractional", "<DjentyDonkeyPreset><PARAM id='channel' value='0.5'/></DjentyDonkeyPreset>"},
+         "<DystoratorPreset version='1.0.0'><PARAM id='ampGain' value='3'/></DystoratorPreset>"},
+        {"nan", "<DystoratorPreset><PARAM id='ampGain' value='nan'/></DystoratorPreset>"},
+        {"range", "<DystoratorPreset><PARAM id='ampGain' value='300'/></DystoratorPreset>"},
+        {"junk", "<DystoratorPreset><PARAM id='ampGain' value='2oops'/></DystoratorPreset>"},
+        {"unknown", "<DystoratorPreset><PARAM id='unknown' value='2'/></DystoratorPreset>"},
+        {"duplicate", "<DystoratorPreset><PARAM id='ampGain' value='2'/><PARAM id='ampGain' "
+                      "value='3'/></DystoratorPreset>"},
+        {"fractional", "<DystoratorPreset><PARAM id='channel' value='0.5'/></DystoratorPreset>"},
         {"relative",
-         "<DjentyDonkeyPreset irPath='relative.wav'><PARAM id='ampGain' value='3'/></DjentyDonkeyPreset>"}};
+         "<DystoratorPreset irPath='relative.wav'><PARAM id='ampGain' value='3'/></DystoratorPreset>"}};
     for (const auto &item : invalid)
     {
         auto file = dir.getChildFile (juce::String ("reject-") + item.first + ".xml");
@@ -158,7 +158,7 @@ static void malformedScenes (VibeAmpProcessor &p, const juce::File &dir, const j
     for (const char *path : {"missing.wav", "bad.wav"})
     {
         auto xml = juce::AudioProcessor::getXmlFromBinary (original.getData (), (int)original.getSize ());
-        xml->setTagName ("DjentyDonkeyPreset");
+        xml->setTagName ("DystoratorPreset");
         xml->setAttribute ("irPath", dir.getChildFile (path).getFullPathName ());
         for (auto *child : xml->getChildWithTagNameIterator ("PARAM"))
             if (child->getStringAttribute ("id") == ids::ampGain)
@@ -195,7 +195,7 @@ static void malformedScenes (VibeAmpProcessor &p, const juce::File &dir, const j
     // Existing partial legacy presets are intentionally supported, with defaults.
     auto legacy = dir.getChildFile ("legacy.xml");
     legacy.replaceWithText (
-        "<DjentyDonkeyPreset knobCurves='2'><PARAM id='boostAttack' value='8'/></DjentyDonkeyPreset>");
+        "<DystoratorPreset knobCurves='2'><PARAM id='boostAttack' value='8'/></DystoratorPreset>");
     p.presets.refresh ();
     check (p.presets.load (p.presets.indexOf ("legacy")), "legacy partial preset accepted");
     check (*p.apvts.getRawParameterValue (ids::boostAttack) == 1.f && p.getIRPath ().isEmpty (),
