@@ -270,21 +270,24 @@ static void compactStateAndAutomation (const juce::File &dir)
     double error = 0, energy = 0;
     bool finite = true;
     unsigned alloc = 0, freed = 0;
-    const std::vector<const char *> inert = {
-        ids::compOn,      ids::compThresh, ids::compRatio,     ids::compAttack, ids::compRelease,
-        ids::compMakeup,  ids::transpose,  ids::transposeMode, ids::gateOn,     ids::gateThresh,
-        ids::gateRelease, ids::gateLow,    ids::gateMid,       ids::gateHigh,   ids::eqOn,
-        ids::phaserOn,    ids::phRate,     ids::phDepth,       ids::phFeedback, ids::phMix,
-        ids::delayOn,     ids::dlTime,     ids::dlFeedback,    ids::dlMix,      ids::dlPingPong,
-        ids::reverbOn,    ids::rvSize,     ids::rvDamping,     ids::rvWidth,    ids::rvMix};
+    // The former effect knobs must no longer appear in the host's parameter
+    // list. Any archived values will be stripped from 125A state/preset XML.
+    const juce::StringArray removed {
+        "gateOn", "gateThresh", "gateRelease", "gateLow", "gateMid", "gateHigh",
+        "transpose", "transposeMode", "compOn", "compThresh", "compRatio",
+        "compAttack", "compRelease", "compMakeup", "eqOn",
+        "phaserOn", "phRate", "phDepth", "phFeedback", "phMix",
+        "delayOn", "dlTime", "dlFeedback", "dlMix", "dlPingPong",
+        "reverbOn", "rvSize", "rvDamping", "rvWidth", "rvMix",
+        "eq0", "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9"
+    };
+    bool allRemoved = true;
+    for (const auto& id : removed)
+        allRemoved = allRemoved && a.apvts.getParameter (id) == nullptr;
+    check (allRemoved, "retired DSP controls are absent from VST3 host parameter list");
     for (int k = 0; k < 100; ++k)
     {
-        // Only A receives all retired-FX automation. Both receive identical
-        // live cut/channel/drive automation, including reversals mid-smoothing.
-        for (auto *id : inert)
-            a.apvts.getParameter (id)->setValueNotifyingHost ((k % 2) ? 1.f : 0.f);
-        for (int i = 0; i < 10; ++i)
-            a.apvts.getParameter (ids::eqBand (i))->setValueNotifyingHost ((k % 2) ? 1.f : 0.f);
+        // Both processors receive the same automatable live controls.
         for (auto *p : {&a, &b})
         {
             param (*p, ids::lowCutHz, 20 + (k * 37) % 281);
@@ -316,10 +319,10 @@ static void compactStateAndAutomation (const juce::File &dir)
                 energy += (double)y.getSample (c, i) * y.getSample (c, i);
             }
     }
-    std::cout << "STATE/FX automation max_delta=" << error << " energy=" << energy << " new=" << alloc
+    std::cout << "STATE/compact automation max_delta=" << error << " energy=" << energy << " new=" << alloc
               << " delete=" << freed << '\n';
     check (finite && error < 1e-6 && energy > 1e-8,
-           "stereo IR/state and cuts automation identical despite every retired FX parameter changing");
+           "stereo IR, state and all live cuts automation remain sample-identical");
     check (alloc == 0 && freed == 0, "full processor automation callback does no observed C++ new/delete");
     double cabinetWarmError = 0;
     for (int k = 100; k < 150; ++k)
