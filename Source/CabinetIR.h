@@ -1,6 +1,7 @@
 #pragma once
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <juce_dsp/juce_dsp.h>
+#include "dsp/CabMatch.h"
 #include <atomic>
 #include <mutex>
 #include <stdexcept>
@@ -276,11 +277,22 @@ private:
             auto& c = result->convolution;
             c = std::make_unique<juce::dsp::Convolution>();
             juce::AudioBuffer<float> copy (src->data);
+            // v1.0.0's amp-spectrum/K-weighted match, adapted for independent
+            // stereo IR channels. One shared gain preserves L/R relative level.
+            // This calculation is strictly control-side during makeEngine().
+            const double gain = copy.getNumChannels() == 2 && s.numChannels == 2
+                ? vamp::cabMatchGainStereo (copy.getReadPointer (0), copy.getReadPointer (1),
+                                            copy.getNumSamples(), src->rate)
+                : vamp::cabMatchGain (copy.getReadPointer (0), copy.getNumSamples(), src->rate);
+            if (! std::isfinite (gain) || gain <= 0.0 || ! std::isfinite ((float) gain)
+                || (float) gain == 0.0f)
+                throw std::runtime_error ("Invalid IR loudness match (previous cabinet retained)");
+            copy.applyGain ((float) gain);
             c->loadImpulseResponse (std::move (copy), src->rate,
                                     src->data.getNumChannels() == 2 && s.numChannels == 2
                                         ? juce::dsp::Convolution::Stereo::yes
                                         : juce::dsp::Convolution::Stereo::no,
-                                    juce::dsp::Convolution::Trim::yes, juce::dsp::Convolution::Normalise::yes);
+                                    juce::dsp::Convolution::Trim::yes, juce::dsp::Convolution::Normalise::no);
             // JUCE 8.0.4 documents prepare() as synchronous completion of the
             // latest IR load. load/prepare here never overlap this instance's process.
             c->prepare (convolutionSpec);

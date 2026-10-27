@@ -1,0 +1,74 @@
+name: Dystorator compact UI and IR Windows QA
+on:
+  push:
+    branches: [fix/compact-ui-ir-level-20261027]
+    paths:
+      - '.github/workflows/compact-ir-windows-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compact-ir-windows:
+    runs-on: windows-2022
+    timeout-minutes: 85
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Pin common Windows dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Path build/tools,qa-out -Force | Out-Null
+          & git clone --depth 1 --branch 8.0.4 https://github.com/juce-framework/JUCE.git build/tools/JUCE
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/JUCE rev-parse HEAD).Trim() -ne '51d11a2be6d5c97ccf12b4e5e827006e19f0555a') { throw 'JUCE pin failed' }
+          & git clone --depth 1 --branch v4.0.1 https://github.com/microsoft/Detours.git build/tools/Detours
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/Detours rev-parse HEAD).Trim() -ne 'e4bfd6b03e50de46b47abfbd1e46b384f0c5f833') { throw 'Detours pin failed' }
+          (& git rev-parse HEAD).Trim() | Set-Content qa-out/candidate-sha.txt
+      - name: Verify native GUI and IR tests already passed on identical product source
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          # Run 40422575513: two native tests PASS on this exact Source/tests/CMake tree.
+          # Repeat only the CMake command-line failure and missing Release bundle.
+          & git diff --quiet b4856bdf6aab67d794284b39fd45ccfb5578df71 HEAD -- Source tests CMakeLists.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot reuse previous GUI/IR result: product or tests changed' }
+          'PASS (prior exact source): https://github.com/challanger2000/125A-Dystorator/actions/runs/40422575513' | Set-Content qa-out/prior-native-evidence.txt
+      - name: Large IR exact PCM and callback heap
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          & cmake -S tests/ir_presets -B build/ir-heap -G 'Visual Studio 17 2022' -A x64 "-DJUCE_SOURCE_DIR=$root/build/tools/JUCE" "-DIR_PRODUCT_SOURCE_DIR=$root/Source" "-DIR_TEST_MAIN:STRING=large_ir_heap.cpp" "-DIR_TRACE_CONVOLUTION=OFF" "-DIR_BUILD_VST3_HOST=ON" "-DSTEP3_DETOURS_DIR=$root/build/tools/Detours"
+          if ($LASTEXITCODE -ne 0) { throw "Heap QA configure failed" }
+          & cmake --build build/ir-heap --config Release --target ir_presets_test --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw "Heap QA build failed" }
+          & ctest --test-dir build/ir-heap -C Release --output-on-failure -R '^large_ir_process_heap$' 2>&1 | Tee-Object qa-out/ir-heap.txt
+          if ($LASTEXITCODE -ne 0) { throw "Heap QA FAIL" }
+      - name: Release VST3 build (no install)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          & cmake -S . -B build/vst3 -G 'Visual Studio 17 2022' -A x64 "-DFETCHCONTENT_SOURCE_DIR_JUCE=$root/build/tools/JUCE"
+          if ($LASTEXITCODE -ne 0) { throw "Release configure FAIL" }
+          & cmake --build build/vst3 --config Release --target DjentyDonkey_VST3 --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw "Windows Release VST3 build FAIL" }
+          $bundle="$root/build/vst3/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+          if (!(Test-Path -LiteralPath $bundle)) { throw 'VST3 artifact missing' }
+          $files=@(Get-ChildItem -LiteralPath $bundle -Recurse -File | Where-Object { $_.Extension -ieq '.vst3' })
+          if ($files.Count -ne 1) { throw 'Expected one binary in VST3 bundle' }
+          (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash | Set-Content qa-out/vst3-sha256.txt
+      - name: Upload complete QA evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dystorator-compact-ir-windows-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            qa-out/**
+            build/ir/Testing/Temporary/**
+            build/ir-heap/Testing/Temporary/**
+            build/vst3/DjentyDonkey_artefacts/Release/VST3/**
