@@ -413,11 +413,26 @@ static void sceneAudio (const juce::File &dir, const juce::File &ir)
     check (presetError < 1e-6, "preset reload preserves actual stereo output");
 }
 
+// Mono-reference oracles must request the mono-in/stereo-out host bus
+// explicitly. The product default is now genuine stereo input and must remain
+// separately covered by compactEditorBindings() and stereoInputRegressions().
+static void requireMonoInputReferenceBuses (VibeAmpProcessor& p)
+{
+    juce::AudioProcessor::BusesLayout mono;
+    mono.inputBuses.add (juce::AudioChannelSet::mono());
+    mono.outputBuses.add (juce::AudioChannelSet::stereo());
+    if (! p.setBusesLayout (mono)
+        || p.getTotalNumInputChannels() != 1
+        || p.getTotalNumOutputChannels() != 2)
+        throw std::runtime_error ("mono reference test cannot establish 1-in/2-out host layout");
+}
+
 // Observe the exact post-amp input; compare the two real cabinet routes with
 // independent original-JUCE and five-filter oracles, without a second amp.
 static void builtinReturnAudio (const juce::File &dir, const juce::File &ir)
 {
     VibeAmpProcessor switched (dir);
+    requireMonoInputReferenceBuses (switched);
     switched.loadIR (ir);
     switched.prepareToPlay (48000, 64);
     juce::dsp::Convolution originalIR;
@@ -591,6 +606,7 @@ static void compactCutProcessorOracle (const juce::File& dir)
     // Reference the exact live signal just before the cabinet, without
     // comparing independently simulated nonlinear amplifiers.
     VibeAmpProcessor p (dir);
+    requireMonoInputReferenceBuses (p);
     param (p, ids::cabOn, 0);
     param (p, ids::inGateOn, 0);
     param (p, ids::ampNoise, 0);
