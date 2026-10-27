@@ -1,0 +1,65 @@
+name: Dystorator compact cleanup Windows QA
+on:
+  push:
+    branches: [refactor/compact-dead-code-presets-20261027]
+    paths: ['.github/workflows/compact-preset-cleanup-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cleanup:
+    runs-on: windows-2022
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Pin JUCE and check 125A brand
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Path tools,evidence -Force | Out-Null
+          & python tests/branding/check_brand_contract.py 2>&1 | Tee-Object evidence/brand.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Branding QA failed' }
+          & git clone --depth 1 --branch 8.0.4 https://github.com/juce-framework/JUCE.git tools/JUCE
+          if ($LASTEXITCODE -ne 0 -or (& git -C tools/JUCE rev-parse HEAD).Trim() -ne '51d11a2be6d5c97ccf12b4e5e827006e19f0555a') { throw 'JUCE pinned clone failed' }
+          (& git rev-parse HEAD).Trim() | Set-Content evidence/source-sha.txt
+      - name: Windows native audio, GUI, presets and state compatibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          & cmake -S tests/ir_presets -B build/native -G 'Visual Studio 17 2022' -A x64 "-DJUCE_SOURCE_DIR=$root/tools/JUCE" "-DIR_PRODUCT_SOURCE_DIR=$root/Source" "-DIR_TEST_MAIN:STRING=ir_presets_test.cpp" "-DIR_TRACE_CONVOLUTION=ON"
+          if ($LASTEXITCODE -ne 0) { throw 'Native configure failed' }
+          & cmake --build build/native --config Release --target ir_presets_test --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Native compilation failed' }
+          & ctest --test-dir build/native -C Release --output-on-failure -R '^(ir_presets_integration|compact_editor_bindings|compact_factory_and_migration)$' 2>&1 | Tee-Object evidence/native-qa.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Actual GUI/IR/factory/state regression failed' }
+      - name: Build Windows x64 branded VST3 with valid manifest
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          & cmake -S . -B build/release -G 'Visual Studio 17 2022' -A x64 "-DFETCHCONTENT_SOURCE_DIR_JUCE=$root/tools/JUCE"
+          if ($LASTEXITCODE -ne 0) { throw 'VST3 configure failed' }
+          & cmake --build build/release --config Release --target Dystorator_VST3 --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'VST3 compilation failed' }
+          $bundle="$root/build/release/Dystorator_artefacts/Release/VST3/125A Dystorator.vst3"
+          $manifest=Join-Path $bundle 'Contents/Resources/moduleinfo.json'
+          if (!(Test-Path -LiteralPath $manifest)) { throw 'Missing moduleinfo.json' }
+          & python -m json.tool $manifest > evidence/moduleinfo-strict.json
+          if ($LASTEXITCODE -ne 0) { throw 'VST3 manifest invalid strict JSON' }
+          $json=Get-Content -LiteralPath $manifest -Raw | ConvertFrom-Json
+          if ($json.Name -ne '125A Dystorator' -or $json.'Factory Info'.Vendor -ne '125A Systems') { throw 'Wrong VST3 factory identity' }
+          $dll=@(Get-ChildItem -LiteralPath $bundle -File -Recurse | Where-Object { $_.Extension -ieq '.vst3' })
+          if ($dll.Count -ne 1) { throw 'Missing VST3 binary' }
+          (Get-FileHash -LiteralPath $dll[0].FullName -Algorithm SHA256).Hash | Set-Content evidence/vst3-sha256.txt
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dystorator-cleanup-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            evidence/**
+            build/native/Testing/Temporary/**
+            build/release/Dystorator_artefacts/Release/VST3/**
