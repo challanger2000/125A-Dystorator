@@ -62,6 +62,7 @@ elseif(IR_TEST_MAIN STREQUAL "quality_bench.cpp")
 else()
     add_test(NAME ir_presets_integration COMMAND ir_presets_test)
     add_test(NAME compact_editor_bindings COMMAND ir_presets_test gui)
+    add_test(NAME compact_factory_and_migration COMMAND ir_presets_test factory)
 endif()
 
 # Test-only API ownership trace, using the real JUCE convolver. No product hook.

@@ -45,6 +45,36 @@ inline void upgradeKnobCurves (juce::XmlElement& xml)
     xml.setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
 }
 
+// Pre-release compatibility: remove the no-longer-existent controls from
+// earlier 125A Dystorator state/preset XML before strict validation.
+// They are not JUCE parameters, not automatable and have no DSP/UI path.
+inline bool isRetiredCompactParameter (const juce::String& id)
+{
+    static constexpr const char* removed[] = {
+        "gateOn", "gateThresh", "gateRelease", "gateLow", "gateMid", "gateHigh",
+        "transpose", "transposeMode", "compOn", "compThresh", "compRatio",
+        "compAttack", "compRelease", "compMakeup", "eqOn",
+        "phaserOn", "phRate", "phDepth", "phFeedback", "phMix",
+        "delayOn", "dlTime", "dlFeedback", "dlMix", "dlPingPong",
+        "reverbOn", "rvSize", "rvDamping", "rvWidth", "rvMix",
+        "eq0", "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9"
+    };
+    for (const auto* oldId : removed)
+        if (id == oldId) return true;
+    return false;
+}
+inline void stripRetiredCompactParameters (juce::XmlElement& xml)
+{
+    for (auto* element = xml.getFirstChildElement(); element != nullptr;)
+    {
+        auto* next = element->getNextElement();
+        if (element->hasTagName ("PARAM")
+            && isRetiredCompactParameter (element->getStringAttribute ("id")))
+            xml.removeChildElement (element, true);
+        element = next;
+    }
+}
+
 // Validate before any live parameter/IR mutation. Older partial presets remain
 // supported: missing parameters use their actual declared defaults.
 inline bool validatePresetState (juce::XmlElement& xml,
@@ -52,6 +82,7 @@ inline bool validatePresetState (juce::XmlElement& xml,
                                  const juce::String& expectedTag)
 {
     if (! xml.hasTagName (expectedTag)) return false;
+    stripRetiredCompactParameters (xml);
     const int curves = xml.getIntAttribute (kKnobCurvesAttr, 1);
     if (curves < 1 || curves > kKnobCurvesVersion
         || (xml.hasAttribute (kKnobCurvesAttr) && xml.getStringAttribute (kKnobCurvesAttr) != juce::String (curves))) return false;
@@ -250,37 +281,37 @@ private:
     {
         static const std::vector<Factory> presets = {
             { "Default", {} },
-            { "Djent Rhythm", {
-                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.5f }, { ids::mid, 6.0f }, { ids::treble, 6.5f },
-                { ids::presence, 5.5f }, { ids::resonance, 4.0f }, { ids::master, 5.1f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f }, { ids::boostTone, 6.0f }, { ids::boostAttack, 5 },
-                { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f }, { ids::inGateRelease, 15.0f },
-                { ids::gateThresh, -55.0f }, { ids::gateRelease, 60.0f }, { ids::gateLow, 40.0f }, { ids::gateMid, 70.0f }, { ids::gateHigh, 100.0f } } },
-            { "Djent Drop -2 (LIVE)", {
-                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.0f }, { ids::mid, 6.0f }, { ids::treble, 6.5f },
-                { ids::presence, 5.5f }, { ids::resonance, 3.5f }, { ids::master, 5.1f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f }, { ids::boostTone, 6.0f }, { ids::boostAttack, 6 },
-                { ids::transpose, -2 }, { ids::transposeMode, 0 },
-                { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f }, { ids::inGateRelease, 15.0f },
-                { ids::gateThresh, -55.0f }, { ids::gateRelease, 60.0f } } },
-            { "5150 Lead", {
-                { ids::channel, 2 }, { ids::ampGain, 7.7f }, { ids::bass, 5.0f }, { ids::mid, 6.5f }, { ids::treble, 6.0f },
-                { ids::presence, 6.0f }, { ids::resonance, 5.0f }, { ids::master, 5.7f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 2.0f }, { ids::boostLevel, 7.0f }, { ids::boostAttack, 4 },
-                { ids::gateThresh, -62.0f }, { ids::gateRelease, 120.0f },
-                { ids::delayOn, 1 }, { ids::dlTime, 420.0f }, { ids::dlFeedback, 0.3f }, { ids::dlMix, 0.2f }, { ids::dlPingPong, 1 },
-                { ids::reverbOn, 1 }, { ids::rvSize, 0.55f }, { ids::rvMix, 0.18f } } },
-            { "Blue Crunch", {
-                { ids::channel, 1 }, { ids::ampGain, 6.9f }, { ids::bass, 5.5f }, { ids::mid, 5.5f }, { ids::treble, 6.0f },
-                { ids::presence, 5.0f }, { ids::resonance, 5.0f }, { ids::master, 4.6f },
-                { ids::gateThresh, -62.0f }, { ids::gateLow, 20.0f }, { ids::gateMid, 40.0f }, { ids::gateHigh, 80.0f } } },
-            { "Big Clean", {
-                { ids::channel, 0 }, { ids::ampGain, 5.3f }, { ids::bass, 5.0f }, { ids::mid, 5.0f }, { ids::treble, 6.5f },
-                { ids::presence, 4.0f }, { ids::resonance, 3.0f }, { ids::master, 5.7f },
-                { ids::gateOn, 0 },
-                { ids::compOn, 1 }, { ids::compThresh, -24.0f }, { ids::compRatio, 3.0f }, { ids::compMakeup, 4.0f },
-                { ids::delayOn, 1 }, { ids::dlTime, 380.0f }, { ids::dlFeedback, 0.25f }, { ids::dlMix, 0.15f },
-                { ids::reverbOn, 1 }, { ids::rvSize, 0.6f }, { ids::rvMix, 0.3f } } },
+            { "Tight Rhythm", {
+                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.5f },
+                { ids::mid, 6.0f }, { ids::treble, 6.5f }, { ids::presence, 5.5f },
+                { ids::resonance, 4.0f }, { ids::master, 5.1f },
+                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f },
+                { ids::boostTone, 6.0f }, { ids::boostAttack, 5 },
+                { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f },
+                { ids::inGateRelease, 15.0f } } },
+            { "Modern Rhythm", {
+                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.0f },
+                { ids::mid, 6.0f }, { ids::treble, 6.5f }, { ids::presence, 5.5f },
+                { ids::resonance, 3.5f }, { ids::master, 5.1f },
+                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f },
+                { ids::boostTone, 6.0f }, { ids::boostAttack, 6 },
+                { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f },
+                { ids::inGateRelease, 15.0f } } },
+            { "Lead Drive", {
+                { ids::channel, 2 }, { ids::ampGain, 7.7f }, { ids::bass, 5.0f },
+                { ids::mid, 6.5f }, { ids::treble, 6.0f }, { ids::presence, 6.0f },
+                { ids::resonance, 5.0f }, { ids::master, 5.7f },
+                { ids::boostOn, 1 }, { ids::boostDrive, 2.0f },
+                { ids::boostLevel, 7.0f }, { ids::boostAttack, 4 } } },
+            { "Classic Crunch", {
+                { ids::channel, 1 }, { ids::ampGain, 6.9f }, { ids::bass, 5.5f },
+                { ids::mid, 5.5f }, { ids::treble, 6.0f }, { ids::presence, 5.0f },
+                { ids::resonance, 5.0f }, { ids::master, 4.6f } } },
+            { "Open Clean", {
+                { ids::channel, 0 }, { ids::ampGain, 5.3f }, { ids::bass, 5.0f },
+                { ids::mid, 5.0f }, { ids::treble, 6.5f },
+                { ids::presence, 4.0f }, { ids::resonance, 3.0f },
+                { ids::master, 5.7f } } },
         };
         return presets;
     }
