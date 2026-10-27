@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(IRPresetIntegration VERSION 0.5.6 LANGUAGES C CXX)
+project(IRPresetIntegration VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 if(NOT TARGET juce::juce_dsp)
     if(NOT JUCE_SOURCE_DIR)
