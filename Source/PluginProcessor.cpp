@@ -9,7 +9,8 @@ extern void irTestCaptureCabinetInput (const float*, int);
 
 VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     : AudioProcessor (BusesProperties()
-                          .withInput ("Input", juce::AudioChannelSet::mono(), true)
+                          // Native stereo input by default: keep both channels of virtual-guitar instruments.
+                          .withInput ("Input", juce::AudioChannelSet::stereo(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
       apvts (*this, nullptr, "PARAMS", vamp::createParameterLayout()),
       presets (apvts, [this] (const juce::File& f)
