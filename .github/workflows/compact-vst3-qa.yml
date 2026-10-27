@@ -1,0 +1,90 @@
+name: Dystorator independent VST3 Windows QA
+on:
+  push:
+    branches: [fix/compact-ui-ir-level-20261027]
+    paths: ['.github/workflows/compact-vst3-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-vst3-and-tester:
+    runs-on: windows-2022
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Reuse exact Windows-built VST3, no product rebuild
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: dystorator-compact-ir-windows-c00d2618e7ade4a93e9ba1aca4e80f742841b611
+          run-id: 40424003598
+          repository: challanger2000/125A-Dystorator
+          github-token: ${{ github.token }}
+          path: candidate
+      - name: Fail closed on wrong source or binary hash
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force evidence | Out-Null
+          $pin='c00d2618e7ade4a93e9ba1aca4e80f742841b611'
+          & git diff --quiet $pin HEAD -- Source tests CMakeLists.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Product source diverged from certified input binary' }
+          if ((Get-Content candidate/qa-out/candidate-sha.txt -Raw).Trim() -ne $pin) { throw 'Wrong package source pin' }
+          $bundle='candidate/build/vst3/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3'
+          $dlls=@(Get-ChildItem -LiteralPath $bundle -Recurse -File | Where-Object { $_.Extension -ieq '.vst3' })
+          if ($dlls.Count -ne 1) { throw 'Required exact Windows VST3 binary missing' }
+          $hash=(Get-FileHash -LiteralPath $dlls[0].FullName -Algorithm SHA256).Hash
+          if ($hash -ne (Get-Content candidate/qa-out/vst3-sha256.txt -Raw).Trim()) { throw 'VST3 binary mismatch' }
+          "source=$pin;binary=$hash;run=40424003598" | Set-Content evidence/provenance.txt
+      - name: Pin and build Steinberg SDK and 125A Plugin Tester
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force build/tools | Out-Null
+          & git clone --depth 1 --branch v3.8.1_build_84 --recurse-submodules --shallow-submodules https://github.com/steinbergmedia/vst3sdk.git build/tools/vst3sdk
+          if ($LASTEXITCODE -ne 0 -or (& git -C build/tools/vst3sdk rev-parse HEAD).Trim() -ne '3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96') { throw 'SDK version invalid' }
+          & git clone --no-checkout https://github.com/challanger2000/125A-Plugin-Tester-Final.git build/tools/tester
+          if ($LASTEXITCODE -ne 0) { throw 'Tester clone failed' }
+          & git -C build/tools/tester checkout --detach 3dcf3fe607008e520dcf20d1f793d9c534a9b9e1
+          if ($LASTEXITCODE -ne 0) { throw 'Tester source revision missing' }
+          $root=(Get-Location).Path
+          & cmake -S build/tools/tester -B build/tester -G 'Visual Studio 17 2022' -A x64 "-DFETCHCONTENT_SOURCE_DIR_VST3SDK=$root/build/tools/vst3sdk" -DSMTG_CREATE_PLUGIN_LINK=OFF
+          if ($LASTEXITCODE -ne 0) { throw 'Tester configure failed' }
+          $targets=@('PluginTester125ADispatcher','PluginTester125ALauncher','PluginTester125AWorker','PluginTester125AReloadProbe','PluginTester125AStateProbe','PluginTester125AEditorLifecycleProbe','PluginTester125AIOEventProbe','PluginTester125AValidatorWrapper','PluginTester125AGuardSelfTest','validator','PluginTester125AQAGoodControl','PluginTester125AQABadLifecycle','PluginTester125AQABadNaN','PluginTester125AQABadState','PluginTester125AQABadIO','PluginTester125AQAGoodEditor','PluginTester125AQABadEditor')
+          & cmake --build build/tester --config Release --target $targets --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Tester build failed' }
+          'tester=3dcf3fe607008e520dcf20d1f793d9c534a9b9e1' | Add-Content evidence/provenance.txt
+      - name: Run tester self-check and independently inspect actual VST3
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $root=(Get-Location).Path
+          $tester="$root/build/tester/Release/125A_Plugin_Tester.exe"
+          $validator="$root/build/tester/Release/125A_Plugin_Tester_SteinbergValidator.exe"
+          $guard="$root/build/tester/Release/125A_Plugin_Tester_GuardSelfTest.exe"
+          foreach ($exe in @($tester,$validator,$guard)) { if (!(Test-Path -LiteralPath $exe)) { throw "Missing mandatory: $exe" } }
+          & $tester --guard-selftest $guard *>&1 | Out-File evidence/guard.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Tester guard selftest failed' }
+          & $validator -selftest *>&1 | Out-File evidence/validator-selftest.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Steinberg wrapper selftest failed' }
+          $bundle="$root/candidate/build/vst3/DjentyDonkey_artefacts/Release/VST3/Djenty Donkey.vst3"
+          $env:125A_PLUGIN_TESTER_REPORT_DIR="$root/evidence/product"
+          New-Item -ItemType Directory -Force $env:125A_PLUGIN_TESTER_REPORT_DIR | Out-Null
+          & $tester $bundle *>&1 | Out-File evidence/product-console.txt
+          $code=$LASTEXITCODE
+          "exit=$code" | Add-Content evidence/provenance.txt
+          if ($code -ne 0) { throw "Tester reports product FAIL ($code)" }
+          $reports=@(Get-ChildItem -LiteralPath $env:125A_PLUGIN_TESTER_REPORT_DIR -File -Filter '*125A_QA_Report.txt')
+          if ($reports.Count -eq 0) { throw 'No saved tester product report' }
+          $body=($reports | ForEach-Object { Get-Content $_.FullName -Raw }) -join ' '
+          if ($body -notmatch '0 WARNING / 0 FAIL') { throw 'Product report fails zero warning/failure requirement' }
+      - name: Upload actual QA evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dystorator-real-vst3-qa-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: evidence/**
