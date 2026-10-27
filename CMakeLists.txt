@@ -38,6 +38,18 @@ juce_add_plugin(Dystorator
     VST3_CATEGORIES Fx Distortion
     COPY_PLUGIN_AFTER_BUILD FALSE)
 
+# JUCE's generated moduleinfo.json in this pinned toolchain contains JSON trailing
+# commas. Repair metadata only after the VST3 bundle is produced. Strictly
+# re-parse the result and verify the 125A plugin factory before packaging.
+if(WIN32)
+    add_custom_command(TARGET Dystorator_VST3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}"
+                "-DMODULE_INFO_PATH=$<TARGET_FILE_DIR:Dystorator_VST3>/../Resources/moduleinfo.json"
+                -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/normalize_vst3_moduleinfo.cmake"
+        COMMENT "Validate strict VST3 moduleinfo.json for 125A Dystorator"
+        VERBATIM)
+endif()
+
 target_sources(Dystorator PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp)
