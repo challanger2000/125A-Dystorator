@@ -26,31 +26,21 @@ VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
         return p;
     };
 
+
     pInGain = get (ids::inGain);
-    pGateOn = get (ids::gateOn); pGateThresh = get (ids::gateThresh); pGateRelease = get (ids::gateRelease);
-    pGateLow = get (ids::gateLow); pGateMid = get (ids::gateMid); pGateHigh = get (ids::gateHigh);
-    pTranspose = get (ids::transpose); pTransposeMode = get (ids::transposeMode);
-    pInGateOn = get (ids::inGateOn); pInGateThresh = get (ids::inGateThresh); pInGateRelease = get (ids::inGateRelease);
+    pInGateOn = get (ids::inGateOn); pInGateThresh = get (ids::inGateThresh);
+    pInGateRelease = get (ids::inGateRelease);
     pAmpVolume = get (ids::ampVolume);
-    pCompOn = get (ids::compOn); pCompThresh = get (ids::compThresh); pCompRatio = get (ids::compRatio);
-    pCompAttack = get (ids::compAttack); pCompRelease = get (ids::compRelease); pCompMakeup = get (ids::compMakeup);
     pBoostOn = get (ids::boostOn); pBoostDrive = get (ids::boostDrive); pBoostTone = get (ids::boostTone);
     pBoostLevel = get (ids::boostLevel); pBoostAttack = get (ids::boostAttack); pBoostModel = get (ids::boostModel);
-    pChannel = get (ids::channel); pAmpBright = get (ids::ampBright); pAmpCrunch = get (ids::ampCrunch); pAmpNoise = get (ids::ampNoise); pTubeSet = get (ids::tubeSet); pAmpGain = get (ids::ampGain); pBass = get (ids::bass); pMid = get (ids::mid);
-    pTreble = get (ids::treble); pPresence = get (ids::presence); pResonance = get (ids::resonance);
-    pMaster = get (ids::master);
+    pChannel = get (ids::channel); pAmpBright = get (ids::ampBright);
+    pAmpCrunch = get (ids::ampCrunch); pAmpNoise = get (ids::ampNoise);
+    pTubeSet = get (ids::tubeSet); pAmpGain = get (ids::ampGain); pBass = get (ids::bass);
+    pMid = get (ids::mid); pTreble = get (ids::treble); pPresence = get (ids::presence);
+    pResonance = get (ids::resonance); pMaster = get (ids::master);
     pCabOn = get (ids::cabOn);
     pLowCutOn = get (ids::lowCutOn); pLowCutHz = get (ids::lowCutHz);
     pHighCutOn = get (ids::highCutOn); pHighCutHz = get (ids::highCutHz);
-    pEqOn = get (ids::eqOn);
-    for (int i = 0; i < 10; ++i)
-        pEq[i] = get (ids::eqBand (i));
-    pPhaserOn = get (ids::phaserOn); pPhRate = get (ids::phRate); pPhDepth = get (ids::phDepth);
-    pPhFeedback = get (ids::phFeedback); pPhMix = get (ids::phMix);
-    pDelayOn = get (ids::delayOn); pDlTime = get (ids::dlTime); pDlFeedback = get (ids::dlFeedback);
-    pDlMix = get (ids::dlMix); pDlPingPong = get (ids::dlPingPong);
-    pReverbOn = get (ids::reverbOn); pRvSize = get (ids::rvSize); pRvDamping = get (ids::rvDamping);
-    pRvWidth = get (ids::rvWidth); pRvMix = get (ids::rvMix);
     pOutGain = get (ids::outGain);
     pAmpMode = get (ids::ampMode); pQuality = get (ids::quality);
 }
@@ -162,9 +152,6 @@ void VibeAmpProcessor::processAudio (juce::AudioBuffer<float>& buffer, bool bypa
     cuts.setEnabled (pLowCutOn->load() > 0.5f, pHighCutOn->load() > 0.5f);
     outputGain.setGainDecibels (pOutGain->load());
 
-    // Obsolete legacy parameter IDs stay available to project recall.
-    // Compressor, Transpose, EQ, Phaser, Delay, Reverb and loop gate have
-    // NO active audio path in this compact product.
     for (int start = 0; start < numSamples; start += maxBlock)
         processChunk (buffer, start, juce::jmin (maxBlock, numSamples - start), numIn, numOut);
 }
@@ -280,7 +267,6 @@ void VibeAmpProcessor::processChunk (juce::AudioBuffer<float>& buffer, int start
     for (int channel = juce::jlimit (0, 2, numOut); channel < buffer.getNumChannels(); ++channel)
         buffer.clear (channel, start, len);
 
-    for (auto& band : gateBandGain) band.store (1.0f); // legacy meter only
 }
 
 // ---------------------------------------------------------------------------
