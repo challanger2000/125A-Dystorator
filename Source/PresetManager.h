@@ -98,7 +98,7 @@ inline bool validatePresetState (juce::XmlElement& xml,
 }
 
 // Factory presets (built into the plugin) + user presets (XML files in
-// Documents/Djenty Donkey/Presets, easy to share). Call everything from the message thread.
+// Documents/125A Systems/Dystorator/Presets, easy to share). Call everything from the message thread.
 class PresetManager
 {
 public:
@@ -120,7 +120,7 @@ public:
     static juce::File getUserFolder()
     {
         auto dir = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory)
-                       .getChildFile ("Djenty Donkey").getChildFile ("Presets");
+                       .getChildFile ("125A Systems").getChildFile ("Dystorator").getChildFile ("Presets");
         dir.createDirectory();
         return dir;
     }
@@ -168,7 +168,7 @@ public:
             if (file.getSize() <= 0 || file.getSize() > 1024 * 1024)
                 return reject ("Preset file is missing, empty or too large");
             xml = juce::XmlDocument::parse (file);
-            if (! xml || ! validatePresetState (*xml, apvts, "DjentyDonkeyPreset"))
+            if (! xml || ! validatePresetState (*xml, apvts, "DystoratorPreset"))
                 return reject ("Invalid or unsupported preset");
             const auto path = xml->getStringAttribute ("irPath");
             if (path.isNotEmpty())
@@ -201,7 +201,7 @@ public:
         auto state = apvts.copyState();
         std::unique_ptr<juce::XmlElement> xml (state.createXml());
         if (xml == nullptr) return false;
-        xml->setTagName ("DjentyDonkeyPreset");
+        xml->setTagName ("DystoratorPreset");
         xml->setAttribute ("name", name);
         xml->setAttribute ("version", JucePlugin_VersionString);
         xml->setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
