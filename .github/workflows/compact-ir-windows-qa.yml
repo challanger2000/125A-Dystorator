@@ -40,7 +40,7 @@ jobs:
         run: |
           $ErrorActionPreference='Stop'
           $root=(Get-Location).Path
-          & cmake -S tests/ir_presets -B build/ir-heap -G 'Visual Studio 17 2022' -A x64 "-DJUCE_SOURCE_DIR=$root/build/tools/JUCE" "-DIR_PRODUCT_SOURCE_DIR=$root/Source" "-DIR_TEST_MAIN:STRING=large_ir_heap.cpp" "-DIR_TRACE_CONVOLUTION=OFF" "-DSTEP3_DETOURS_DIR=$root/build/tools/Detours"
+          & cmake -S tests/ir_presets -B build/ir-heap -G 'Visual Studio 17 2022' -A x64 "-DJUCE_SOURCE_DIR=$root/build/tools/JUCE" "-DIR_PRODUCT_SOURCE_DIR=$root/Source" "-DIR_TEST_MAIN:STRING=large_ir_heap.cpp" "-DIR_TRACE_CONVOLUTION=OFF" "-DIR_BUILD_VST3_HOST=ON" "-DSTEP3_DETOURS_DIR=$root/build/tools/Detours"
           if ($LASTEXITCODE -ne 0) { throw "Heap QA configure failed" }
           & cmake --build build/ir-heap --config Release --target ir_presets_test --parallel 2
           if ($LASTEXITCODE -ne 0) { throw "Heap QA build failed" }
