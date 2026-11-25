@@ -27,16 +27,12 @@ int main ()
         set (p, "inGateOn", 0);
         set (p, "ampGain", 9);
         set (p, "master", 3);
-        set (p, "boostOn", 1);
-        set (p, "boostDrive", 8);
         p.prepareToPlay (fs, 128);
         vamp::AmpSim ref;
         ref.prepare (fs, 128);
         vamp::AmpSim::Settings settings;
         settings.gain = p.apvts.getRawParameterValue ("ampGain")->load () * .1f;
         settings.master = p.apvts.getRawParameterValue ("master")->load () * .1f;
-        settings.boostOn = true;
-        settings.boostDrive = .8f;
         juce::dsp::Gain<float> in, out;
         for (auto *g : {&in, &out})
         {

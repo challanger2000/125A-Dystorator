@@ -5,27 +5,27 @@
 
 Compact high-gain guitar amplifier simulator with two independent nonlinear
 left/right amp signal paths for stereo virtual guitars. The component-level
-tube model and drive simulations originate from the AGPLv3 open-source
+tube model originates from the AGPLv3 open-source
 amp simulator developed by SteveAsAConstant (see Attribution and License).
 The 125A variant adds its own stereo amp routing, selectable processing quality,
 independent stereo cabinet IR handling and post-cabinet low/high cut filters.
 
 ## Active signal path
 
-Input gain → input gate → Precision Drive or TS9-style boost → selected
+Input gain → input gate → selected
 amp circuit (CLEAN / BLUE / RED; stereo paths when selected) →
 builtin five-filter cabinet or loaded mono/stereo impulse response →
 low-cut and high-cut → output gain.
 
 The editor and VST3 host parameter list contain only live controls.
-Unused transpose, compressor, loop gate, 10-band EQ, phaser, delay and reverb
+Unused pedals, tube-set selection, transpose, compressor, loop gate, 10-band EQ, phaser, delay and reverb
 parameters have been removed from this **new, unreleased VST3 identity**.
 Earlier pre-release 125A state/preset XML may still be loaded: recognized
 obsolete control entries are discarded, while all currently supported
 parameters, cabinet IR and knob-curve upgrades remain intact.
 
 Built-in 125A factory presets are Default, Tight Rhythm, Modern Rhythm,
-Lead Drive, Classic Crunch and Open Clean. None promise inactive effects,
+Lead Sustain, Classic Crunch and Open Clean. None promise inactive effects,
 such as pitch shifting, delay or reverb.
 
 ## Quality and CPU
@@ -72,7 +72,7 @@ imply Studio One realtime qualification or final release approval.
 ## Attribution and license
 
 Copyright in original contributions remains with their respective authors.
-The amplifier circuit, solver, drive and some cabinet-level matching code
+The amplifier circuit, solver and some cabinet-level matching code
 are derived from the open-source project
 [SteveAsAConstant/djenty-donkey](https://github.com/SteveAsAConstant/djenty-donkey)
 and are adapted here under the **GNU AGPLv3**. Preserve original notices and

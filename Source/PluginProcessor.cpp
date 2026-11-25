@@ -31,11 +31,9 @@ VibeAmpProcessor::VibeAmpProcessor (juce::File presetFolder)
     pInGateOn = get (ids::inGateOn); pInGateThresh = get (ids::inGateThresh);
     pInGateRelease = get (ids::inGateRelease);
     pAmpVolume = get (ids::ampVolume);
-    pBoostOn = get (ids::boostOn); pBoostDrive = get (ids::boostDrive); pBoostTone = get (ids::boostTone);
-    pBoostLevel = get (ids::boostLevel); pBoostAttack = get (ids::boostAttack); pBoostModel = get (ids::boostModel);
     pChannel = get (ids::channel); pAmpBright = get (ids::ampBright);
     pAmpCrunch = get (ids::ampCrunch); pAmpNoise = get (ids::ampNoise);
-    pTubeSet = get (ids::tubeSet); pAmpGain = get (ids::ampGain); pBass = get (ids::bass);
+    pAmpGain = get (ids::ampGain); pBass = get (ids::bass);
     pMid = get (ids::mid); pTreble = get (ids::treble); pPresence = get (ids::presence);
     pResonance = get (ids::resonance); pMaster = get (ids::master);
     pCabOn = get (ids::cabOn);
@@ -129,7 +127,6 @@ void VibeAmpProcessor::processAudio (juce::AudioBuffer<float>& buffer, bool bypa
     ampSettings.bright = pAmpBright->load() > 0.5f;
     ampSettings.crunch = pAmpCrunch->load() > 0.5f;
     ampSettings.noise = pAmpNoise->load() > 0.5f;
-    ampSettings.tubeSet = juce::roundToInt (pTubeSet->load());
     ampSettings.gain = pAmpGain->load() * 0.1f;
     ampSettings.bass = pBass->load() * 0.1f;
     ampSettings.mid = pMid->load() * 0.1f;
@@ -138,12 +135,6 @@ void VibeAmpProcessor::processAudio (juce::AudioBuffer<float>& buffer, bool bypa
     ampSettings.resonance = pResonance->load() * 0.1f;
     ampSettings.master = pMaster->load() * 0.1f;
     ampSettings.volumeDb = pAmpVolume->load();
-    ampSettings.boostOn = pBoostOn->load() > 0.5f;
-    ampSettings.boostDrive = pBoostDrive->load() * 0.1f;
-    ampSettings.boostBright = pBoostTone->load() * 0.1f;
-    ampSettings.boostLevel = pBoostLevel->load() * 0.1f;
-    ampSettings.boostAttack = juce::roundToInt (pBoostAttack->load()) - 1;
-    ampSettings.boostModel = juce::roundToInt (pBoostModel->load());
 
     cabOn = pCabOn->load() > 0.5f;
     cabinetMix.setTargetValue (cabOn ? 1.0f : 0.0f);

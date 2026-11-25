@@ -46,7 +46,7 @@ static int hostedCPU (juce::VST3PluginFormat &format, const juce::PluginDescript
             // named parameter must exist; no silently defaulted benchmark setup.
             const std::vector<std::pair<const char *, float>> settings = {
                 {"Amp Noise", 0},   {"Input Gate On", 0}, {"Cab On", 1},       {"Low Cut On", 1},
-                {"High Cut On", 1}, {"Boost On", 0},      {"Channel", 1},      {"Gain", .5f},
+                {"High Cut On", 1}, {"Channel", 1},      {"Gain", .5f},
                 {"Bass", .5f},      {"Mid", .5f},         {"Treble", .6f},     {"Master", .3f},
                 {"Presence", .5f},  {"Resonance", .5f},   {"Amp Volume", .5f}, {"Input", .5f},
                 {"Output", .5f}};

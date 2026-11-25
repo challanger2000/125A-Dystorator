@@ -33,9 +33,6 @@ static int profile (const juce::File &folder, int control, int ack)
                                                                            {"master", 3},
                                                                            {"ampNoise", 0},
                                                                            {"inGateOn", 0},
-                                                                           {"boostOn", 1},
-                                                                           {"boostDrive", 8},
-                                                                           {"boostLevel", 7},
                                                                            {"cabOn", 1},
                                                                            {"lowCutOn", 1},
                                                                            {"highCutOn", 1},
@@ -126,9 +123,6 @@ int main (int argc, char **argv)
             set (p, "master", 3);
             set (p, "ampNoise", 0);
             set (p, "inGateOn", 0);
-            set (p, "boostOn", 1);
-            set (p, "boostDrive", 8);
-            set (p, "boostLevel", 7);
             set (p, "cabOn", 1);
             set (p, "lowCutOn", 1);
             set (p, "highCutOn", 1);

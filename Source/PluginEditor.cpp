@@ -217,24 +217,6 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     inGateSec->add<Knob> (s, ids::inGateThresh, "Thresh", colours::teal);
     inGateSec->add<Knob> (s, ids::inGateRelease, "Release", colours::teal);
 
-    boostSec = std::make_unique<Section> ("PRECISION DRIVE", colours::clean, &s, ids::boostOn);
-    auto* boostModelSel = boostSec->add<ChoiceButtons> (s, ids::boostModel, "Model", juce::StringArray { "PRECISION", "TS9" }, colours::clean);
-    boostModelSel->setTooltip ("PRECISION: Horizon Devices Precision Drive (tight, Attack sets the low end).  "
-                               "TS9: Ibanez Tube Screamer (mid hump, smoother).");
-    auto* boostLevelKnob = boostSec->add<Knob> (s, ids::boostLevel, "Volume", colours::clean);
-    boostSec->add<Knob> (s, ids::boostDrive, "Drive", colours::clean);
-    auto* boostToneKnob = boostSec->add<Knob> (s, ids::boostTone, "Bright", colours::clean);
-    auto* boostAttackKnob = boostSec->add<Knob> (s, ids::boostAttack, "Attack", colours::clean);
-    // the two pedals share the knobs: the names follow the selected one, the TS9 has no Attack
-    boostModelSel->setOnChange ([this, boostLevelKnob, boostToneKnob, boostAttackKnob] (int model)
-    {
-        const bool ts9 = model == 1;
-        boostSec->setTitle (ts9 ? "TS9 TUBE SCREAMER" : "PRECISION DRIVE");
-        boostLevelKnob->setLabel (ts9 ? "Level" : "Volume");
-        boostToneKnob->setLabel (ts9 ? "Tone" : "Bright");
-        boostAttackKnob->setActive (! ts9);
-    });
-
     // ---- row 2: amp ----
     ampSec = std::make_unique<Section> ("AMP / HIGH GAIN", colours::red);
     ampSec->add<ChannelSelector> (s, ids::channel, [this] (int ch) { setAmpChannelColour (ch); });
@@ -243,10 +225,7 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
         { ids::ampCrunch, "CRUNCH", "The rhythm channel's CRUNCH switch (relay K4, as on the amp): on, BLUE is the crunch "
                                     "rhythm; off, the 6505's rhythm channel without crunch (all five stages, less gain)." },
         { ids::ampNoise, "NOISE", "The preamp's own noise, from physics: thermal noise of its resistors, shot and flicker "
-                                  "noise of its tubes. Off: a noiseless amp." } }, colours::red,
-        ToggleStack::Item { ids::tubeSet, "TUBES", "Stock: the datasheet (nominal) tubes. Set A-E: particular real tubes, each "
-                            "12AX7 and 6L6 within production spreads (gain, bias and the output pairs' balance differ "
-                            "a little, as from one amp to the next)." });
+                                  "noise of its tubes. Off: a noiseless amp." } }, colours::red);
     ampSec->add<Knob> (s, ids::ampGain, "Gain", colours::red);
     ampSec->add<Knob> (s, ids::bass, "Bass", colours::red);
     ampSec->add<Knob> (s, ids::mid, "Middle", colours::red);
@@ -258,7 +237,7 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     setAmpChannelColour (juce::roundToInt (s.getRawParameterValue (ids::channel)->load()));
 
     // Only controls that actually reach the compact processor audio path are visible.
-    // Legacy APVTS parameter IDs remain in Parameters.h for old-state compatibility.
+    // Retired controls are migrated by PresetManager, not exposed to hosts.
     cabSec = std::make_unique<Section> ("CABINET IR", colours::orange, &s, ids::cabOn);
     cabSec->add<IRPanel> (proc);
 
@@ -281,7 +260,7 @@ VibeAmpEditor::VibeAmpEditor (VibeAmpProcessor& p) : AudioProcessorEditor (&p), 
     outSec->add<LevelMeter> ([this] { return proc.popOutputPeak(); }, false);
 
     addAndMakeVisible (presetBar);
-    for (auto* sec : { inSec.get(), inGateSec.get(), boostSec.get(), outSec.get(),
+    for (auto* sec : { inSec.get(), inGateSec.get(), outSec.get(),
                        ampSec.get(), cabSec.get(), cutsSec.get(), modeSec.get() })
         addAndMakeVisible (sec);
 
@@ -352,7 +331,7 @@ void VibeAmpEditor::resized()
     auto row3 = b;
 
     layoutRow (row1, { { inSec.get(), 2.0f }, { inGateSec.get(), 2.5f },
-                        { boostSec.get(), 6.2f }, { outSec.get(), 2.0f } });
+                        { outSec.get(), 2.0f } });
     ampSec->setBounds (row2);
     layoutRow (row3, { { cabSec.get(), 4.2f }, { cutsSec.get(), 4.1f },
                         { modeSec.get(), 3.7f } });

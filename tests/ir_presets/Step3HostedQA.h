@@ -87,8 +87,6 @@ inline bool run (juce::VST3PluginFormat &format, const juce::PluginDescription &
                                                                             {"Channel", 1},
                                                                             {"Gain", .9f},
                                                                             {"Master", .3f},
-                                                                            {"Boost On", 1},
-                                                                            {"Boost Drive", .8f},
                                                                             {"Cab On", 1},
                                                                             {"Low Cut On", 1},
                                                                             {"High Cut On", 1},
@@ -311,9 +309,6 @@ inline void cpuParameters (juce::AudioProcessor &p, int lanes)
                                                                     {"Channel", 1},
                                                                     {"Gain", .9f},
                                                                     {"Master", .3f},
-                                                                    {"Boost On", 1},
-                                                                    {"Boost Drive", .8f},
-                                                                    {"Drive Volume", .7f},
                                                                     {"Cab On", 1},
                                                                     {"Low Cut On", 1},
                                                                     {"High Cut On", 1},
@@ -338,9 +333,9 @@ inline int cpuSetup (juce::VST3PluginFormat &format, const juce::PluginDescripti
                 return 2;
             cpuParameters (*p, lanes);
             p->prepareToPlay (fs, 512);
-            for (float driveLevel : {.31f, .7f})
+            for (float masterLevel : {.31f, .7f})
             {
-                parameter (*p, "Drive Volume", driveLevel);
+                parameter (*p, "Master", masterLevel);
                 juce::AudioBuffer<float> audio (2, 512);
                 for (int c = 0; c < 2; ++c)
                     for (int i = 0; i < 512; ++i)
@@ -354,10 +349,7 @@ inline int cpuSetup (juce::VST3PluginFormat &format, const juce::PluginDescripti
                                                                   {"inGateOn", 0},
                                                                   {"channel", 2},
                                                                   {"ampGain", 9},
-                                                                  {"master", 3},
-                                                                  {"boostOn", 1},
-                                                                  {"boostDrive", 8},
-                                                                  {"boostLevel", driveLevel * 10.},
+                                                                                                                                    {"master", masterLevel * 10.},
                                                                   {"cabOn", 1},
                                                                   {"lowCutOn", 1},
                                                                   {"highCutOn", 1},
@@ -376,7 +368,7 @@ inline int cpuSetup (juce::VST3PluginFormat &format, const juce::PluginDescripti
                     for (int i = 0; i < 512; ++i)
                         pass = pass && std::isfinite (audio.getSample (c, i));
                 std::cout << (pass ? "PASS" : "FAIL") << " VST3_CPU_SETUP fs=" << fs << " lanes=" << lanes
-                          << " drive_level=" << driveLevel * 10. << std::endl;
+                          << " master_level=" << masterLevel * 10. << std::endl;
                 failures += !pass;
             }
             p->releaseResources ();
@@ -469,7 +461,7 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
                         bool stateCorrect = false;
                         if (auto scene = hostedComponentState (*p))
                         {
-                            bool mode = false, q = false, gain = false, drive = false, driveLevel = false;
+                            bool mode = false, q = false, gain = false, master = false, retired = false;
                             for (auto *child : scene->getChildWithTagNameIterator ("PARAM"))
                             {
                                 const auto id = child->getStringAttribute ("id");
@@ -480,12 +472,10 @@ inline int cpu (juce::VST3PluginFormat &format, const juce::PluginDescription &d
                                     q = value == quality;
                                 if (id == "ampGain")
                                     gain = std::abs (value - 9.) < 1e-5;
-                                if (id == "boostOn")
-                                    drive = value == 1.;
-                                if (id == "boostLevel")
-                                    driveLevel = std::abs (value - 7.) < 1e-5;
+                                if (id == "master") master = std::abs (value - 3.) < 1e-5;
+                                if (id.startsWith ("boost") || id == "tubeSet") retired = true;
                             }
-                            stateCorrect = mode && q && gain && drive && driveLevel;
+                            stateCorrect = mode && q && gain && master && !retired;
                         }
                         std::sort (times.begin (), times.end ());
                         const bool pass = finite && energy[0] > 1e-8 && energy[1] > 1e-8 && stateCorrect &&

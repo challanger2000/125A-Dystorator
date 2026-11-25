@@ -34,14 +34,6 @@ inline void upgradeKnobCurves (juce::XmlElement& xml)
             else if (id == ids::master) p->setAttribute ("value", 10.0 * vamp::masterKnobFromV03 (v));
         }
     }
-    if (version < 3)
-    {
-        // old 1..8 = 33n 47n 68n 82n 100n 220n 330n 470n -> new 1..6 = 470n 330n 100n 68n 47n 33n
-        static constexpr int newAttack[8] = { 6, 5, 4, 4, 3, 2, 2, 1 };
-        for (auto* p : xml.getChildWithTagNameIterator ("PARAM"))
-            if (p->getStringAttribute ("id") == ids::boostAttack)
-                p->setAttribute ("value", newAttack[juce::jlimit (1, 8, juce::roundToInt (p->getDoubleAttribute ("value"))) - 1]);
-    }
     xml.setAttribute (kKnobCurvesAttr, kKnobCurvesVersion);
 }
 
@@ -57,6 +49,7 @@ inline bool isRetiredCompactParameter (const juce::String& id)
         "phaserOn", "phRate", "phDepth", "phFeedback", "phMix",
         "delayOn", "dlTime", "dlFeedback", "dlMix", "dlPingPong",
         "reverbOn", "rvSize", "rvDamping", "rvWidth", "rvMix",
+        "boostOn", "boostDrive", "boostTone", "boostLevel", "boostAttack", "boostModel", "tubeSet",
         "eq0", "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9"
     };
     for (const auto* oldId : removed)
@@ -117,7 +110,7 @@ inline bool validatePresetState (juce::XmlElement& xml,
         in >> std::noskipws >> value;
         if (! in || ! in.eof() || ! std::isfinite (value)) return false;
         const auto range = parameter->getNormalisableRange();
-        const double maximum = curves < 3 && id == ids::boostAttack ? 8.0 : range.end;
+        const double maximum = range.end;
         if (value < range.start || value > maximum) return false;
         if (range.interval > 0 && std::abs ((value - range.start) / range.interval
                                           - std::round ((value - range.start) / range.interval)) > 1e-5)
@@ -282,27 +275,22 @@ private:
         static const std::vector<Factory> presets = {
             { "Default", {} },
             { "Tight Rhythm", {
-                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.5f },
+                { ids::channel, 2 }, { ids::ampGain, 7.2f }, { ids::bass, 4.5f },
                 { ids::mid, 6.0f }, { ids::treble, 6.5f }, { ids::presence, 5.5f },
                 { ids::resonance, 4.0f }, { ids::master, 5.1f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f },
-                { ids::boostTone, 6.0f }, { ids::boostAttack, 5 },
                 { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f },
                 { ids::inGateRelease, 15.0f } } },
             { "Modern Rhythm", {
-                { ids::channel, 2 }, { ids::ampGain, 6.1f }, { ids::bass, 4.0f },
+                { ids::channel, 2 }, { ids::ampGain, 7.8f }, { ids::bass, 4.0f },
                 { ids::mid, 6.0f }, { ids::treble, 6.5f }, { ids::presence, 5.5f },
                 { ids::resonance, 3.5f }, { ids::master, 5.1f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 0.0f }, { ids::boostLevel, 9.0f },
-                { ids::boostTone, 6.0f }, { ids::boostAttack, 6 },
                 { ids::inGateOn, 1 }, { ids::inGateThresh, -50.0f },
                 { ids::inGateRelease, 15.0f } } },
-            { "Lead Drive", {
+            { "Lead Sustain", {
                 { ids::channel, 2 }, { ids::ampGain, 7.7f }, { ids::bass, 5.0f },
                 { ids::mid, 6.5f }, { ids::treble, 6.0f }, { ids::presence, 6.0f },
                 { ids::resonance, 5.0f }, { ids::master, 5.7f },
-                { ids::boostOn, 1 }, { ids::boostDrive, 2.0f },
-                { ids::boostLevel, 7.0f }, { ids::boostAttack, 4 } } },
+                { ids::inGain, 0.0f } } },
             { "Classic Crunch", {
                 { ids::channel, 1 }, { ids::ampGain, 6.9f }, { ids::bass, 5.5f },
                 { ids::mid, 5.5f }, { ids::treble, 6.0f }, { ids::presence, 5.0f },

@@ -19,7 +19,6 @@ static void compactSettings (VibeAmpProcessor &p)
     param (p, ids::cabOn, 0);
     param (p, ids::lowCutOn, 0);
     param (p, ids::highCutOn, 0);
-    param (p, ids::boostOn, 0);
     param (p, ids::channel, 2);
     param (p, ids::ampGain, 5);
     param (p, ids::bass, 5);
@@ -131,19 +130,13 @@ static void compactCoreMatrix (const juce::File &dir)
             {
                 settings.channel = 1;
                 settings.gain = .8f;
-                settings.boostOn = true;
                 param (p, ids::channel, 1);
                 param (p, ids::ampGain, 8);
-                param (p, ids::boostOn, 1);
             }
             if (n == 777)
             {
                 settings.channel = 0;
-                settings.boostModel = 1;
-                settings.tubeSet = 3;
                 param (p, ids::channel, 0);
-                param (p, ids::boostModel, 1);
-                param (p, ids::tubeSet, 3);
             }
             juce::AudioBuffer<float> actual (2, n), expected (2, n);
             for (int c = 0; c < 2; ++c)

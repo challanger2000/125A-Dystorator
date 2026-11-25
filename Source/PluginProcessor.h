@@ -71,10 +71,8 @@ private:
     std::atomic<float>* pInGain {};
     std::atomic<float>* pInGateOn {}, *pInGateThresh {}, *pInGateRelease {};
     std::atomic<float>* pAmpVolume {};
-    std::atomic<float>* pBoostOn {}, *pBoostDrive {}, *pBoostTone {}, *pBoostLevel {};
-    std::atomic<float>* pBoostAttack {}, *pBoostModel {};
     std::atomic<float>* pChannel {}, *pAmpBright {}, *pAmpCrunch {}, *pAmpNoise {};
-    std::atomic<float>* pTubeSet {}, *pAmpGain {}, *pBass {}, *pMid {}, *pTreble {};
+    std::atomic<float>* pAmpGain {}, *pBass {}, *pMid {}, *pTreble {};
     std::atomic<float>* pPresence {}, *pResonance {}, *pMaster {};
     std::atomic<float>* pCabOn {}, *pLowCutOn {}, *pLowCutHz {};
     std::atomic<float>* pHighCutOn {}, *pHighCutHz {};

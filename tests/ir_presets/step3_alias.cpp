@@ -13,7 +13,6 @@ template<class Amp> static bool measure (double fs,int factor,const char* qualit
     else amp.prepare(fs,128);
     typename Amp::Settings settings;
     settings.channel=2;settings.gain=.9f;settings.master=.3f;
-    settings.boostOn=true;settings.boostDrive=.8f;settings.boostLevel=.7f;
     constexpr int count=8192;
     juce::dsp::FFT fft(13);
     bool valid=true;

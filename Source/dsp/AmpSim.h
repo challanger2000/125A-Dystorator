@@ -3,7 +3,6 @@
 #include "Filters.h"
 #include "Amp5150.h"
 #include "Preamp5150.h"
-#include "PrecisionDrive.h"
 
 namespace vamp
 {
@@ -25,14 +24,9 @@ public:
         bool bright = true;    // BRIGHT pushbutton (rhythm: CLEAN and BLUE)
         bool crunch = true;    // CRUNCH pushbutton (BLUE)
         bool noise = false;    // circuit noise of the preamp (resistors, tubes)
-        int tubeSet = 0;       // TubeSet: 0 nominal tubes, 1.. particular sets
         float gain = 0.6f, bass = 0.5f, mid = 0.5f, treble = 0.6f;
         float presence = 0.5f, resonance = 0.5f, master = 0.3f; // all 0..1
         float volumeDb = 0.0f; // post-power-amp level (like an attenuator), does not change the tone
-        bool boostOn = false;
-        float boostDrive = 0.0f, boostBright = 0.5f, boostLevel = 0.7f;
-        int boostAttack = 3; // 0..5 (the knob minus one)
-        int boostModel = 0;  // 0 Precision Drive, 1 TS9
     };
 
     void prepare (double sampleRate, int maxBlock, int requestedFactor = 0)
@@ -54,12 +48,9 @@ public:
         oversampler->initProcessing ((size_t) maxBlock);
         osRate = sampleRate * (1 << stages);
 
-        drive.prepare (osRate);
-        ts9.prepare (osRate);
-        modelStep = 1.0 / (0.02 * osRate); // drive model switch: 20 ms crossfade
         preamp.setChannelTrims (kChannelPost[0], kChannelPost[1], kChannelPost[2]); // applied inside the switch crossfade
-        // the tubes of the last block (or nominal): settled with them
-        const auto tubes = TubeSet::make (tubeSetApplied);
+        // STOCK only: settle with nominal tubes
+        const auto tubes = TubeSet::make (0);
         preamp.setTubeSet (tubes);
         power.setTubeSet (tubes);
         preamp.prepare (osRate);
@@ -82,7 +73,6 @@ public:
         oversampler->reset();
         knobsSet = false;
         firstBlock = true;
-        firstModel = true;
         knobCoef = 1.0 - std::exp (-kControlInterval / (kKnobSmoothMs * 1e-3 * osRate));
     }
 
@@ -107,30 +97,8 @@ public:
         else preamp.setMode (channel);
         preamp.setBright (s.bright); // no-op unless it changed
         preamp.setNoise (s.noise);   // likewise
-        if (s.tubeSet != tubeSetApplied) // other tubes: as swapping them, the stages re-bias through their caps
-        {
-            tubeSetApplied = std::clamp (s.tubeSet, 0, TubeSet::kSets - 1);
-            const auto tubes = TubeSet::make (tubeSetApplied);
-            preamp.setTubeSet (tubes);
-            power.setTubeSet (tubes);
-        }
         firstBlock = false;
-        if (s.boostOn && (! lastBoostOn || s.boostAttack != boostAttack)) // switches: no smoothing
-        {
-            drive.setControls (knob[7], knob[8], s.boostAttack, knob[9]);
-            ts9.setControls (knob[7], knob[8], knob[9]);
-        }
-        modelTarget = s.boostModel == 1 ? 1.0 : 0.0;
-        if (firstModel)
-        {
-            modelMix = modelTarget;
-            modelWeight = 0.5 - 0.5 * std::cos (kPi * modelMix);
-            firstModel = false;
-        }
-        lastBoostOn = s.boostOn;
-        boostAttack = s.boostAttack;
-        const double target[kKnobs] = { s.gain, s.bass, s.mid, s.treble, s.master, s.presence, s.resonance,
-                                        s.boostDrive, s.boostBright, s.boostLevel };
+        const double target[kKnobs] = { s.gain, s.bass, s.mid, s.treble, s.master, s.presence, s.resonance };
         std::copy (knobTarget, knobTarget + kKnobs, knobFrom); // the last block's values: the target ramps from there
         std::copy (target, target + kKnobs, knobTarget);
         if (! knobsSet)
@@ -156,20 +124,9 @@ public:
             if (++controlPhase >= kControlInterval)
             {
                 controlPhase = 0;
-                stepKnobs (s.boostOn, (double) (i + 1) / (double) n);
+                stepKnobs ((double) (i + 1) / (double) n);
             }
             double v = (double) x[i] * kInputVolts;
-
-            if (s.boostOn) // both pedals run, so switching between them is a crossfade, not a restart
-            {
-                if (modelMix != modelTarget)
-                {
-                    modelMix = modelTarget > modelMix ? std::min (modelTarget, modelMix + modelStep) : std::max (modelTarget, modelMix - modelStep);
-                    modelWeight = 0.5 - 0.5 * std::cos (kPi * modelMix);
-                }
-                const double w = modelWeight; // same cosine; reuse only while its argument is unchanged
-                v = (1.0 - w) * drive.process (v) + w * ts9.process (v);
-            }
 
             v = processAmp5150 (preamp, power, v, 1.0); // volts across the speaker (preamp on the power amp's rails; channel trim in the preamp)
             x[i] = dcBlock.process ((float) (v * volume.getNextValue()));
@@ -188,12 +145,12 @@ private:
     // Gain and Presence / Resonance sit inside DK circuits (lead preamp, power amp): their matrices are rebuilt then
     // (DKCircuit: allocation-free), so they follow every kHeavyEvery-th step only (~0.36 ms: still ~55 steps per
     // 20 ms ramp, a quarter of the CPU).
-    static constexpr int kKnobs = 10, kControlInterval = 32, kHeavyEvery = 4;
+    static constexpr int kKnobs = 7, kControlInterval = 32, kHeavyEvery = 4;
     static constexpr double kKnobSmoothMs = 20.0;
     static constexpr int kHeavy[3] = { 0, 5, 6 }; // Gain, Presence, Resonance
 
     // frac: position in the current host block (0..1], where the target is between knobFrom and knobTarget
-    void stepKnobs (bool boostOn, double frac)
+    void stepKnobs (double frac)
     {
         bool moving = false;
         for (int k = 0; k < kKnobs; ++k)
@@ -208,37 +165,28 @@ private:
         bool heavyPending = false;
         for (int k : kHeavy) heavyPending = heavyPending || heavyApplied[k == 0 ? 0 : k - 4] != knob[k];
         if (moving || (heavyStep && heavyPending))
-            applyKnobs (boostOn, heavyStep);
+            applyKnobs (heavyStep);
     }
 
-    void applyKnobs (bool boostOn, bool heavy = true)
+    void applyKnobs (bool heavy = true)
     {
         if (heavy)
             for (int k : kHeavy) heavyApplied[k == 0 ? 0 : k - 4] = knob[k];
         preamp.setControls (heavyApplied[0], knob[1], knob[2], knob[3], knob[4]);
         power.setControls (heavyApplied[1], heavyApplied[2]);
-        if (boostOn)
-        {
-            drive.setControls (knob[7], knob[8], boostAttack, knob[9]);
-            ts9.setControls (knob[7], knob[8], knob[9]);
-        }
     }
 
     double knob[kKnobs] {}, knobTarget[kKnobs] {}, knobFrom[kKnobs] {}, knobCoef = 1.0;
     double heavyApplied[3] {}; // Gain, Presence, Resonance as last applied
     int heavyPhase = 0;
-    bool knobsSet = false, lastBoostOn = false, firstBlock = true, firstModel = true;
-    int tubeSetApplied = 0;
-    double modelMix = 0.0, modelTarget = 0.0, modelStep = 1e-4, modelWeight = 0.0; // drive model crossfade, 0 = Precision Drive
-    int controlPhase = 0, boostAttack = 3;
+    bool knobsSet = false, firstBlock = true;
+    int controlPhase = 0;
 
     static constexpr double kMinOsRate = 352800.0; // 8 x 44.1 kHz
     std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
     double osRate = 176400.0;
     int oversamplingFactor = 1;
 
-    PrecisionDrive drive;
-    TubeScreamer9 ts9;
     Preamp5150 preamp;
     PowerAmp5150 power;
     OnePoleHP dcBlock;

@@ -200,11 +200,11 @@ static void malformedScenes (VibeAmpProcessor &p, const juce::File &dir, const j
     // Existing partial legacy presets are intentionally supported, with defaults.
     auto legacy = dir.getChildFile ("legacy.xml");
     legacy.replaceWithText (
-        "<DystoratorPreset knobCurves='2'><PARAM id='boostAttack' value='8'/></DystoratorPreset>");
+        "<DystoratorPreset knobCurves='2'><PARAM id='boostAttack' value='8'/><PARAM id='ampGain' value='3'/></DystoratorPreset>");
     p.presets.refresh ();
     check (p.presets.load (p.presets.indexOf ("legacy")), "legacy partial preset accepted");
-    check (*p.apvts.getRawParameterValue (ids::boostAttack) == 1.f && p.getIRPath ().isEmpty (),
-           "legacy Attack migration and built-in recall");
+    check (p.apvts.getParameter ("boostAttack") == nullptr && std::abs (p.apvts.getRawParameterValue (ids::ampGain)->load() - 3.f) < 1e-5f && p.getIRPath ().isEmpty (),
+           "retired Attack removed and active gain recalled");
 }
 
 // Verify that built-in presets only depend on the working 125A signal path.
@@ -212,7 +212,7 @@ static void compactFactoryPresets (const juce::File& dir)
 {
     VibeAmpProcessor p (dir);
     const juce::StringArray names { "Default", "Tight Rhythm", "Modern Rhythm",
-                                    "Lead Drive", "Classic Crunch", "Open Clean" };
+                                    "Lead Sustain", "Classic Crunch", "Open Clean" };
     check (p.presets.getNumFactory() == names.size(), "exactly six 125A factory presets");
     p.prepareToPlay (48000, 64);
     bool all = true;
@@ -225,9 +225,12 @@ static void compactFactoryPresets (const juce::File& dir)
         const auto xml = p.apvts.copyState().toXmlString();
         all = all && ! xml.contains ("transpose") && ! xml.contains ("reverb")
             && ! xml.contains ("compThresh") && ! xml.contains ("delayOn")
-            && ! xml.contains ("gateLow") && ! xml.contains ("eq0");
+            && ! xml.contains ("gateLow") && ! xml.contains ("eq0")
+            && ! xml.contains ("boostOn") && ! xml.contains ("tubeSet");
     }
     check (all, "six renamed presets load without disconnected effect parameters");
+    for (auto* id : { "boostOn", "boostDrive", "boostTone", "boostLevel", "boostAttack", "boostModel", "tubeSet" })
+        check (p.apvts.getParameter (id) == nullptr, "retired parameter absent from host layout");
 }
 
 // Former pre-release 125A state data must retain active controls but drop only
@@ -583,7 +586,6 @@ static void stereoInputRegressions (const juce::File& dir)
         {
             param (*p, ids::channel, 0);
             param (*p, ids::ampNoise, 0);
-            param (*p, ids::boostOn, 0);
             param (*p, ids::cabOn, 0);
             param (*p, ids::lowCutOn, 0);
             param (*p, ids::highCutOn, 0);

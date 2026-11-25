@@ -7,17 +7,10 @@ inline constexpr const char* inGain      = "inGain";
 inline constexpr const char* inGateOn    = "inGateOn";
 inline constexpr const char* inGateThresh = "inGateThresh";
 inline constexpr const char* inGateRelease = "inGateRelease";
-inline constexpr const char* boostOn     = "boostOn";
-inline constexpr const char* boostDrive  = "boostDrive";
-inline constexpr const char* boostTone   = "boostTone";
-inline constexpr const char* boostLevel  = "boostLevel";
-inline constexpr const char* boostAttack = "boostAttack";
-inline constexpr const char* boostModel  = "boostModel";
 inline constexpr const char* channel     = "channel";
 inline constexpr const char* ampBright   = "ampBright";
 inline constexpr const char* ampCrunch   = "ampCrunch";
 inline constexpr const char* ampNoise    = "ampNoise";
-inline constexpr const char* tubeSet     = "tubeSet";
 inline constexpr const char* ampGain     = "ampGain";
 inline constexpr const char* bass        = "bass";
 inline constexpr const char* mid         = "mid";
@@ -70,21 +63,11 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     layout.add (makeFloat (ids::inGateThresh, "Input Gate Threshold", -90.0f, 0.0f, -50.0f, " dB"));
     layout.add (makeFloat (ids::inGateRelease, "Input Gate Release", 2.0f, 200.0f, 20.0f, " ms", 0, 20.0f));
 
-    layout.add (makeBool  (ids::boostOn, "Boost On", false));
-    layout.add (makeFloat (ids::boostDrive, "Boost Drive", 0.0f, 10.0f, 0.0f));
-    layout.add (makeFloat (ids::boostTone, "Drive Bright", 0.0f, 10.0f, 5.0f));
-    layout.add (makeFloat (ids::boostLevel, "Drive Volume", 0.0f, 10.0f, 7.0f));
-    layout.add (std::make_unique<juce::AudioParameterInt> (juce::ParameterID { ids::boostAttack, 1 }, "Drive Attack", 1, 6, 4));
-    layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { ids::boostModel, 1 }, "Drive Model",
-                                                              juce::StringArray { "Precision Drive", "TS9" }, 0));
-
     layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { ids::channel, 1 }, "Channel",
                                                               juce::StringArray { "Clean", "Blue", "Red" }, 2));
     layout.add (makeBool (ids::ampBright, "Bright", true)); // the rhythm channel's BRIGHT pushbutton (CLEAN, BLUE)
     layout.add (makeBool (ids::ampCrunch, "Crunch", true)); // the rhythm channel's CRUNCH pushbutton (BLUE)
     layout.add (makeBool (ids::ampNoise, "Amp Noise", false)); // circuit noise: resistors' thermal, tubes' shot / flicker
-    layout.add (std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { ids::tubeSet, 1 }, "Tube Set",
-                                                              juce::StringArray { "Stock", "Set A", "Set B", "Set C", "Set D", "Set E" }, 0));
     layout.add (makeFloat (ids::ampGain, "Gain", 0.0f, 10.0f, 6.9f));
     layout.add (makeFloat (ids::bass, "Bass", 0.0f, 10.0f, 5.0f));
     layout.add (makeFloat (ids::mid, "Mid", 0.0f, 10.0f, 5.0f));

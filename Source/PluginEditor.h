@@ -65,7 +65,7 @@ private:
     juce::TooltipWindow tooltipWindow { this, 400 };
 
     PresetBar presetBar { proc };
-    std::unique_ptr<ui::Section> inSec, inGateSec, boostSec, outSec;
+    std::unique_ptr<ui::Section> inSec, inGateSec, outSec;
     std::unique_ptr<ui::Section> ampSec, cabSec, cutsSec, modeSec;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VibeAmpEditor)

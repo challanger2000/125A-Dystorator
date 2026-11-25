@@ -24,7 +24,7 @@ static void set (VibeAmpProcessor &p, const char *id, float value)
         throw std::runtime_error (id);
     x->setValueNotifyingHost (x->convertTo0to1 (value));
 }
-template <class S> static S settings (int channel = 2, int drive = 0)
+template <class S> static S settings (int channel = 2)
 {
     S s;
     s.channel = channel;
@@ -35,10 +35,6 @@ template <class S> static S settings (int channel = 2, int drive = 0)
     s.treble = .6f;
     s.presence = .5f;
     s.resonance = .5f;
-    s.boostOn = drive >= 0;
-    s.boostModel = std::max (0, drive);
-    s.boostDrive = .8f;
-    s.boostLevel = .7f;
     s.noise = false;
     return s;
 }
@@ -53,17 +49,17 @@ static void pcm ()
 {
     for (double fs : {44100., 48000., 96000.})
         for (int ch : {0, 1, 2})
-            for (int drive : {-1, 0, 1})
+            for (bool noise : {false, true})
             {
                 vamp::AmpSim after;
                 vamp_before::AmpSim before;
                 after.prepare (fs, 256);
                 before.prepare (fs, 256);
-                auto a = settings<vamp::AmpSim::Settings> (ch, drive);
-                auto b = settings<vamp_before::AmpSim::Settings> (ch, drive);
-                a.noise = b.noise = (ch == 2 && drive == 0);
+                auto a = settings<vamp::AmpSim::Settings> (ch);
+                auto b = settings<vamp_before::AmpSim::Settings> (ch);
+                a.noise = b.noise = noise;
                 std::ofstream frozenPCM, optimizedPCM;
-                if (fs == 48000 && ch == 2 && drive == 0)
+                if (fs == 48000 && ch == 2 && !noise)
                 {
                     frozenPCM.open ("build/quality-before-high.f32", std::ios::binary);
                     optimizedPCM.open ("build/quality-after-high.f32", std::ios::binary);
@@ -80,7 +76,6 @@ static void pcm ()
                     if (k == 24)
                     {
                         a.channel = b.channel = (ch + 1) % 3;
-                        a.tubeSet = b.tubeSet = 3;
                     }
                     for (int i = 0; i < 256; ++i)
                         x[i] = y[i] = input (k * 256 + i, fs);
@@ -99,11 +94,11 @@ static void pcm ()
                     }
                 }
                 double residual = 10 * std::log10 (std::max (error, 1e-300) / std::max (energy, 1e-300));
-                std::cout << "PCM fs=" << fs << " channel=" << ch << " drive=" << drive << " max=" << max
+                std::cout << "PCM fs=" << fs << " channel=" << ch << " noise=" << noise << " max=" << max
                           << " residual_db=" << residual << " energy=" << energy << '\n';
                 check (
                     max < 1e-6 && residual < -100 && energy > 1e-8,
-                    "HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/tube-set (no threshold relaxation)");
+                    "HIGH vs pinned 8ca580d PCM, dynamic knobs/channel/STOCK/noise (no threshold relaxation)");
             }
 }
 static void modes (const juce::File &dir)
@@ -116,8 +111,6 @@ static void modes (const juce::File &dir)
         p.setBusesLayout (layout);
         set (p, "ampNoise", 0);
         set (p, "cabOn", 0);
-        set (p, "boostOn", 1);
-        set (p, "boostDrive", 8);
         set (p, "ampGain", 9);
         p.prepareToPlay (fs, 128);
         int latency = p.getLatencySamples ();
