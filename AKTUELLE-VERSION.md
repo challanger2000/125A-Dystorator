@@ -9,3 +9,6 @@ Verbindliche Entwicklungsrichtung: komponentenbasierte Röhren- und Schaltungsem
 Offen: native Windows-/ASIO-Echtzeitperformance, vollständige aktuelle QA, finaler GUI-Entwurf, DAW-Abnahme. Die Konsolidierung ändert keinen Produkt-DSP und ersetzt keinen Test. Original-ZIP 1.0.0 liegt im Chat vor; es ist noch nicht zusätzlich als unverändertes Archiv im Repository gesichert. AGPLv3 und bestehende Attribution beibehalten.
 
 Historische Dokumente: `docs/AUDIT-PRE-CODEX-20261026.md`, `docs/COMPACT-STEREO-MIGRATION-20261026.md`, `docs/STEP4-OWNER-CPU-DIAGNOSTIC-20261026.md`, `tests/step4/`.
+
+## P002a — Windows-VST3-only Bereinigung
+Standalone-Build, eigener Standalone-App-Quellcode, ASIO-SDK-Download und Standalone-Installer-/Portable-Pfade entfernt. VST3 bleibt obligatorischer Installerinhalt; DAW verwendet weiterhin ihren eigenen Audiotreiber. Kein Schaltungs-/DSP-Eingriff. Historischer Stand über Git erhalten. Statische Scope-Prüfung ergänzt; Windows-Build und Paketinstallation noch nicht ausgeführt. P002b (Pedale/TubeSet-Auswahl, Presets und Tests) noch offen. P001: kombinierter Amp-Kern im begrenzten Linux-Referenztest bitidentisch, siehe docs/P001-ENDSTUFE-SOLVER-PARITAET.md. Kein Release.

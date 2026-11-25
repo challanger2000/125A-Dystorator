@@ -42,7 +42,6 @@ if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
 Copy-Item (Join-Path $dist "125A-Dystorator-Setup-$version.exe") $stageDir
 
 # 2) portable
-Copy-Item (Join-Path $build "Standalone\125A Dystorator.exe") "$stageDir\Portable"
 Copy-Item (Join-Path $build "VST3\125A Dystorator.vst3") "$stageDir\Portable" -Recurse
 
 # 3) docs
@@ -50,11 +49,11 @@ Copy-Item (Join-Path $PSScriptRoot "README.txt") (Join-Path $stageDir "README.tx
 Copy-Item (Join-Path $PSScriptRoot "THIRD-PARTY-NOTICES.txt") $stageDir
 Copy-Item (Join-Path $root "LICENSE") $stageDir
 
-# 4) source code (required by the AGPL/GPL licenses of JUCE and the ASIO SDK)
+# 4) source code (required by the AGPL license and applicable third-party notices)
 $srcStage = Join-Path $dist "src-stage\125A-Dystorator-source-$version"
 if (Test-Path (Split-Path $srcStage)) { Remove-Item (Split-Path $srcStage) -Recurse -Force }
 New-Item -ItemType Directory -Force $srcStage | Out-Null
-foreach ($item in "CMakeLists.txt", "build.bat", "README.md", "Source", "tests", "docs", "spice", "installer") {
+foreach ($item in "CMakeLists.txt", "build.bat", "README.md", "LICENSE", "cmake", "Source", "tests", "docs", "spice", "installer") {
     Copy-Item (Join-Path $root $item) $srcStage -Recurse
 }
 # LTspice runs leave waveform / database files next to the netlists (can be GBs); ship the netlists only

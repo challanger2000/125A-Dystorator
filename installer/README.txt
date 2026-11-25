@@ -2,9 +2,8 @@
 
 This is a development build, not a released V1.
 
-To install: run the 125A Dystorator setup, choose VST3 integration if needed.
+To install: run the 125A Dystorator setup, to install the VST3 bundle.
 Default VST3 location: C:\Program Files\Common Files\VST3\125A Dystorator.vst3.
-Standalone app: 125A Dystorator.exe.
 User presets: Documents\125A Systems\Dystorator\Presets.
 
 The amp processes independent stereo inputs. Choose ECO for low-CPU tracking

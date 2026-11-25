@@ -53,7 +53,7 @@ require("installer/THIRD-PARTY-NOTICES.txt", ["JUCE", "Steinberg"])
 # Old product labels may remain ONLY in attribution notices / historical docs;
 # never in current plugin and packaging identifiers.
 ship = [
-    "CMakeLists.txt", "build.bat", "Source/PresetManager.h", "Source/StandaloneApp.cpp",
+    "CMakeLists.txt", "build.bat", "Source/PresetManager.h",
     "Source/PluginEditor.cpp", "Source/PluginProcessor.cpp", "Source/PluginProcessor.h",
     "installer/125A-Dystorator.iss", "installer/make_package.ps1", "installer/README.txt",
     "tests/ir_presets/CMakeLists.txt",
@@ -75,3 +75,22 @@ if problems:
     sys.exit(1)
 print("PASS: 125A Dystorator source identity, installer paths, legal materials, and preset namespace")
 print("LIMITATION: the compiled VST3 factory/UID and actual Windows install require separate binary-level checks")
+
+# Scope regression: the product must not build or distribute a standalone app.
+for path, tokens in {
+    "CMakeLists.txt": ("FORMATS VST3 Standalone", "Dystorator_Standalone", "asiosdk", "JUCE_ASIO", "JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP"),
+    "build.bat": ("Standalone", "ASIO SDK"),
+    "installer/125A-Dystorator.iss": ("Standalone", "AppExe", "desktopicon", "[Run]"),
+    "installer/make_package.ps1": ("Standalone", "125A Dystorator.exe"),
+}.items():
+    value = content(path)
+    for token in tokens:
+        if token.lower() in value.lower():
+            problems.append(f"{path}: retired product route: {token}")
+if (root / "Source/StandaloneApp.cpp").exists():
+    problems.append("Retired standalone source still present")
+if problems:
+    for p in problems:
+        print("FAIL:", p)
+    sys.exit(1)
+print("PASS: VST3-only source/package scope (static; not a Windows build)")

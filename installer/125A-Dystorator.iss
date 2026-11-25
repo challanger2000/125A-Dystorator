@@ -3,7 +3,6 @@
 
 #define AppName "125A Dystorator"
 #define AppVersion "0.1.0"
-#define AppExe "125A Dystorator.exe"
 #define BuildDir GetEnv("USERPROFILE") + "\vab-build\Dystorator_artefacts\Release"
 
 [Setup]
@@ -23,24 +22,13 @@ ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=admin
 WizardStyle=modern
 UninstallDisplayName={#AppName}
-UninstallDisplayIcon={app}\{#AppExe}
 CloseApplications=yes
 
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
-Name: "vst3"; Description: "Install the VST3 plugin for DAWs (Reaper, Cubase, FL Studio, ...)"; GroupDescription: "Plugin:"
-
 [Files]
-Source: "{#BuildDir}\Standalone\{#AppExe}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\VST3\125A Dystorator.vst3\*"; DestDir: "{commoncf64}\VST3\125A Dystorator.vst3"; Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: vst3
+Source: "{#BuildDir}\VST3\125A Dystorator.vst3\*"; DestDir: "{commoncf64}\VST3\125A Dystorator.vst3"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "README.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"
 Name: "{group}\Readme"; Filename: "{app}\README.txt"
 Name: "{group}\Uninstall {#AppName}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
-
-[Run]
-Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent

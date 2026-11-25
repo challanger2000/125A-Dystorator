@@ -1,6 +1,6 @@
 # 125A Dystorator
 
-**Windows x64 VST3 / standalone – development candidate 0.1.0.**
+**Windows x64 VST3 – development candidate 0.1.0.**
 **Manufacturer:** 125A Systems. **Status:** Unreleased; not a FINAL or V1 package.
 
 Compact high-gain guitar amplifier simulator with two independent nonlinear
@@ -47,7 +47,6 @@ Real-guitar level-matched listening and acceptance are outstanding.
 - Windows VST3: `C:\Program Files\Common Files\VST3\125A Dystorator.vst3`
 - User presets: `Documents\125A Systems\Dystorator\Presets`
 - Preset XML root: `DystoratorPreset`
-- Optional standalone: `125A Dystorator.exe`
 
 The product has a **new VST3 identity and preset namespace**, separate from
 earlier unbranded experimental builds. Do not assume projects or presets from

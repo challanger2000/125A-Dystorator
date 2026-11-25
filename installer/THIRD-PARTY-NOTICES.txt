@@ -8,8 +8,6 @@ its authorship and notices remain acknowledged here and in the source.
 This program is built with:
 
 - JUCE 8.0.4 (https://juce.com) - used under the GNU AGPLv3.
-- Steinberg ASIO SDK 2.3.4 - used under its GNU GPLv3 license option.
-  ASIO is a trademark and software of Steinberg Media Technologies GmbH.
 - Steinberg VST3 SDK (bundled with JUCE). VST is a registered trademark
   of Steinberg Media Technologies GmbH.
 

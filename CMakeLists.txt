@@ -14,21 +14,12 @@ FetchContent_Declare(JUCE
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(JUCE)
 
-# Steinberg ASIO SDK (official download, dual licensed proprietary / GPLv3) so the
-# standalone app can talk to ASIO drivers such as the Neural DSP Quad Cortex.
-if(WIN32)
-    FetchContent_Declare(asiosdk
-        URL https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip
-        DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
-    FetchContent_MakeAvailable(asiosdk)
-endif()
-
 juce_add_plugin(Dystorator
     VERSION 0.1.0
     COMPANY_NAME "125A Systems"
     PLUGIN_MANUFACTURER_CODE A125
     PLUGIN_CODE Dyst
-    FORMATS VST3 Standalone
+    FORMATS VST3
     PRODUCT_NAME "125A Dystorator"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
@@ -54,21 +45,12 @@ target_sources(Dystorator PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp)
 
-# Custom standalone app shell (no "mute audio input" - an amp sim needs its input)
-target_sources(Dystorator_Standalone PRIVATE Source/StandaloneApp.cpp)
-
 target_include_directories(Dystorator PRIVATE Source)
 
 target_compile_definitions(Dystorator PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
-    JUCE_VST3_CAN_REPLACE_VST2=0
-    JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1)
-
-if(WIN32)
-    target_compile_definitions(Dystorator PUBLIC JUCE_ASIO=1)
-    target_include_directories(Dystorator PRIVATE "${asiosdk_SOURCE_DIR}/common")
-endif()
+    JUCE_VST3_CAN_REPLACE_VST2=0)
 
 target_link_libraries(Dystorator
     PRIVATE
